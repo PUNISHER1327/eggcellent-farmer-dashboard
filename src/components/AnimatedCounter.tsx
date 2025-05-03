@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
+import { useTheme } from '@/hooks/useTheme';
 
 type AnimatedCounterProps = {
   title: string;
@@ -17,6 +18,7 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   icon,
   className = '' 
 }) => {
+  const { theme } = useTheme();
   const [count, setCount] = useState(0);
   const countRef = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
@@ -66,13 +68,20 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     };
   }, [targetValue]);
 
+  const cardClass = theme === 'light' 
+    ? 'light-glass-morphism p-4 flex flex-col items-center justify-center text-center sensor-card-hover border border-gray-200'
+    : 'glass-morphism p-4 flex flex-col items-center justify-center text-center sensor-card-hover';
+
+  const textClass = theme === 'light' ? 'text-gray-800' : 'text-white';
+  const iconBgClass = theme === 'light' ? 'bg-gray-100' : 'bg-secondary/50';
+
   return (
-    <Card className={`glass-morphism p-4 flex flex-col items-center justify-center text-center sensor-card-hover ${className}`}>
-      <div className="p-3 bg-secondary/50 rounded-full mb-2">{icon}</div>
-      <h3 className="text-sm text-muted-foreground mb-1">{title}</h3>
-      <div className="font-bold text-2xl flex items-baseline" ref={countRef}>
+    <Card className={`${cardClass} ${className}`}>
+      <div className={`p-3 ${iconBgClass} rounded-full mb-2`}>{icon}</div>
+      <h3 className={`text-sm ${theme === 'light' ? 'text-gray-600' : 'text-muted-foreground'} mb-1`}>{title}</h3>
+      <div className={`font-bold text-2xl flex items-baseline ${textClass}`} ref={countRef}>
         <span>{count}</span>
-        <span className="text-sm ml-1 text-muted-foreground">{unit}</span>
+        <span className={`text-sm ml-1 ${theme === 'light' ? 'text-gray-600' : 'text-muted-foreground'}`}>{unit}</span>
       </div>
     </Card>
   );

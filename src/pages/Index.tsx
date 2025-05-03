@@ -38,7 +38,7 @@ const Index = () => {
       <NavBar />
       
       {/* Main Content */}
-      <main className="relative z-10">
+      <main className={`relative z-10 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
         {/* Hero Section */}
         <HeroSection />
         

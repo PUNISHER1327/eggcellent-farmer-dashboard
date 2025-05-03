@@ -16,17 +16,33 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
-    document.documentElement.classList.toggle('light-mode', newTheme === 'light');
-    document.documentElement.classList.toggle('dark-mode', newTheme === 'dark');
+    
+    if (newTheme === 'light') {
+      document.documentElement.classList.add('light-mode');
+      document.documentElement.classList.remove('dark-mode');
+    } else {
+      document.documentElement.classList.remove('light-mode');
+      document.documentElement.classList.add('dark-mode');
+    }
+    
     localStorage.setItem('theme', newTheme);
+    console.log(`Theme switched to: ${newTheme}`);
   };
   
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as Theme | null;
     if (savedTheme) {
       setTheme(savedTheme);
-      document.documentElement.classList.toggle('light-mode', savedTheme === 'light');
-      document.documentElement.classList.toggle('dark-mode', savedTheme === 'dark');
+      
+      if (savedTheme === 'light') {
+        document.documentElement.classList.add('light-mode');
+        document.documentElement.classList.remove('dark-mode');
+      } else {
+        document.documentElement.classList.remove('light-mode');
+        document.documentElement.classList.add('dark-mode');
+      }
+      
+      console.log(`Theme restored from localStorage: ${savedTheme}`);
     } else {
       document.documentElement.classList.add('dark-mode');
     }

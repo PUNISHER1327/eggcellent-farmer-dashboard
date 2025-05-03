@@ -1,9 +1,10 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/hooks/useTheme';
 
 const BackgroundVideo: React.FC = () => {
   const { theme } = useTheme();
+  const [isLoaded, setIsLoaded] = useState(false);
   
   // Different videos for light and dark mode
   const videoSrc = theme === 'light' 
@@ -14,6 +15,16 @@ const BackgroundVideo: React.FC = () => {
   const overlayClass = theme === 'light'
     ? "bg-white/50 backdrop-blur-sm"
     : "bg-black/70";
+
+  useEffect(() => {
+    console.log("BackgroundVideo component mounted, theme:", theme);
+    console.log("Video source:", videoSrc);
+  }, [theme, videoSrc]);
+
+  const handleVideoLoaded = () => {
+    console.log("Video loaded successfully");
+    setIsLoaded(true);
+  };
 
   return (
     <div className="fixed inset-0 z-0">
@@ -43,11 +54,12 @@ const BackgroundVideo: React.FC = () => {
       {/* Video element with smooth transition between sources */}
       <video
         key={videoSrc}
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
         autoPlay
         muted
         loop
         playsInline
+        onLoadedData={handleVideoLoaded}
       >
         <source src={videoSrc} type="video/mp4" />
         Your browser does not support the video tag.
