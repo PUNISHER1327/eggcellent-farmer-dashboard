@@ -8,8 +8,11 @@ import InsightsSection from '../components/InsightsSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
 import CustomCursor from '../components/CustomCursor';
+import { useTheme } from '@/hooks/useTheme';
 
 const Index = () => {
+  const { theme } = useTheme();
+
   useEffect(() => {
     // Set document title
     document.title = "Farmer Friendly - Poultry Farm Dashboard";
@@ -24,7 +27,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className={`min-h-screen ${theme === 'light' ? 'light-mode' : 'dark-mode'}`}>
       {/* Background Video */}
       <BackgroundVideo />
       
