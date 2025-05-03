@@ -1,0 +1,69 @@
+
+import React from 'react';
+import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+
+type EggProductionCardProps = {
+  value: number;
+  maxValue: number;
+  status: 'low' | 'medium' | 'high';
+};
+
+const EggProductionCard: React.FC<EggProductionCardProps> = ({
+  value,
+  maxValue,
+  status,
+}) => {
+  const percentage = (value / maxValue) * 100;
+  
+  let statusColor = '';
+  let statusText = '';
+  
+  switch (status) {
+    case 'high':
+      statusColor = 'bg-farm-green';
+      statusText = 'High';
+      break;
+    case 'medium':
+      statusColor = 'bg-farm-yellow';
+      statusText = 'Medium';
+      break;
+    case 'low':
+      statusColor = 'bg-farm-red';
+      statusText = 'Low';
+      break;
+    default:
+      statusColor = 'bg-farm-green';
+      statusText = 'Normal';
+  }
+
+  return (
+    <Card className="p-6 glass-morphism sensor-card-hover">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-white">Egg Production</h3>
+        <div className="p-2 rounded-full bg-secondary/50">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 22c-4.97 0-9-7-9-11a9 9 0 0 1 18 0c0 4-4.03 11-9 11z" />
+          </svg>
+        </div>
+      </div>
+      
+      <div className="flex items-end justify-between mb-4">
+        <div className="flex items-baseline">
+          <span className="text-3xl font-bold">{value.toFixed(1)}</span>
+          <span className="text-sm ml-1 text-muted-foreground">eggs/hen/day</span>
+        </div>
+        <span className={`px-2 py-1 text-xs rounded-full ${statusColor} text-white`}>{statusText}</span>
+      </div>
+      
+      <Progress value={percentage} className="h-2" />
+      
+      <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+        <span>0 eggs/hen/day</span>
+        <span>{maxValue} eggs/hen/day</span>
+      </div>
+    </Card>
+  );
+};
+
+export default EggProductionCard;
