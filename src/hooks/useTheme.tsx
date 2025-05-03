@@ -18,8 +18,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setTheme(newTheme);
     
     if (newTheme === 'light') {
-      document.documentElement.classList.add('light-mode');
       document.documentElement.classList.remove('dark-mode');
+      document.documentElement.classList.add('light-mode');
     } else {
       document.documentElement.classList.remove('light-mode');
       document.documentElement.classList.add('dark-mode');
@@ -35,8 +35,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setTheme(savedTheme);
       
       if (savedTheme === 'light') {
-        document.documentElement.classList.add('light-mode');
         document.documentElement.classList.remove('dark-mode');
+        document.documentElement.classList.add('light-mode');
       } else {
         document.documentElement.classList.remove('light-mode');
         document.documentElement.classList.add('dark-mode');

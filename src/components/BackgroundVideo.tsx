@@ -13,8 +13,8 @@ const BackgroundVideo: React.FC = () => {
   
   // Different overlay intensity for light and dark mode
   const overlayClass = theme === 'light'
-    ? "bg-white/50 backdrop-blur-sm"
-    : "bg-black/70";
+    ? "bg-white/40 backdrop-blur-sm"
+    : "bg-black/60";
 
   useEffect(() => {
     console.log("BackgroundVideo component mounted, theme:", theme);
@@ -24,6 +24,10 @@ const BackgroundVideo: React.FC = () => {
   const handleVideoLoaded = () => {
     console.log("Video loaded successfully");
     setIsLoaded(true);
+  };
+
+  const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement>) => {
+    console.error("Video failed to load:", e);
   };
 
   return (
@@ -60,6 +64,7 @@ const BackgroundVideo: React.FC = () => {
         loop
         playsInline
         onLoadedData={handleVideoLoaded}
+        onError={handleVideoError}
       >
         <source src={videoSrc} type="video/mp4" />
         Your browser does not support the video tag.

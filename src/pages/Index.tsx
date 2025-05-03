@@ -27,7 +27,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className={`min-h-screen ${theme === 'light' ? 'light-mode' : 'dark-mode'}`}>
+    <div className={theme === 'light' ? 'light-mode min-h-screen' : 'dark-mode min-h-screen'}>
       {/* Background Video */}
       <BackgroundVideo />
       
@@ -38,7 +38,7 @@ const Index = () => {
       <NavBar />
       
       {/* Main Content */}
-      <main className={`relative z-10 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
+      <main className="relative z-10">
         {/* Hero Section */}
         <HeroSection />
         
