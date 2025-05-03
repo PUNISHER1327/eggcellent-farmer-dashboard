@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { egg } from 'lucide-react';
+import { Egg } from 'lucide-react';
 
 const NavBar: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -35,7 +35,7 @@ const NavBar: React.FC = () => {
     >
       <div className="container mx-auto flex items-center justify-between py-4">
         <div className="flex items-center space-x-2">
-          <egg className="h-6 w-6 text-farm-yellow" />
+          <Egg className="h-6 w-6 text-farm-yellow" />
           <span className="text-xl font-bold text-gradient">Farmer Friendly</span>
         </div>
         

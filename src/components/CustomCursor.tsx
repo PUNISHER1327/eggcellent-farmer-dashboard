@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import { egg } from 'lucide-react';
 
 type Position = {
   x: number;

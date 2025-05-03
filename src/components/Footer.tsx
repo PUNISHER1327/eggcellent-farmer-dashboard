@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { egg } from 'lucide-react';
+import { Egg } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <egg className="h-6 w-6 text-farm-yellow" />
+              <Egg className="h-6 w-6 text-farm-yellow" />
               <span className="text-xl font-bold text-white">Farmer Friendly</span>
             </div>
             <p className="text-white/70">
