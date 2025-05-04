@@ -46,6 +46,29 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } else {
       document.documentElement.classList.add('dark-mode');
     }
+    
+    // Add base styles for theme colors to ensure charts have proper coloring
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .light-mode {
+        --text-primary: #1a1a1a;
+        --text-secondary: #4a4a4a;
+        --chart-grid: #e5e7eb;
+        --chart-text: #6b7280;
+      }
+      
+      .dark-mode {
+        --text-primary: #ffffff;
+        --text-secondary: rgba(255, 255, 255, 0.7);
+        --chart-grid: #374151;
+        --chart-text: #9ca3af;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
   }, []);
   
   return (

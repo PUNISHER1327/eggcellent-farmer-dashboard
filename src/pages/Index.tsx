@@ -8,6 +8,7 @@ import InsightsSection from '../components/InsightsSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
 import CustomCursor from '../components/CustomCursor';
+import AnalyticsDashboard from '../components/AnalyticsDashboard';
 import { useTheme } from '@/hooks/useTheme';
 
 const Index = () => {
@@ -44,6 +45,9 @@ const Index = () => {
         
         {/* Live Data Section */}
         <LiveDataSection />
+        
+        {/* Analytics Dashboard */}
+        <AnalyticsDashboard />
         
         {/* Insights Section */}
         <InsightsSection />

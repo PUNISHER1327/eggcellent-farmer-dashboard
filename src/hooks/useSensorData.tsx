@@ -10,6 +10,14 @@ export type SensorData = {
   totalEggsToday: number;
   activeSensors: number;
   chickens: number;
+  historicalData?: {
+    temperature: number[];
+    humidity: number[];
+    co2: number[];
+    ammonia: number[];
+  };
+  eggProductionHistory?: number[];
+  farmScore?: number;
 };
 
 export const getDataStatus = (value: number, min: number, max: number): 'good' | 'warning' | 'danger' => {
@@ -46,6 +54,14 @@ export const useSensorData = () => {
     totalEggsToday: 1240,
     activeSensors: 24,
     chickens: 500,
+    historicalData: {
+      temperature: [24, 24.5, 25, 25.5, 26, 25.5, 25, 24.5, 24, 24, 24, 24],
+      humidity: [65, 64, 63, 62, 60, 62, 64, 65, 66, 65, 65, 65],
+      co2: [750, 780, 800, 820, 840, 830, 810, 800, 790, 780, 770, 760],
+      ammonia: [14, 14.5, 15, 15.5, 16, 15.5, 15, 14.5, 14, 14, 14, 14],
+    },
+    eggProductionHistory: [450, 460, 470, 480, 490, 500, 490, 480, 470, 480, 490, 500, 510, 520],
+    farmScore: 86,
   });
   
   const [loading, setLoading] = useState<boolean>(true);
@@ -67,6 +83,14 @@ export const useSensorData = () => {
         totalEggsToday: Math.floor(Math.random() * (2000 - 1000 + 1)) + 1000,
         activeSensors: Math.floor(Math.random() * (30 - 20 + 1)) + 20,
         chickens: 500,
+        historicalData: {
+          temperature: Array.from({length: 12}, () => Math.floor((Math.random() * (30 - 20 + 1)) + 20)),
+          humidity: Array.from({length: 12}, () => Math.floor(Math.random() * (80 - 50 + 1)) + 50),
+          co2: Array.from({length: 12}, () => Math.floor(Math.random() * (1000 - 600 + 1)) + 600),
+          ammonia: Array.from({length: 12}, () => Math.floor(Math.random() * (25 - 10 + 1)) + 10),
+        },
+        eggProductionHistory: Array.from({length: 14}, () => Math.floor(Math.random() * (550 - 450 + 1)) + 450),
+        farmScore: Math.floor(Math.random() * (95 - 75 + 1)) + 75,
       });
     }, 5000);
     
