@@ -15,16 +15,16 @@ const ReportsTab: React.FC = () => {
     : 'glass-morphism p-4 bg-gray-800 border border-gray-700';
 
   const reports = [
-    { id: 1, name: 'April 2025 Performance Report', date: '2025-05-01', type: 'Monthly' },
-    { id: 2, name: 'March 2025 Performance Report', date: '2025-04-01', type: 'Monthly' },
-    { id: 3, name: 'February 2025 Performance Report', date: '2025-03-01', type: 'Monthly' },
-    { id: 4, name: 'Q1 2025 Analysis', date: '2025-04-15', type: 'Quarterly' },
+    { id: 1, name: t('april2025PerformanceReport'), date: '2025-05-01', type: t('monthly') },
+    { id: 2, name: t('march2025PerformanceReport'), date: '2025-04-01', type: t('monthly') },
+    { id: 3, name: t('february2025PerformanceReport'), date: '2025-03-01', type: t('monthly') },
+    { id: 4, name: t('q12025Analysis'), date: '2025-04-15', type: t('quarterly') },
   ];
 
   const scheduledReports = [
-    { id: 1, name: 'Weekly Performance', frequency: 'Every Monday', next: '2025-05-11' },
-    { id: 2, name: 'Monthly Summary', frequency: 'First of Month', next: '2025-06-01' },
-    { id: 3, name: 'Environmental Conditions', frequency: 'Daily', next: '2025-05-05' },
+    { id: 1, name: t('weeklyPerformance'), frequency: t('everyMonday'), next: '2025-05-11' },
+    { id: 2, name: t('monthlySummary'), frequency: t('firstOfMonth'), next: '2025-06-01' },
+    { id: 3, name: t('environmentalConditions'), frequency: t('daily'), next: '2025-05-05' },
   ];
 
   return (

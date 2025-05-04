@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState } from 'react';
 
 type AvailableLanguage = 'en' | 'hi' | 'kn';
@@ -79,6 +78,18 @@ const translations = {
     "delete": "Delete",
     "cancel": "Cancel",
     "save": "Save Settings",
+    "april2025PerformanceReport": "April 2025 Performance Report",
+    "march2025PerformanceReport": "March 2025 Performance Report",
+    "february2025PerformanceReport": "February 2025 Performance Report",
+    "q12025Analysis": "Q1 2025 Analysis",
+    "monthly": "Monthly",
+    "quarterly": "Quarterly",
+    "weeklyPerformance": "Weekly Performance",
+    "monthlySummary": "Monthly Summary",
+    "environmentalConditions": "Environmental Conditions",
+    "everyMonday": "Every Monday",
+    "firstOfMonth": "First of Month",
+    "daily": "Daily",
     
     // Settings Tab
     "dashboardSettings": "Dashboard Settings",
@@ -108,6 +119,24 @@ const translations = {
     "compactViewDesc": "Show more information in less space",
     "uiAnimations": "UI Animations",
     "uiAnimationsDesc": "Enable smooth transitions and animations",
+    
+    // Contact Section
+    "contactUs": "Contact Us",
+    "haveQuestions": "Have questions? We're here to help optimize your farm",
+    "enterYourName": "Enter your name",
+    "enterYourEmail": "Enter your email",
+    "howCanWeHelp": "How can we help?",
+    "tellUsWhatYouNeed": "Tell us what you need...",
+    "sendMessage": "Send Message",
+    "farmSupportHours": "Farm Support Hours",
+    "farmExpertsAvailable": "Our farming experts are available to assist you with any questions or concerns:",
+    "mondayToFriday": "Monday - Friday: 7:00 AM - 6:00 PM",
+    "saturday": "Saturday: 8:00 AM - 2:00 PM",
+    "sunday": "Sunday: Closed (Emergency support only)",
+    "emergencySupport": "Emergency Support",
+    "urgentMatters": "For urgent matters related to equipment failures or animal welfare:",
+    "location": "Location",
+    "farmHeadquarters": "Farmer Friendly Headquarters:"
   },
   hi: {
     // Navigation
@@ -177,6 +206,18 @@ const translations = {
     "delete": "हटाएं",
     "cancel": "रद्द करें",
     "save": "सेटिंग्स सहेजें",
+    "april2025PerformanceReport": "अप्रैल 2025 प्रदर्शन रिपोर्ट",
+    "march2025PerformanceReport": "मार्च 2025 प्रदर्शन रिपोर्ट",
+    "february2025PerformanceReport": "फरवरी 2025 प्रदर्शन रिपोर्ट",
+    "q12025Analysis": "Q1 2025 विश्लेषण",
+    "monthly": "मासिक",
+    "quarterly": "त्रैमासिक",
+    "weeklyPerformance": "साप्ताहिक प्रदर्शन",
+    "monthlySummary": "मासिक सारांश",
+    "environmentalConditions": "पर्यावरणीय स्थितियां",
+    "everyMonday": "हर सोमवार",
+    "firstOfMonth": "महीने का पहला दिन",
+    "daily": "दैनिक",
     
     // Settings Tab
     "dashboardSettings": "डैशबोर्ड सेटिंग्स",
@@ -190,22 +231,40 @@ const translations = {
     "emailNotifications": "ईमेल सूचनाएं",
     "emailNotificationsDesc": "दैनिक सारांश रिपोर्ट प्राप्त करें",
     "alertThresholds": "अलर्ट सीमाएं",
-    "alertThresholdsDesc": "केवल महत्वपूर्ण मूल्यों के लिए सूचित किया जाए",
+    "alertThresholdsDesc": "केवल महत्वपूर्ण मूल्यಗಳಿಗೆ ಸೂಚನೆ ಪಡೆಯಿರಿ",
     "dataCollectionInterval": "डेटा संग्रह अंतराल",
     "fiveMinutes": "5 मिनट",
     "fifteenMinutes": "15 मिनट",
     "thirtyMinutes": "30 मिनट",
     "oneHour": "1 घंटा",
-    "extendedDataStorage": "विस्तारित डेटा स्टोरेज",
-    "extendedDataStorageDesc": "1 वर्ष तक का ऐतिहासिक डेटा स्टोर करें",
-    "automaticBackup": "स्वचालित बैकअप",
-    "automaticBackupDesc": "साप्ताहिक क्लाउड बैकअप",
-    "darkTheme": "डार्क थीम",
-    "darkThemeDesc": "लाइट और डार्क मोड के बीच स्विच करें",
-    "compactView": "कॉम्पैक्ट व्यू",
-    "compactViewDesc": "कम जगह में अधिक जानकारी दिखाएं",
-    "uiAnimations": "यूआई एनिमेशन",
-    "uiAnimationsDesc": "स्मूथ ट्रांजिशन और एनिमेशन सक्षम करें",
+    "extendedDataStorage": "विस್ತರಿತ ಡೇಟಾ ಸಂಗ್ರಹಣೆ",
+    "extendedDataStorageDesc": "1 वर್ಷ तक का ऐತಿಹासिक ಡೇಟಾ ಸಂಗ್ರಹಿಸಿ",
+    "automaticBackup": "स್ವಯಂಚಾಲಿತ ಬ್ಯಾಕಪ್",
+    "automaticBackupDesc": "साप್ತಾಹಿಕ ಕ್ಲೌಡ್ ಸಂಗ್ರಹಣೆಗೆ ಬ್ಯಾಕಪ್ ಮಾಡಿ",
+    "darkTheme": "डार್ಕ್ ಥೀಮ್",
+    "darkThemeDesc": "ಲೈಟ್ ಮತ್ತು ಡಾರ್ಕ್ ಮೋಡ್‌ಗಳ ನಡುವೆ ಬದಲಿಸಿ",
+    "compactView": "ಕಾಂಪ್ಯಾಕ್ಟ್ ವೀಕ್ಷಣೆ",
+    "compactViewDesc": "ಕಡಿಮೆ ಸ್ಥಳದಲ್ಲಿ ಹೆಚ್ಚಿನ ಮಾಹಿತಿಯನ್ನು ತೋರಿಸಿ",
+    "uiAnimations": "ಯುಐ ಅನಿಮೇಷನ್‌ಗಳು",
+    "uiAnimationsDesc": "ಸುಗಮ ಪರಿವರ್ತನೆಗಳು ಮತ್ತು ಅನಿಮೇಷನ್‌ಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ",
+    
+    // Contact Section
+    "contactUs": "हमसे संपर्क करें",
+    "haveQuestions": "कोई सवाल है? हम आपके फार्म को अनुकूलित करने में मदद करने के लिए यहां हैं",
+    "enterYourName": "अपना नाम दर्ज करें",
+    "enterYourEmail": "अपना ईमेल दर्ज करें",
+    "howCanWeHelp": "हम कैसे मदद कर सकते हैं?",
+    "tellUsWhatYouNeed": "हमें बताएं आपको क्या चाहिए...",
+    "sendMessage": "संदेश भेजें",
+    "farmSupportHours": "फार्म सपोर्ट के घंटे",
+    "farmExpertsAvailable": "हमारे कृषि विशेषज्ञ आपके किस��� भी सवाल या चिंता के साथ सहायता के लिए उपलब्ध हैं:",
+    "mondayToFriday": "सोमवार - शुक्रवार: सुबह 7:00 - शाम 6:00",
+    "saturday": "शनिवार: सुबह 8:00 - दोपहर 2:00",
+    "sunday": "रविवार: बंद (केवल आपातकालीन सहायता)",
+    "emergencySupport": "आपातकालीन सहायता",
+    "urgentMatters": "उपकरण विफलताओं या पशु कल्याण से संबंधित तत्काल मामलों के लिए:",
+    "location": "स्थान",
+    "farmHeadquarters": "फार्मर फ्रेंडली मुख्यालय:"
   },
   kn: {
     // Navigation
@@ -246,7 +305,7 @@ const translations = {
     "hourSensorTrends": "24-ಗಂಟೆ ಸೆನ್ಸರ್ ಪ್ರವೃತ್ತಿಗಳು",
     "eggProductionTrends": "ಮೊಟ್ಟೆ ಉತ್ಪಾದನೆ ಪ್ರವೃತ್ತಿಗಳು",
     "averageCO2": "ಸರಾಸರಿ CO2",
-    "averageAmmonia": "ಸರಾಸರಿ ಅಮೋನಿಯ",
+    "averageAmmonia": "ಸರಾಸರಿ ಅಮೋनಿಯ",
     "averageTemp": "ಸರಾಸರಿ ತಾಪಮಾನ",
     
     // Performance Tab
@@ -275,6 +334,18 @@ const translations = {
     "delete": "ಅಳಿಸಿ",
     "cancel": "ರದ್ದುಮಾಡಿ",
     "save": "ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಉಳಿಸಿ",
+    "april2025PerformanceReport": "ಏಪ್ರಿಲ್ 2025 ಕಾರ್ಯಕ್ಷಮತೆ ವರದಿ",
+    "march2025PerformanceReport": "ಮಾರ್ಚ್ 2025 ಕಾರ್ಯಕ್ಷಮತೆ ವರದಿ",
+    "february2025PerformanceReport": "ಫೆಬ್ರವರಿ 2025 ಕಾರ್ಯಕ್ಷಮತೆ ವರದಿ",
+    "q12025Analysis": "Q1 2025 ವಿಶ್ಲೇಷಣೆ",
+    "monthly": "ಮಾಸಿಕ",
+    "quarterly": "ತ್ರೈಮಾಸಿಕ",
+    "weeklyPerformance": "ವಾರದ ಕಾರ್ಯಕ್ಷಮತೆ",
+    "monthlySummary": "ಮಾಸಿಕ ಸಾರಾಂಶ",
+    "environmentalConditions": "ಪರಿಸರದ ಸ್ಥಿತಿಗಳು",
+    "everyMonday": "ಪ್ರತಿ ಸೋಮವಾರ",
+    "firstOfMonth": "ತಿಂಗಳ ಮೊದಲ ದಿನ",
+    "daily": "ದೈನಂದಿನ",
     
     // Settings Tab
     "dashboardSettings": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
@@ -284,7 +355,7 @@ const translations = {
     "languageSettings": "ಭಾಷಾ ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
     "selectLanguage": "ಭಾಷೆಯನ್ನು ಆಯ್ಕೆ ಮಾಡಿ",
     "pushNotifications": "ಪುಶ್ ಅಧಿಸೂಚನೆಗಳು",
-    "pushNotificationsDesc": "ಮಹತ್ವದ ಘಟನೆಗಳಿಗೆ ಎಚ್ಚರಿಕೆಗಳನ್ನು ಪಡೆಯಿರಿ",
+    "pushNotificationsDesc": "ಮಹತ್ವದ ಘटನೆಗಳಿಗೆ ಎಚ್ಚರಿಕೆಗಳನ್ನು ಪಡೆಯಿರಿ",
     "emailNotifications": "ಇಮೇಲ್ ಅಧಿಸೂಚನೆಗಳು",
     "emailNotificationsDesc": "ದೈನಂದಿನ ಸಾರಾಂಶ ವರದಿಗಳನ್ನು ಪಡೆಯಿರಿ",
     "alertThresholds": "ಎಚ್ಚರಿಕೆ ಮಿತಿಗಳು",
@@ -304,6 +375,24 @@ const translations = {
     "compactViewDesc": "ಕಡಿಮೆ ಸ್ಥಳದಲ್ಲಿ ಹೆಚ್ಚಿನ ಮಾಹಿತಿಯನ್ನು ತೋರಿಸಿ",
     "uiAnimations": "ಯುಐ ಅನಿಮೇಷನ್‌ಗಳು",
     "uiAnimationsDesc": "ಸುಗಮ ಪರಿವರ್ತನೆಗಳು ಮತ್ತು ಅನಿಮೇಷನ್‌ಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ",
+    
+    // Contact Section
+    "contactUs": "ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ",
+    "haveQuestions": "ಪ್ರಶ್ನೆಗಳಿವೆಯೇ? ನಿಮ್ಮ ಕೃಷಿಯನ್ನು ಅನುಕೂಲಿಸಲು ನಾವು ಇಲ್ಲಿದ್ದೇವೆ",
+    "enterYourName": "ನಿಮ್ಮ ಹೆಸರನ್ನು ನಮೂದಿಸಿ",
+    "enterYourEmail": "ನಿಮ್ಮ ಇಮೇಲ್ ನಮೂದಿಸಿ",
+    "howCanWeHelp": "ನಾವು ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು?",
+    "tellUsWhatYouNeed": "ನಿಮಗೆ ಏನು ಬೇಕು ಎಂದು ನಮಗೆ ಹೇಳಿ...",
+    "sendMessage": "ಸಂದೇಶ ಕಳುಹಿಸಿ",
+    "farmSupportHours": "ಕೃಷಿ ಬೆಂಬಲದ ಸಮಯಗಳು",
+    "farmExpertsAvailable": "ನಮ್ಮ ಕೃಷಿ ತಜ್ಞರು ನಿಮ್ಮ ಯಾವುದೇ ಪ್ರಶ್ನೆಗಳು ಅಥವಾ ಕಾಳಜಿಗಳೊಂದಿಗೆ ಸಹಾಯ ಮಾಡಲು ಲಭ್ಯವಿದ್ದಾರೆ:",
+    "mondayToFriday": "ಸೋಮವಾರ - ಶುಕ್ರವಾರ: 7:00 AM - 6:00 PM",
+    "saturday": "ಶನಿವಾರ: 8:00 AM - 2:00 PM",
+    "sunday": "ಭಾನುವಾರ: ಮುಚ್ಚಲಾಗಿದೆ (ತುರ್ತು ಬೆಂಬಲ ಮಾತ್ರ)",
+    "emergencySupport": "ತುರ್ತು ಬೆಂಬಲ",
+    "urgentMatters": "ಉಪಕರಣ ವೈಫಲ್ಯಗಳು ಅಥವಾ ಪ್ರಾಣಿ ಕಲ್ಯಾಣಕ್ಕೆ ಸಂಬಂಧಿಸಿದ ತುರ್ತು ವಿಷಯಗಳಿಗೆ:",
+    "location": "ಸ್ಥಳ",
+    "farmHeadquarters": "ಫಾರ್ಮರ್ ಫ್ರೆಂಡ್ಲಿ ಮುಖ್ಯ ಕಚೇರಿ:"
   }
 };
 
