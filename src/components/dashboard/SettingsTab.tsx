@@ -11,7 +11,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const SettingsTab: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
   
   const cardClass = theme === 'light' 
@@ -36,10 +36,10 @@ const SettingsTab: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="push-notifications" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>
-                Push Notifications
+                {t('pushNotifications')}
               </Label>
               <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
-                Receive alerts for important events
+                {t('pushNotificationsDesc')}
               </p>
             </div>
             <Switch id="push-notifications" defaultChecked />
@@ -48,10 +48,10 @@ const SettingsTab: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="email-notifications" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>
-                Email Notifications
+                {t('emailNotifications')}
               </Label>
               <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
-                Receive daily summary reports
+                {t('emailNotificationsDesc')}
               </p>
             </div>
             <Switch id="email-notifications" />
@@ -60,10 +60,10 @@ const SettingsTab: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="alert-thresholds" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>
-                Alert Thresholds
+                {t('alertThresholds')}
               </Label>
               <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
-                Get notified for critical values only
+                {t('alertThresholdsDesc')}
               </p>
             </div>
             <Switch id="alert-thresholds" defaultChecked />
@@ -82,24 +82,24 @@ const SettingsTab: React.FC = () => {
         <div className="space-y-4">
           <div>
             <Label className={theme === 'light' ? 'text-gray-700' : 'text-white'}>
-              Data Collection Interval
+              {t('dataCollectionInterval')}
             </Label>
-            <RadioGroup defaultValue="15min" className="flex space-x-4 mt-2">
+            <RadioGroup defaultValue="15min" className="flex flex-wrap space-x-4 mt-2">
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="5min" id="r1" />
-                <Label htmlFor="r1" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>5 minutes</Label>
+                <Label htmlFor="r1" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>{t('fiveMinutes')}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="15min" id="r2" />
-                <Label htmlFor="r2" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>15 minutes</Label>
+                <Label htmlFor="r2" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>{t('fifteenMinutes')}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="30min" id="r3" />
-                <Label htmlFor="r3" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>30 minutes</Label>
+                <Label htmlFor="r3" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>{t('thirtyMinutes')}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="60min" id="r4" />
-                <Label htmlFor="r4" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>1 hour</Label>
+                <Label htmlFor="r4" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>{t('oneHour')}</Label>
               </div>
             </RadioGroup>
           </div>
@@ -107,10 +107,10 @@ const SettingsTab: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="data-storage" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>
-                Extended Data Storage
+                {t('extendedDataStorage')}
               </Label>
               <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
-                Store historical data for up to 1 year
+                {t('extendedDataStorageDesc')}
               </p>
             </div>
             <Switch id="data-storage" defaultChecked />
@@ -119,10 +119,10 @@ const SettingsTab: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="automatic-backup" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>
-                Automatic Backup
+                {t('automaticBackup')}
               </Label>
               <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
-                Weekly backup to cloud storage
+                {t('automaticBackupDesc')}
               </p>
             </div>
             <Switch id="automatic-backup" />
@@ -141,11 +141,11 @@ const SettingsTab: React.FC = () => {
         <div className="space-y-4">
           <div>
             <Label htmlFor="language-select" className={`block mb-2 ${theme === 'light' ? 'text-gray-700' : 'text-white'}`}>
-              Select Language
+              {t('selectLanguage')}
             </Label>
             <Select value={language} onValueChange={handleLanguageChange}>
               <SelectTrigger className="w-full" id="language-select">
-                <SelectValue placeholder="Select Language" />
+                <SelectValue placeholder={t('selectLanguage')} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="en">English</SelectItem>
@@ -164,7 +164,7 @@ const SettingsTab: React.FC = () => {
                   : 'bg-gray-800 hover:bg-gray-700 border-gray-700'
               }`}
             >
-              Cancel
+              {t('cancel')}
             </Button>
             <Button 
               className={`${
@@ -173,7 +173,7 @@ const SettingsTab: React.FC = () => {
                   : 'bg-farm-green hover:bg-farm-green/90 text-white'
               }`}
             >
-              Save Settings
+              {t('save')}
             </Button>
           </div>
         </div>
@@ -191,22 +191,22 @@ const SettingsTab: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="theme-toggle" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>
-                Dark Theme
+                {t('darkTheme')}
               </Label>
               <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
-                Toggle between light and dark mode
+                {t('darkThemeDesc')}
               </p>
             </div>
-            <Switch id="theme-toggle" checked={theme === 'dark'} />
+            <Switch id="theme-toggle" checked={theme === 'dark'} onCheckedChange={toggleTheme} />
           </div>
           
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="compact-view" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>
-                Compact View
+                {t('compactView')}
               </Label>
               <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
-                Show more information in less space
+                {t('compactViewDesc')}
               </p>
             </div>
             <Switch id="compact-view" />
@@ -215,10 +215,10 @@ const SettingsTab: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="animations" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>
-                UI Animations
+                {t('uiAnimations')}
               </Label>
               <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
-                Enable smooth transitions and animations
+                {t('uiAnimationsDesc')}
               </p>
             </div>
             <Switch id="animations" defaultChecked />

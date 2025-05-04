@@ -50,10 +50,10 @@ const ReportsTab: React.FC = () => {
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className={theme === 'light' ? 'bg-gray-50' : 'bg-gray-900'}>
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('name')}</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('date')}</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('type')}</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('actions')}</th>
               </tr>
             </thead>
             <tbody className={`divide-y ${theme === 'light' ? 'divide-gray-200' : 'divide-gray-700'}`}>
@@ -72,8 +72,8 @@ const ReportsTab: React.FC = () => {
                     {report.type}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <Button size="sm" variant="ghost" className="text-farm-green">View</Button>
-                    <Button size="sm" variant="ghost" className="text-farm-blue">Download</Button>
+                    <Button size="sm" variant="ghost" className="text-farm-green">{t('view')}</Button>
+                    <Button size="sm" variant="ghost" className="text-farm-blue">{t('download')}</Button>
                   </td>
                 </tr>
               ))}
@@ -90,10 +90,10 @@ const ReportsTab: React.FC = () => {
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className={theme === 'light' ? 'bg-gray-50' : 'bg-gray-900'}>
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Frequency</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Next Run</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('name')}</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('frequency')}</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('nextRun')}</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('actions')}</th>
               </tr>
             </thead>
             <tbody className={`divide-y ${theme === 'light' ? 'divide-gray-200' : 'divide-gray-700'}`}>
@@ -112,8 +112,8 @@ const ReportsTab: React.FC = () => {
                     {report.next}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <Button size="sm" variant="ghost" className="text-farm-green">Edit</Button>
-                    <Button size="sm" variant="ghost" className="text-red-500">Delete</Button>
+                    <Button size="sm" variant="ghost" className="text-farm-green">{t('edit')}</Button>
+                    <Button size="sm" variant="ghost" className="text-red-500">{t('delete')}</Button>
                   </td>
                 </tr>
               ))}
@@ -130,7 +130,7 @@ const ReportsTab: React.FC = () => {
             }`}
           >
             <Calendar className="h-4 w-4" />
-            Create New Scheduled Report
+            {t('createNewScheduledReport')}
           </Button>
         </div>
       </Card>
@@ -141,15 +141,15 @@ const ReportsTab: React.FC = () => {
         </h3>
         <div className="p-6 text-center border border-dashed rounded-lg border-gray-300 dark:border-gray-600">
           <FileText className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className={`mt-2 text-sm font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>Create a custom report</h3>
+          <h3 className={`mt-2 text-sm font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>{t('createCustomReport')}</h3>
           <p className={`mt-1 text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
-            Select parameters and date ranges to generate a custom report
+            {t('customReportDescription')}
           </p>
           <Button 
             className="mt-3"
             variant="outline" 
           >
-            Create Custom Report
+            {t('createCustomReport')}
           </Button>
         </div>
       </Card>
