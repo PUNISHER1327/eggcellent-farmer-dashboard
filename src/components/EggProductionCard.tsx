@@ -40,7 +40,7 @@ const EggProductionCard: React.FC<EggProductionCardProps> = ({
   }
 
   const cardClass = theme === 'light' 
-    ? 'p-6 light-glass-morphism sensor-card-hover border border-gray-200'
+    ? 'p-6 bg-white border border-gray-200 shadow-md rounded-lg'
     : 'p-6 glass-morphism sensor-card-hover';
 
   const textClass = theme === 'light' ? 'text-gray-800' : 'text-white';
@@ -59,7 +59,7 @@ const EggProductionCard: React.FC<EggProductionCardProps> = ({
       <div className="flex items-end justify-between mb-4">
         <div className="flex items-baseline">
           <span className={`text-3xl font-bold ${textClass}`}>{value.toFixed(1)}</span>
-          <span className="text-sm ml-1 text-muted-foreground">{theme === 'light' ? 'eggs/hen/day' : 'eggs/hen/day'}</span>
+          <span className={`text-sm ml-1 ${theme === 'light' ? 'text-gray-500' : 'text-gray-300'}`}>eggs/hen/day</span>
         </div>
         <span className={`px-2 py-1 text-xs rounded-full ${statusColor} text-white`}>{statusText}</span>
       </div>
@@ -67,8 +67,8 @@ const EggProductionCard: React.FC<EggProductionCardProps> = ({
       <Progress value={percentage} className="h-2" />
       
       <div className="flex justify-between mt-2 text-xs text-muted-foreground">
-        <span>0 eggs/hen/day</span>
-        <span>{maxValue} eggs/hen/day</span>
+        <span className={theme === 'light' ? 'text-gray-500' : 'text-gray-300'}>0 eggs/hen/day</span>
+        <span className={theme === 'light' ? 'text-gray-500' : 'text-gray-300'}>{maxValue} eggs/hen/day</span>
       </div>
     </Card>
   );

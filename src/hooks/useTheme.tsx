@@ -55,6 +55,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         --text-secondary: #4a4a4a;
         --chart-grid: #e5e7eb;
         --chart-text: #6b7280;
+        --card-background: #ffffff;
+        --card-border: #e5e7eb;
+        --card-highlight: #f3f4f6;
       }
       
       .dark-mode {
@@ -62,6 +65,39 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         --text-secondary: rgba(255, 255, 255, 0.7);
         --chart-grid: #374151;
         --chart-text: #9ca3af;
+        --card-background: rgba(255, 255, 255, 0.05);
+        --card-border: rgba(255, 255, 255, 0.1);
+        --card-highlight: rgba(255, 255, 255, 0.1);
+      }
+      
+      /* Ensure charts are visible in both modes */
+      .recharts-text {
+        fill: var(--chart-text) !important;
+      }
+      
+      .recharts-cartesian-grid-horizontal line,
+      .recharts-cartesian-grid-vertical line {
+        stroke: var(--chart-grid) !important;
+      }
+      
+      /* Fix card colors */
+      .light-glass-morphism {
+        background-color: var(--card-background);
+        border-color: var(--card-border);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+      
+      /* Make sure stat cards are visible in both themes */
+      .stat-card {
+        background-color: var(--card-background);
+        border: 1px solid var(--card-border);
+      }
+      
+      .light-mode .text-gradient {
+        background: linear-gradient(to bottom right, #1a1a1a, #4a4a4a);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
       }
     `;
     document.head.appendChild(style);

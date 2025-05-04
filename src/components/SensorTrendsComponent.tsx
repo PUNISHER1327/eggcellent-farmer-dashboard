@@ -2,8 +2,7 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { LineChart, XAxis, YAxis, CartesianGrid, Line, ResponsiveContainer, Tooltip } from 'recharts';
-import { useSensorData } from '@/hooks/useSensorData';
+import { LineChart, XAxis, YAxis, CartesianGrid, Line, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { useTheme } from '@/hooks/useTheme';
 import { ChartLine } from 'lucide-react';
 
@@ -35,8 +34,12 @@ const SensorTrendsComponent: React.FC = () => {
     humidity: { label: "Humidity (%)", theme: { light: "#2196F3", dark: "#2196F3" } },
   };
   
+  const cardClass = theme === 'light' 
+    ? 'p-6 bg-white border border-gray-200 shadow-md rounded-lg'
+    : 'glass-morphism p-6';
+
   return (
-    <Card className="glass-morphism p-6">
+    <Card className={cardClass}>
       <div className="flex items-center gap-2 mb-6">
         <ChartLine className="h-6 w-6 text-farm-green" />
         <h3 className={`text-2xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
@@ -54,6 +57,7 @@ const SensorTrendsComponent: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" stroke={theme === 'light' ? '#e5e7eb' : '#374151'} />
               <XAxis 
                 dataKey="time" 
+                tick={{ fill: theme === 'light' ? '#6b7280' : '#9ca3af' }}
                 stroke={theme === 'light' ? '#6b7280' : '#9ca3af'}
                 label={{ 
                   value: 'Time (hours)', 
@@ -63,6 +67,7 @@ const SensorTrendsComponent: React.FC = () => {
                 }} 
               />
               <YAxis 
+                tick={{ fill: theme === 'light' ? '#6b7280' : '#9ca3af' }}
                 stroke={theme === 'light' ? '#6b7280' : '#9ca3af'}
                 label={{ 
                   value: 'Value', 
@@ -81,6 +86,7 @@ const SensorTrendsComponent: React.FC = () => {
                 strokeWidth={2}
                 activeDot={{ r: 6 }}
                 name="co2"
+                dot={false}
               />
               <Line 
                 type="monotone" 
@@ -89,6 +95,7 @@ const SensorTrendsComponent: React.FC = () => {
                 strokeWidth={2} 
                 activeDot={{ r: 6 }}
                 name="ammonia"
+                dot={false}
               />
               <Line 
                 type="monotone" 
@@ -97,6 +104,7 @@ const SensorTrendsComponent: React.FC = () => {
                 strokeWidth={2} 
                 activeDot={{ r: 6 }}
                 name="temperature"
+                dot={false}
               />
               <Line 
                 type="monotone" 
@@ -105,10 +113,40 @@ const SensorTrendsComponent: React.FC = () => {
                 strokeWidth={2} 
                 activeDot={{ r: 6 }}
                 name="humidity"
+                dot={false}
               />
+              <Legend />
             </LineChart>
           </ResponsiveContainer>
         </ChartContainer>
+      </div>
+      
+      {/* Stats summary */}
+      <div className="grid grid-cols-4 gap-4 mt-6">
+        <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-purple-50' : 'bg-purple-900/20'}`}>
+          <p className={`text-sm font-medium ${theme === 'light' ? 'text-purple-700' : 'text-purple-300'}`}>Average CO2</p>
+          <p className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
+            {Math.round(historicalData.reduce((sum, item) => sum + item.co2, 0) / historicalData.length)} ppm
+          </p>
+        </div>
+        <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-red-50' : 'bg-red-900/20'}`}>
+          <p className={`text-sm font-medium ${theme === 'light' ? 'text-red-700' : 'text-red-300'}`}>Average Ammonia</p>
+          <p className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
+            {Math.round(historicalData.reduce((sum, item) => sum + item.ammonia, 0) / historicalData.length)} ppm
+          </p>
+        </div>
+        <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-orange-50' : 'bg-orange-900/20'}`}>
+          <p className={`text-sm font-medium ${theme === 'light' ? 'text-orange-700' : 'text-orange-300'}`}>Average Temp</p>
+          <p className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
+            {Math.round(historicalData.reduce((sum, item) => sum + item.temperature, 0) / historicalData.length)}°C
+          </p>
+        </div>
+        <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-blue-50' : 'bg-blue-900/20'}`}>
+          <p className={`text-sm font-medium ${theme === 'light' ? 'text-blue-700' : 'text-blue-300'}`}>Average Humidity</p>
+          <p className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
+            {Math.round(historicalData.reduce((sum, item) => sum + item.humidity, 0) / historicalData.length)}%
+          </p>
+        </div>
       </div>
     </Card>
   );

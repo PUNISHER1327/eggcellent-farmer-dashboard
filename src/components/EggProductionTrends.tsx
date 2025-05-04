@@ -60,9 +60,13 @@ const EggProductionTrends: React.FC = () => {
   const lastValue = recentProduction[recentProduction.length - 1]?.actual as number;
   const trend = lastValue - firstValue;
   const trendPercent = Math.round((trend / firstValue) * 100);
+  
+  const cardClass = theme === 'light' 
+    ? 'p-6 bg-white border border-gray-200 shadow-md rounded-lg'
+    : 'glass-morphism p-6';
 
   return (
-    <Card className="glass-morphism p-6">
+    <Card className={cardClass}>
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <ChartBarBig className="h-6 w-6 text-farm-green" />
@@ -73,12 +77,12 @@ const EggProductionTrends: React.FC = () => {
         
         <div className="flex items-center gap-6">
           <div>
-            <p className="text-sm text-muted-foreground">Average</p>
+            <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-300'}`}>Average</p>
             <p className={`font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>{avg} eggs/day</p>
           </div>
           
           <div>
-            <p className="text-sm text-muted-foreground">7-Day Trend</p>
+            <p className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-300'}`}>7-Day Trend</p>
             <div className="flex items-center gap-1">
               <span className={`font-semibold ${trend >= 0 ? 'text-farm-green' : 'text-farm-red'}`}>
                 {trend >= 0 ? '+' : ''}{trendPercent}%
@@ -123,6 +127,7 @@ const EggProductionTrends: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" stroke={theme === 'light' ? '#e5e7eb' : '#374151'} />
               <XAxis 
                 dataKey="day" 
+                tick={{ fill: theme === 'light' ? '#6b7280' : '#9ca3af' }}
                 stroke={theme === 'light' ? '#6b7280' : '#9ca3af'} 
                 label={{ 
                   value: 'Day', 
@@ -131,7 +136,10 @@ const EggProductionTrends: React.FC = () => {
                   fill: theme === 'light' ? '#6b7280' : '#9ca3af'
                 }}
               />
-              <YAxis stroke={theme === 'light' ? '#6b7280' : '#9ca3af'} />
+              <YAxis 
+                tick={{ fill: theme === 'light' ? '#6b7280' : '#9ca3af' }}
+                stroke={theme === 'light' ? '#6b7280' : '#9ca3af'} 
+              />
               <ChartTooltip
                 content={<ChartTooltipContent />}
               />
@@ -158,22 +166,23 @@ const EggProductionTrends: React.FC = () => {
                 fill="url(#colorPredicted)" 
                 name="predicted"
               />
+              <Legend />
             </AreaChart>
           </ResponsiveContainer>
         </ChartContainer>
       </div>
       
       <div className="grid grid-cols-3 gap-4 mt-6">
-        <div className="p-3 bg-blue-50 rounded-lg dark:bg-blue-900/20">
-          <p className="text-sm font-medium text-blue-600 dark:text-blue-400">Data Collected</p>
+        <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-blue-50' : 'bg-blue-900/20'}`}>
+          <p className={`text-sm font-medium ${theme === 'light' ? 'text-blue-700' : 'text-blue-300'}`}>Data Collected</p>
           <p className={`text-2xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>21 days</p>
         </div>
-        <div className="p-3 bg-purple-50 rounded-lg dark:bg-purple-900/20">
-          <p className="text-sm font-medium text-purple-600 dark:text-purple-400">Forecast Range</p>
+        <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-purple-50' : 'bg-purple-900/20'}`}>
+          <p className={`text-sm font-medium ${theme === 'light' ? 'text-purple-700' : 'text-purple-300'}`}>Forecast Range</p>
           <p className={`text-2xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>9 days</p>
         </div>
-        <div className="p-3 bg-green-50 rounded-lg dark:bg-green-900/20">
-          <p className="text-sm font-medium text-green-600 dark:text-green-400">Accuracy</p>
+        <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-green-50' : 'bg-green-900/20'}`}>
+          <p className={`text-sm font-medium ${theme === 'light' ? 'text-green-700' : 'text-green-300'}`}>Accuracy</p>
           <p className={`text-2xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>94.2%</p>
         </div>
       </div>
