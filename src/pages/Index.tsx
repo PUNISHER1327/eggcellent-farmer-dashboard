@@ -11,13 +11,15 @@ import CustomCursor from '../components/CustomCursor';
 import AnalyticsDashboard from '../components/AnalyticsDashboard';
 import ConveyorBeltStatus from '../components/ConveyorBeltStatus';
 import { useTheme } from '@/hooks/useTheme';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const Index = () => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
 
   useEffect(() => {
     // Set document title
-    document.title = "Farmer Friendly - Poultry Farm Dashboard";
+    document.title = t("farmFriendlyDashboard") || "Farmer Friendly - Poultry Farm Dashboard";
     
     // Apply body class for custom cursor
     document.body.classList.add('cursor-hen');
@@ -26,7 +28,7 @@ const Index = () => {
       // Clean up
       document.body.classList.remove('cursor-hen');
     };
-  }, []);
+  }, [t]);
 
   return (
     <div className={theme === 'light' ? 'light-mode min-h-screen' : 'dark-mode min-h-screen'}>

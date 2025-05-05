@@ -27,18 +27,18 @@ const ContactSection: React.FC = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium">Email</label>
+                  <label htmlFor="email" className="text-sm font-medium">{t('email')}</label>
                   <Input id="email" type="email" placeholder={t('enterYourEmail')} className="bg-secondary/50 border-white/10" />
                 </div>
               </div>
               
               <div className="space-y-2">
-                <label htmlFor="subject" className="text-sm font-medium">Subject</label>
+                <label htmlFor="subject" className="text-sm font-medium">{t('subject')}</label>
                 <Input id="subject" placeholder={t('howCanWeHelp')} className="bg-secondary/50 border-white/10" />
               </div>
               
               <div className="space-y-2">
-                <label htmlFor="message" className="text-sm font-medium">Message</label>
+                <label htmlFor="message" className="text-sm font-medium">{t('message')}</label>
                 <Textarea id="message" placeholder={t('tellUsWhatYouNeed')} className="bg-secondary/50 border-white/10 min-h-[120px]" />
               </div>
               

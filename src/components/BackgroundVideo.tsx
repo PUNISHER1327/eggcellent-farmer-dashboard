@@ -17,6 +17,13 @@ const BackgroundVideo: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-0">
+      {/* Background image with smooth transition */}
+      <img
+        src={imageSrc}
+        alt="Poultry farm background"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100"
+      />
+      
       {/* Image overlay */}
       <div className={`absolute inset-0 ${overlayClass} z-10 transition-colors duration-700`}></div>
       
@@ -39,13 +46,6 @@ const BackgroundVideo: React.FC = () => {
           ))}
         </div>
       </div>
-      
-      {/* Background image with smooth transition */}
-      <img
-        src={imageSrc}
-        alt="Poultry farm background"
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100"
-      />
     </div>
   );
 };

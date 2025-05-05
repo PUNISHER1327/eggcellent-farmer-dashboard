@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState } from 'react';
 
 type AvailableLanguage = 'en' | 'hi' | 'kn';
@@ -20,6 +19,9 @@ const translations = {
     "contact": "Contact",
     "dashboard": "Dashboard",
     "profile": "Profile",
+    
+    // Global
+    "farmFriendlyDashboard": "Farmer Friendly - Poultry Farm Dashboard",
     
     // Profile Page
     "farmerProfile": "Farmer Profile",
@@ -164,7 +166,11 @@ const translations = {
     "emergencySupport": "Emergency Support",
     "urgentMatters": "For urgent matters related to equipment failures or animal welfare:",
     "location": "Location",
-    "farmHeadquarters": "Farmer Friendly Headquarters:"
+    "farmHeadquarters": "Farmer Friendly Headquarters:",
+    
+    // Added missing translations
+    "subject": "Subject",
+    "message": "Message"
   },
   hi: {
     // Navigation
@@ -175,6 +181,9 @@ const translations = {
     "contact": "संपर्क",
     "dashboard": "डैशबोर्ड",
     "profile": "प्रोफाइल",
+    
+    // Global
+    "farmFriendlyDashboard": "फार्मर फ्रेंडली - पोल्ट्री फार्म डैशबोर्ड",
     
     // Profile Page
     "farmerProfile": "किसान प्रोफ़ाइल",
@@ -260,7 +269,6 @@ const translations = {
     "download": "डाउनलोड करें",
     "edit": "संपादित करें",
     "delete": "हटाएं",
-    // Removed duplicate "cancel" entry here
     "save": "सेटिंग्स सहेजें",
     "april2025PerformanceReport": "अप्रैल 2025 प्रदर्शन रिपोर्ट",
     "march2025PerformanceReport": "मार्च 2025 प्रदर्शन रिपोर्ट",
@@ -320,7 +328,11 @@ const translations = {
     "emergencySupport": "आपातकालीन सहायता",
     "urgentMatters": "उपकरण विफलताओं या पशु कल्याण से संबंधित तत्काल मामलों के लिए:",
     "location": "स्थान",
-    "farmHeadquarters": "फार्मर फ्रेंडली मुख्यालय:"
+    "farmHeadquarters": "फार्मर फ्रेंडली मुख्यालय:",
+    
+    // Added missing translations
+    "subject": "विषय",
+    "message": "संदेश"
   },
   kn: {
     // Navigation
@@ -331,6 +343,9 @@ const translations = {
     "contact": "ಸಂಪರ್ಕ",
     "dashboard": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
     "profile": "ಪ್ರೊಫೈಲ್",
+    
+    // Global
+    "farmFriendlyDashboard": "ಫಾರ್ಮರ್ ಫ್ರೆಂಡ್ಲಿ - ಪೋಲ್ಟ್ರಿ ಫಾರ್ಮ್ ಡ್ಯಾಶ್ಬೋರ್ಡ್",
     
     // Profile Page
     "farmerProfile": "ರೈತ ಪ್ರೊಫೈಲ್",
@@ -416,7 +431,6 @@ const translations = {
     "download": "ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
     "edit": "ಸಂಪಾದಿಸಿ",
     "delete": "ಅಳಿಸಿ",
-    // Removed duplicate "cancel" entry here
     "save": "ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಉಳಿಸಿ",
     "april2025PerformanceReport": "ಏಪ್ರಿಲ್ 2025 ಕಾರ್ಯಕ್ಷಮತೆ ವರದಿ",
     "march2025PerformanceReport": "ಮಾರ್ಚ್ 2025 ಕಾರ್ಯಕ್ಷಮತೆ ವರದಿ",
@@ -476,7 +490,11 @@ const translations = {
     "emergencySupport": "ತುರ್ತು ಬೆಂಬಲ",
     "urgentMatters": "ಉಪಕರಣ ವೈಫಲ್ಯಗಳು ಅಥವಾ ಪ್ರಾಣಿ ಕಲ್ಯಾಣಕ್ಕೆ ಸಂಬಂಧಿಸಿದ ತುರ್ತು ವಿಷಯಗಳಿಗೆ:",
     "location": "ಸ್ಥಳ",
-    "farmHeadquarters": "ಫಾರ್ಮರ್ ಫ್ರೆಂಡ್ಲಿ ಮುಖ್ಯ ಕಚೇರಿ:"
+    "farmHeadquarters": "ಫಾರ್ಮರ್ ಫ್ರೆಂಡ್ಲಿ ಮುಖ್ಯ ಕಚೇರಿ:",
+    
+    // Added missing translations
+    "subject": "ವಿಷಯ",
+    "message": "ಸಂದೇಶ"
   }
 };
 
