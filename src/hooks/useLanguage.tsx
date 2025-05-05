@@ -260,7 +260,7 @@ const translations = {
     "download": "डाउनलोड करें",
     "edit": "संपादित करें",
     "delete": "हटाएं",
-    "cancel": "रद्द करें",
+    // Removed duplicate "cancel" entry here
     "save": "सेटिंग्स सहेजें",
     "april2025PerformanceReport": "अप्रैल 2025 प्रदर्शन रिपोर्ट",
     "march2025PerformanceReport": "मार्च 2025 प्रदर्शन रिपोर्ट",
@@ -416,7 +416,7 @@ const translations = {
     "download": "ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
     "edit": "ಸಂಪಾದಿಸಿ",
     "delete": "ಅಳಿಸಿ",
-    "cancel": "ರದ್ದುಮಾಡಿ",
+    // Removed duplicate "cancel" entry here
     "save": "ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಉಳಿಸಿ",
     "april2025PerformanceReport": "ಏಪ್ರಿಲ್ 2025 ಕಾರ್ಯಕ್ಷಮತೆ ವರದಿ",
     "march2025PerformanceReport": "ಮಾರ್ಚ್ 2025 ಕಾರ್ಯಕ್ಷಮತೆ ವರದಿ",
