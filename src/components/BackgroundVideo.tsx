@@ -1,44 +1,23 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTheme } from '@/hooks/useTheme';
 
 const BackgroundVideo: React.FC = () => {
   const { theme } = useTheme();
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [useImage, setUseImage] = useState(true); // Toggle between video and image
   
-  // Different videos for light and dark mode
-  const videoSrc = theme === 'light' 
-    ? "https://images.unsplash.com/video/upload/v1537022671/Splashing_Water_kzqxeo.mp4" 
-    : "https://images.unsplash.com/video/upload/v1536530769/01_1_-_cropped_jqsspv.mp4";
-  
-  // Background images for light and dark mode
+  // Background images for light and dark mode - poultry farming related
   const imageSrc = theme === 'light'
-    ? "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1932&auto=format&fit=crop"
-    : "https://images.unsplash.com/photo-1501084817091-a4f3d1d19e07?q=80&w=2070&auto=format&fit=crop";
+    ? "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=2070&auto=format&fit=crop"  // Light chickens in farm
+    : "https://images.unsplash.com/photo-1582450880901-6c4c27a1ac51?q=80&w=2070&auto=format&fit=crop";  // Dark chickens in coop
   
   // Different overlay intensity for light and dark mode
   const overlayClass = theme === 'light'
     ? "bg-white/40 backdrop-blur-sm"
     : "bg-black/60";
 
-  useEffect(() => {
-    console.log("BackgroundVideo component mounted, theme:", theme);
-    console.log("Using image:", useImage);
-  }, [theme, useImage]);
-
-  const handleVideoLoaded = () => {
-    console.log("Video loaded successfully");
-    setIsLoaded(true);
-  };
-
-  const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement>) => {
-    console.error("Video failed to load:", e);
-  };
-
   return (
     <div className="fixed inset-0 z-0">
-      {/* Video/Image overlay */}
+      {/* Image overlay */}
       <div className={`absolute inset-0 ${overlayClass} z-10 transition-colors duration-700`}></div>
       
       {/* Animated particles */}
@@ -61,29 +40,12 @@ const BackgroundVideo: React.FC = () => {
         </div>
       </div>
       
-      {useImage ? (
-        /* Background image with smooth transition */
-        <img
-          src={imageSrc}
-          alt="Farm background"
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100"
-        />
-      ) : (
-        /* Video element with smooth transition between sources */
-        <video
-          key={videoSrc}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-          autoPlay
-          muted
-          loop
-          playsInline
-          onLoadedData={handleVideoLoaded}
-          onError={handleVideoError}
-        >
-          <source src={videoSrc} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      )}
+      {/* Background image with smooth transition */}
+      <img
+        src={imageSrc}
+        alt="Poultry farm background"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100"
+      />
     </div>
   );
 };
