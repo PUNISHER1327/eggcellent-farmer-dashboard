@@ -1,10 +1,11 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'en' | 'hi' | 'kn';
 
 interface LanguageContextType {
   language: Language;
-  changeLanguage: (language: Language) => void;
+  setLanguage: (language: Language) => void; // Changed from changeLanguage to setLanguage
   t: (key: string, vars?: { [key: string]: string }) => string;
 }
 
@@ -20,7 +21,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const changeLanguage = (language: Language) => {
+  const handleLanguageChange = (language: Language) => {
     setLanguage(language);
     localStorage.setItem('language', language);
   };
@@ -189,7 +190,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   };
   
   return (
-    <LanguageContext.Provider value={{ language, changeLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage: handleLanguageChange, t }}>
       {children}
     </LanguageContext.Provider>
   );
