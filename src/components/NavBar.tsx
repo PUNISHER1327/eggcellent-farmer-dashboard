@@ -48,7 +48,7 @@ const NavBar: React.FC = () => {
     <>
       <nav
         className={`fixed top-0 left-0 right-0 w-full z-40 transition-all duration-500 ${
-          theme === 'light' ? 'light-glass-morphism' : 'glass-morphism'
+          theme === 'light' ? 'nav-light-glass' : 'glass-morphism'
         } ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}
       >
         <div className="container mx-auto flex items-center justify-between py-4">
@@ -180,7 +180,7 @@ const NavBar: React.FC = () => {
       
       {/* Mobile menu */}
       <div 
-        className={`fixed inset-0 z-30 ${theme === 'light' ? 'bg-white/90 text-gray-800' : 'bg-black/90 text-white'} backdrop-blur-md transform transition-transform duration-300 ease-in-out ${
+        className={`fixed inset-0 z-30 ${theme === 'light' ? 'bg-white/95 text-gray-800' : 'bg-black/90 text-white backdrop-blur-md'} transform transition-transform duration-300 ease-in-out ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

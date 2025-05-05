@@ -22,10 +22,10 @@ const BackgroundVideo: React.FC = () => {
   // Get the current set of images based on theme
   const images = theme === 'light' ? lightModeImages : darkModeImages;
   
-  // Different overlay intensity for light and dark mode
+  // Different overlay intensity for light and dark mode - removed blur from light mode
   const overlayClass = theme === 'light'
-    ? "bg-white/20 backdrop-blur-[2px]" // Reduced blur and opacity for better readability in light mode
-    : "bg-black/60";
+    ? "bg-white/40" // Removed blur and adjusted opacity for better readability in light mode
+    : "bg-black/60 backdrop-blur-[2px]"; // Keep backdrop blur only for dark mode
 
   // Shuffle through images every 10 seconds
   useEffect(() => {
