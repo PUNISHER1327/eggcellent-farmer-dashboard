@@ -1,9 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card } from '@/components/ui/card';
-import { AlertTriangle, ThumbsUp } from 'lucide-react';
+import { AlertTriangle, ThumbsUp, ToggleLeft, ToggleRight } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Button } from '@/components/ui/button';
+import { toast } from '@/components/ui/use-toast';
 
 const ConveyorBeltStatus: React.FC = () => {
   const { theme } = useTheme();
@@ -12,6 +15,7 @@ const ConveyorBeltStatus: React.FC = () => {
   const [threshold] = useState(25);
   const [isOn, setIsOn] = useState(ammoniaLevel > threshold);
   const [ammoniaHistory, setAmmoniaHistory] = useState<{ time: string, value: number }[]>([]);
+  const [autoMode, setAutoMode] = useState(true);
 
   // Generate initial ammonia history data
   useEffect(() => {
@@ -50,10 +54,46 @@ const ConveyorBeltStatus: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Control conveyor belt based on ammonia level
+  // Control conveyor belt based on ammonia level (only in auto mode)
   useEffect(() => {
-    setIsOn(ammoniaLevel > threshold);
-  }, [ammoniaLevel, threshold]);
+    if (autoMode) {
+      setIsOn(ammoniaLevel > threshold);
+    }
+  }, [ammoniaLevel, threshold, autoMode]);
+
+  // Handle manual control
+  const handleToggleConveyor = () => {
+    if (autoMode) {
+      // First, switch to manual mode when user tries to toggle
+      setAutoMode(false);
+      toast({
+        title: t('manualModeActivated'),
+        description: t('conveyorControlSwitchedToManual'),
+      });
+    } else {
+      // Toggle conveyor state
+      setIsOn(prev => !prev);
+      toast({
+        title: isOn ? t('conveyorTurningOff') : t('conveyorTurningOn'),
+        description: isOn ? t('conveyorShuttingDown') : t('conveyorStarting'),
+      });
+    }
+  };
+
+  // Handle toggling between auto and manual mode
+  const handleToggleMode = () => {
+    setAutoMode(prev => !prev);
+    
+    if (!autoMode) {
+      // When switching back to auto, update state based on current ammonia level
+      setIsOn(ammoniaLevel > threshold);
+    }
+    
+    toast({
+      title: autoMode ? t('manualModeActivated') : t('autoModeActivated'),
+      description: autoMode ? t('manualModeDescription') : t('autoModeDescription'),
+    });
+  };
 
   return (
     <section id="conveyor-belt" className="py-10">
@@ -78,9 +118,35 @@ const ConveyorBeltStatus: React.FC = () => {
                   <span className="text-4xl font-bold">{isOn ? t('on') : t('off')}</span>
                 </div>
                 <p className="mt-4 text-center">
-                  {isOn ? t('conveyorBeltOnMessage', {ammonia: ammoniaLevel.toString(), threshold: threshold.toString()}) 
-                  : t('conveyorBeltOffMessage', {ammonia: ammoniaLevel.toString(), threshold: threshold.toString()})}
+                  {autoMode 
+                    ? (isOn ? t('conveyorBeltOnMessage', {ammonia: ammoniaLevel.toString(), threshold: threshold.toString()}) 
+                      : t('conveyorBeltOffMessage', {ammonia: ammoniaLevel.toString(), threshold: threshold.toString()}))
+                    : (isOn ? t('conveyorManuallyOn') : t('conveyorManuallyOff'))}
                 </p>
+                
+                {/* Manual control buttons */}
+                <div className="mt-6 flex flex-col gap-3 w-full">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">{autoMode ? t('autoMode') : t('manualMode')}</span>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={handleToggleMode}
+                      className="flex gap-2 items-center"
+                    >
+                      {autoMode ? <ToggleRight className="h-4 w-4" /> : <ToggleLeft className="h-4 w-4" />}
+                      {autoMode ? t('switchToManual') : t('switchToAuto')}
+                    </Button>
+                  </div>
+                  
+                  <Button 
+                    variant={isOn ? "destructive" : "default"}
+                    onClick={handleToggleConveyor}
+                    className="mt-2"
+                  >
+                    {isOn ? t('turnOffConveyor') : t('turnOnConveyor')}
+                  </Button>
+                </div>
               </div>
               
               <div>
