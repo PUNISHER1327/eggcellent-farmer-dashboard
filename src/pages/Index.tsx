@@ -9,6 +9,7 @@ import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
 import CustomCursor from '../components/CustomCursor';
 import AnalyticsDashboard from '../components/AnalyticsDashboard';
+import ConveyorBeltStatus from '../components/ConveyorBeltStatus';
 import { useTheme } from '@/hooks/useTheme';
 
 const Index = () => {
@@ -45,6 +46,9 @@ const Index = () => {
         
         {/* Live Data Section */}
         <LiveDataSection />
+        
+        {/* Conveyor Belt Status */}
+        <ConveyorBeltStatus />
         
         {/* Analytics Dashboard */}
         <AnalyticsDashboard />

@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState } from 'react';
 
 type AvailableLanguage = 'en' | 'hi' | 'kn';
@@ -6,7 +7,7 @@ interface LanguageContextType {
   language: AvailableLanguage;
   setLanguage: (language: AvailableLanguage) => void;
   translations: Record<string, Record<string, string>>;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, string>) => string;
 }
 
 const translations = {
@@ -18,6 +19,34 @@ const translations = {
     "insights": "Insights",
     "contact": "Contact",
     "dashboard": "Dashboard",
+    "profile": "Profile",
+    
+    // Profile Page
+    "farmerProfile": "Farmer Profile",
+    "phone": "Phone",
+    "email": "Email",
+    "farmLocation": "Farm Location",
+    "chickenCount": "Number of Chickens",
+    "joiningDate": "Joining Date",
+    "editProfile": "Edit Profile",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "healthStatus": "Health Status",
+    "noHealthAlerts": "No health alerts at this time.",
+    "lowFeedAlert": "Low feed level detected in Coop #3",
+    "temperatureAlert": "High temperature warning in Coop #2",
+    "vaccinationReminder": "Vaccination due for Batch #A12",
+    
+    // Conveyor Belt
+    "conveyorBeltStatus": "Conveyor Belt Status",
+    "currentStatus": "Current Status",
+    "ammoniaLevel": "Ammonia Level",
+    "thresholdValue": "Threshold Value",
+    "on": "ON",
+    "off": "OFF",
+    "statusMessage": "Status Message",
+    "conveyorBeltOnMessage": "Conveyor belt is ON because ammonia level ({ammonia} ppm) is above threshold ({threshold} ppm)",
+    "conveyorBeltOffMessage": "Conveyor belt is OFF because ammonia level ({ammonia} ppm) is below threshold ({threshold} ppm)",
     
     // Analytics Dashboard
     "advancedAnalytics": "Advanced Analytics",
@@ -76,7 +105,6 @@ const translations = {
     "download": "Download",
     "edit": "Edit",
     "delete": "Delete",
-    "cancel": "Cancel",
     "save": "Save Settings",
     "april2025PerformanceReport": "April 2025 Performance Report",
     "march2025PerformanceReport": "March 2025 Performance Report",
@@ -146,6 +174,34 @@ const translations = {
     "insights": "इनसाइट्स",
     "contact": "संपर्क",
     "dashboard": "डैशबोर्ड",
+    "profile": "प्रोफाइल",
+    
+    // Profile Page
+    "farmerProfile": "किसान प्रोफ़ाइल",
+    "phone": "फोन",
+    "email": "ईमेल",
+    "farmLocation": "फार्म स्थान",
+    "chickenCount": "मुर्गियों की संख्या",
+    "joiningDate": "शामिल होने की तारीख",
+    "editProfile": "प्रोफाइल संपादित करें",
+    "saveChanges": "परिवर्तन सहेजें",
+    "cancel": "रद्द करें",
+    "healthStatus": "स्वास्थ्य स्थिति",
+    "noHealthAlerts": "इस समय कोई स्वास्थ्य अलर्ट नहीं है।",
+    "lowFeedAlert": "कूप #3 में कम फ़ीड स्तर पाया गया",
+    "temperatureAlert": "कूप #2 में उच्च तापमान चेतावनी",
+    "vaccinationReminder": "बैच #A12 के लिए टीकाकरण देय",
+    
+    // Conveyor Belt
+    "conveyorBeltStatus": "कन्वेयर बेल्ट की स्थिति",
+    "currentStatus": "वर्तमान स्थिति",
+    "ammoniaLevel": "अमोनिया स्तर",
+    "thresholdValue": "सीमा मूल्य",
+    "on": "चालू",
+    "off": "बंद",
+    "statusMessage": "स्थिति संदेश",
+    "conveyorBeltOnMessage": "कन्वेयर बेल्ट चालू है क्योंकि अमोनिया स्तर ({ammonia} पीपीएम) सीमा से ऊपर है ({threshold} पीपीएम)",
+    "conveyorBeltOffMessage": "कन्वेयर बेल्ट बंद है क्योंकि अमोनिया स्तर ({ammonia} पीपीएम) सीमा से नीचे है ({threshold} पीपीएम)",
     
     // Analytics Dashboard
     "advancedAnalytics": "उन्नत विश्लेषिकी",
@@ -231,22 +287,22 @@ const translations = {
     "emailNotifications": "ईमेल सूचनाएं",
     "emailNotificationsDesc": "दैनिक सारांश रिपोर्ट प्राप्त करें",
     "alertThresholds": "अलर्ट सीमाएं",
-    "alertThresholdsDesc": "केवल महत्वपूर्ण मूल्यಗಳಿಗೆ ಸೂಚನೆ ಪಡೆಯಿರಿ",
+    "alertThresholdsDesc": "केवल महत्वपूर्ण मूल्यों के लिए सूचित किया जाए",
     "dataCollectionInterval": "डेटा संग्रह अंतराल",
     "fiveMinutes": "5 मिनट",
     "fifteenMinutes": "15 मिनट",
     "thirtyMinutes": "30 मिनट",
     "oneHour": "1 घंटा",
-    "extendedDataStorage": "विस್ತರಿತ ಡೇಟಾ ಸಂಗ್ರಹಣೆ",
-    "extendedDataStorageDesc": "1 वर್ಷ तक का ऐತಿಹासिक ಡೇಟಾ ಸಂಗ್ರಹಿಸಿ",
-    "automaticBackup": "स್ವಯಂಚಾಲಿತ ಬ್ಯಾಕಪ್",
-    "automaticBackupDesc": "साप್ತಾಹಿಕ ಕ್ಲೌಡ್ ಸಂಗ್ರಹಣೆಗೆ ಬ್ಯಾಕಪ್ ಮಾಡಿ",
-    "darkTheme": "डार್ಕ್ ಥೀಮ್",
-    "darkThemeDesc": "ಲೈಟ್ ಮತ್ತು ಡಾರ್ಕ್ ಮೋಡ್‌ಗಳ ನಡುವೆ ಬದಲಿಸಿ",
-    "compactView": "ಕಾಂಪ್ಯಾಕ್ಟ್ ವೀಕ್ಷಣೆ",
-    "compactViewDesc": "ಕಡಿಮೆ ಸ್ಥಳದಲ್ಲಿ ಹೆಚ್ಚಿನ ಮಾಹಿತಿಯನ್ನು ತೋರಿಸಿ",
-    "uiAnimations": "ಯುಐ ಅನಿಮೇಷನ್‌ಗಳು",
-    "uiAnimationsDesc": "ಸುಗಮ ಪರಿವರ್ತನೆಗಳು ಮತ್ತು ಅನಿಮೇಷನ್‌ಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ",
+    "extendedDataStorage": "विस्तारित डेटा संग्रहण",
+    "extendedDataStorageDesc": "1 वर्ष तक का ऐतिहासिक डेटा संग्रहित करें",
+    "automaticBackup": "स्वचालित बैकअप",
+    "automaticBackupDesc": "साप्ताहिक क्लाउड स्टोरेज पर बैकअप",
+    "darkTheme": "डार्क थीम",
+    "darkThemeDesc": "लाइट और डार्क मोड के बीच टॉगल करें",
+    "compactView": "कॉम्पैक्ट व्यू",
+    "compactViewDesc": "कम स्थान में अधिक जानकारी दिखाएं",
+    "uiAnimations": "यूआई एनिमेशन",
+    "uiAnimationsDesc": "सुचारू ट्रांजिशन और एनिमेशन सक्षम करें",
     
     // Contact Section
     "contactUs": "हमसे संपर्क करें",
@@ -257,7 +313,7 @@ const translations = {
     "tellUsWhatYouNeed": "हमें बताएं आपको क्या चाहिए...",
     "sendMessage": "संदेश भेजें",
     "farmSupportHours": "फार्म सपोर्ट के घंटे",
-    "farmExpertsAvailable": "हमारे कृषि विशेषज्ञ आपके किस��� भी सवाल या चिंता के साथ सहायता के लिए उपलब्ध हैं:",
+    "farmExpertsAvailable": "हमारे कृषि विशेषज्ञ आपके किसी भी सवाल या चिंता के साथ सहायता के लिए उपलब्ध हैं:",
     "mondayToFriday": "सोमवार - शुक्रवार: सुबह 7:00 - शाम 6:00",
     "saturday": "शनिवार: सुबह 8:00 - दोपहर 2:00",
     "sunday": "रविवार: बंद (केवल आपातकालीन सहायता)",
@@ -274,6 +330,34 @@ const translations = {
     "insights": "ಒಳನೋಟಗಳು",
     "contact": "ಸಂಪರ್ಕ",
     "dashboard": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+    "profile": "ಪ್ರೊಫೈಲ್",
+    
+    // Profile Page
+    "farmerProfile": "ರೈತ ಪ್ರೊಫೈಲ್",
+    "phone": "ಫೋನ್",
+    "email": "ಇಮೇಲ್",
+    "farmLocation": "ಕೃಷಿ ಸ್ಥಳ",
+    "chickenCount": "ಕೋಳಿಗಳ ಸಂಖ್ಯೆ",
+    "joiningDate": "ಸೇರಿದ ದಿನಾಂಕ",
+    "editProfile": "ಪ್ರೊಫೈಲ್ ಸಂಪಾದಿಸಿ",
+    "saveChanges": "ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ",
+    "cancel": "ರದ್ದುಮಾಡಿ",
+    "healthStatus": "ಆರೋಗ್ಯ ಸ್ಥಿತಿ",
+    "noHealthAlerts": "ಈ ಸಮಯದಲ್ಲಿ ಯಾವುದೇ ಆರೋಗ್ಯ ಎಚ್ಚರಿಕೆಗಳಿಲ್ಲ.",
+    "lowFeedAlert": "ಕೂಪ್ #3 ರಲ್ಲಿ ಕಡಿಮೆ ಆಹಾರ ಮಟ್ಟ ಪತ್ತೆಯಾಗಿದೆ",
+    "temperatureAlert": "ಕೂಪ್ #2 ರಲ್ಲಿ ಹೆಚ್ಚಿನ ತಾಪಮಾನದ ಎಚ್ಚರಿಕೆ",
+    "vaccinationReminder": "ಬ್ಯಾಚ್ #A12 ಗೆ ಲಸಿಕೆ ಬಾಕಿ ಇದೆ",
+    
+    // Conveyor Belt
+    "conveyorBeltStatus": "ಕನ್ವೇಯರ್ ಬೆಲ್ಟ್ ಸ್ಥಿತಿ",
+    "currentStatus": "ಪ್ರಸ್ತುತ ಸ್ಥಿತಿ",
+    "ammoniaLevel": "ಅಮೋನಿಯಾ ಮಟ್ಟ",
+    "thresholdValue": "ಥ್ರೆಶೋಲ್ಡ್ ಮೌಲ್ಯ",
+    "on": "ಆನ್",
+    "off": "ಆಫ್",
+    "statusMessage": "ಸ್ಥಿತಿ ಸಂದೇಶ",
+    "conveyorBeltOnMessage": "ಕನ್ವೇಯರ್ ಬೆಲ್ಟ್ ಆನ್ ಆಗಿದೆ ಏಕೆಂದರೆ ಅಮೋನಿಯಾ ಮಟ್ಟ ({ammonia} ಪಿಪಿಎಂ) ಥ್ರೆಶೋಲ್ಡ್‌ಗಿಂತ ಹೆಚ್ಚಾಗಿದೆ ({threshold} ಪಿಪಿಎಂ)",
+    "conveyorBeltOffMessage": "ಕನ್ವೇಯರ್ ಬೆಲ್ಟ್ ಆಫ್ ಆಗಿದೆ ಏಕೆಂದರೆ ಅಮೋನಿಯಾ ಮಟ್ಟ ({ammonia} ಪಿಪಿಎಂ) ಥ್ರೆಶೋಲ್ಡ್‌ಗಿಂತ ಕಡಿಮೆ ಇದೆ ({threshold} ಪಿಪಿಎಂ)",
     
     // Analytics Dashboard
     "advancedAnalytics": "ಸುಧಾರಿತ ವಿಶ್ಲೇಷಣೆಗಳು",
@@ -305,7 +389,7 @@ const translations = {
     "hourSensorTrends": "24-ಗಂಟೆ ಸೆನ್ಸರ್ ಪ್ರವೃತ್ತಿಗಳು",
     "eggProductionTrends": "ಮೊಟ್ಟೆ ಉತ್ಪಾದನೆ ಪ್ರವೃತ್ತಿಗಳು",
     "averageCO2": "ಸರಾಸರಿ CO2",
-    "averageAmmonia": "ಸರಾಸರಿ ಅಮೋनಿಯ",
+    "averageAmmonia": "ಸರಾಸರಿ ಅಮೋನಿಯಾ",
     "averageTemp": "ಸರಾಸರಿ ತಾಪಮಾನ",
     
     // Performance Tab
@@ -355,7 +439,7 @@ const translations = {
     "languageSettings": "ಭಾಷಾ ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
     "selectLanguage": "ಭಾಷೆಯನ್ನು ಆಯ್ಕೆ ಮಾಡಿ",
     "pushNotifications": "ಪುಶ್ ಅಧಿಸೂಚನೆಗಳು",
-    "pushNotificationsDesc": "ಮಹತ್ವದ ಘटನೆಗಳಿಗೆ ಎಚ್ಚರಿಕೆಗಳನ್ನು ಪಡೆಯಿರಿ",
+    "pushNotificationsDesc": "ಮಹತ್ವದ ಘಟನೆಗಳಿಗೆ ಎಚ್ಚರಿಕೆಗಳನ್ನು ಪಡೆಯಿರಿ",
     "emailNotifications": "ಇಮೇಲ್ ಅಧಿಸೂಚನೆಗಳು",
     "emailNotificationsDesc": "ದೈನಂದಿನ ಸಾರಾಂಶ ವರದಿಗಳನ್ನು ಪಡೆಯಿರಿ",
     "alertThresholds": "ಎಚ್ಚರಿಕೆ ಮಿತಿಗಳು",
@@ -401,8 +485,17 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<AvailableLanguage>('en');
 
-  const t = (key: string): string => {
-    return translations[language][key] || key;
+  const t = (key: string, params?: Record<string, string>): string => {
+    let text = translations[language][key] || key;
+    
+    // Replace parameters if provided
+    if (params) {
+      Object.entries(params).forEach(([param, value]) => {
+        text = text.replace(`{${param}}`, value);
+      });
+    }
+    
+    return text;
   };
 
   return (

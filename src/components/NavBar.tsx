@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Egg, Moon, Sun, Menu, X, Globe } from 'lucide-react';
+import { Egg, Moon, Sun, Menu, X, Globe, User } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
+import { Link } from 'react-router-dom';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import {
   DropdownMenu,
@@ -52,24 +53,40 @@ const NavBar: React.FC = () => {
       >
         <div className="container mx-auto flex items-center justify-between py-4">
           <div className="flex items-center space-x-2">
-            <div className="relative group">
-              <Egg className={`h-7 w-7 ${theme === 'light' ? 'text-farm-orange' : 'text-farm-yellow'} transition-transform duration-300 group-hover:rotate-12`} />
-              <div className="absolute -inset-2 rounded-full bg-white/10 scale-0 group-hover:scale-100 transition-transform duration-300"></div>
-            </div>
-            <span className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'} tracking-tight`}>Farmer Friendly</span>
+            <Link to="/" className="flex items-center space-x-2 group">
+              <div className="relative">
+                <Egg className={`h-7 w-7 ${theme === 'light' ? 'text-farm-orange' : 'text-farm-yellow'} transition-transform duration-300 group-hover:rotate-12`} />
+                <div className="absolute -inset-2 rounded-full bg-white/10 scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+              </div>
+              <span className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'} tracking-tight`}>Farmer Friendly</span>
+            </Link>
           </div>
           
           <div className="hidden md:flex space-x-8">
-            {['Home', 'Live Data', 'Insights', 'Contact'].map((item, index) => (
-              <a 
-                key={item} 
-                href={item === 'Home' ? '#' : `#${item.toLowerCase().replace(' ', '-')}`}
-                className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {t(item.toLowerCase().replace(' ', ''))}
-              </a>
-            ))}
+            <Link 
+              to="/" 
+              className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
+            >
+              {t('home')}
+            </Link>
+            <a 
+              href="#live-data"
+              className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
+            >
+              {t('liveData')}
+            </a>
+            <a 
+              href="#insights"
+              className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
+            >
+              {t('insights')}
+            </a>
+            <a 
+              href="#contact"
+              className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
+            >
+              {t('contact')}
+            </a>
           </div>
           
           <div className="flex items-center space-x-4">
@@ -121,6 +138,21 @@ const NavBar: React.FC = () => {
               </HoverCardContent>
             </HoverCard>
             
+            <Link to="/profile">
+              <Button
+                variant="outline"
+                size="icon"
+                className={`rounded-full transition-colors duration-300 ${
+                  theme === 'light' 
+                    ? 'bg-white/70 border-gray-300 hover:bg-white/90' 
+                    : 'bg-transparent border-white/20 hover:bg-white/10'
+                }`}
+              >
+                <User className="h-4 w-4" />
+                <span className="sr-only">Profile</span>
+              </Button>
+            </Link>
+            
             <Button 
               variant="outline" 
               className={`hidden md:flex ${
@@ -153,16 +185,41 @@ const NavBar: React.FC = () => {
         }`}
       >
         <div className="container mx-auto h-full flex flex-col justify-center items-center space-y-8">
-          {['Home', 'Live Data', 'Insights', 'Contact'].map((item) => (
-            <a 
-              key={item}
-              href={item === 'Home' ? '#' : `#${item.toLowerCase().replace(' ', '-')}`}
-              className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {t(item.toLowerCase().replace(' ', ''))}
-            </a>
-          ))}
+          <Link 
+            to="/"
+            className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            {t('home')}
+          </Link>
+          <a 
+            href="#live-data"
+            className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            {t('liveData')}
+          </a>
+          <a 
+            href="#insights"
+            className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            {t('insights')}
+          </a>
+          <a 
+            href="#contact"
+            className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            {t('contact')}
+          </a>
+          <Link
+            to="/profile"
+            className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            {t('profile')}
+          </Link>
           <Button 
             className="mt-6 bg-farm-green hover:bg-farm-green/80 text-white"
           >
