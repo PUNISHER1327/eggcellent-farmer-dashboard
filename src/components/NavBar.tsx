@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Egg, Moon, Sun, Menu, X, Globe, User } from 'lucide-react';
+import { Egg, Moon, Sun, Menu, X, Globe, User, LogOut } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
-import { Link } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import { Link, useNavigate } from 'react-router-dom';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import {
   DropdownMenu,
@@ -19,6 +20,8 @@ const NavBar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
+  const { user, signOut, sensorKitActivated } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,6 +43,11 @@ const NavBar: React.FC = () => {
     };
   }, [lastScrollY]);
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
@@ -58,7 +66,9 @@ const NavBar: React.FC = () => {
                 <Egg className={`h-7 w-7 ${theme === 'light' ? 'text-farm-orange' : 'text-farm-yellow'} transition-transform duration-300 group-hover:rotate-12`} />
                 <div className="absolute -inset-2 rounded-full bg-white/10 scale-0 group-hover:scale-100 transition-transform duration-300"></div>
               </div>
-              <span className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'} tracking-tight`}>Farmer Friendly</span>
+              <span className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'} tracking-tight`}>
+                {t('farmerFriendly')}
+              </span>
             </Link>
           </div>
           
@@ -68,6 +78,12 @@ const NavBar: React.FC = () => {
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
             >
               {t('home')}
+            </Link>
+            <Link
+              to="/mission"
+              className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
+            >
+              {t('mission')}
             </Link>
             <a 
               href="#live-data"
@@ -138,20 +154,46 @@ const NavBar: React.FC = () => {
               </HoverCardContent>
             </HoverCard>
             
-            <Link to="/profile">
-              <Button
-                variant="outline"
-                size="icon"
-                className={`rounded-full transition-colors duration-300 ${
-                  theme === 'light' 
-                    ? 'bg-white/70 border-gray-300 hover:bg-white/90' 
-                    : 'bg-transparent border-white/20 hover:bg-white/10'
-                }`}
-              >
-                <User className="h-4 w-4" />
-                <span className="sr-only">Profile</span>
-              </Button>
-            </Link>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className={`rounded-full transition-colors duration-300 ${
+                      theme === 'light' 
+                        ? 'bg-white/70 border-gray-300 hover:bg-white/90' 
+                        : 'bg-transparent border-white/20 hover:bg-white/10'
+                    }`}
+                  >
+                    <User className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => navigate('/profile')}>
+                    {t('profile')}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut} className="text-red-500">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    {t('logout')}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link to="/auth">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={`rounded-full transition-colors duration-300 ${
+                    theme === 'light' 
+                      ? 'bg-white/70 border-gray-300 hover:bg-white/90' 
+                      : 'bg-transparent border-white/20 hover:bg-white/10'
+                  }`}
+                >
+                  <User className="h-4 w-4" />
+                </Button>
+              </Link>
+            )}
             
             <Button 
               variant="outline" 
@@ -160,6 +202,7 @@ const NavBar: React.FC = () => {
                   ? 'bg-white/70 border-gray-300 text-gray-800 hover:bg-white/90' 
                   : 'bg-transparent border-white/20 text-white hover:bg-white/10'
               }`}
+              onClick={() => navigate(sensorKitActivated ? '/' : user ? '/profile' : '/auth')}
             >
               {t('dashboard')}
             </Button>
@@ -192,6 +235,13 @@ const NavBar: React.FC = () => {
           >
             {t('home')}
           </Link>
+          <Link 
+            to="/mission"
+            className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            {t('mission')}
+          </Link>
           <a 
             href="#live-data"
             className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
@@ -213,18 +263,37 @@ const NavBar: React.FC = () => {
           >
             {t('contact')}
           </a>
-          <Link
-            to="/profile"
-            className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            {t('profile')}
-          </Link>
-          <Button 
-            className="mt-6 bg-farm-green hover:bg-farm-green/80 text-white"
-          >
-            {t('dashboard')}
-          </Button>
+          {user ? (
+            <>
+              <Link
+                to="/profile"
+                className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {t('profile')}
+              </Link>
+              <Button 
+                onClick={() => {
+                  handleSignOut();
+                  setMobileMenuOpen(false);
+                }}
+                className="mt-6 bg-red-500 hover:bg-red-600 text-white"
+              >
+                {t('logout')}
+              </Button>
+            </>
+          ) : (
+            <Link
+              to="/auth"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <Button 
+                className="mt-6 bg-farm-green hover:bg-farm-green/80 text-white"
+              >
+                {t('signIn')}
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </>
