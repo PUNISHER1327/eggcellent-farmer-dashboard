@@ -24,6 +24,9 @@ const Index = () => {
     // Apply body class for custom cursor
     document.body.classList.add('cursor-hen');
     
+    // Make sure we scroll to the top when the page loads
+    window.scrollTo(0, 0);
+    
     return () => {
       // Clean up
       document.body.classList.remove('cursor-hen');
@@ -31,7 +34,7 @@ const Index = () => {
   }, [t]);
 
   return (
-    <div className={theme === 'light' ? 'light-mode min-h-screen' : 'dark-mode min-h-screen'}>
+    <div className={`${theme === 'light' ? 'light-mode' : 'dark-mode'} flex flex-col min-h-screen`}>
       {/* Background Video */}
       <BackgroundVideo />
       
@@ -42,7 +45,7 @@ const Index = () => {
       <NavBar />
       
       {/* Main Content */}
-      <main className="relative z-10">
+      <main className="relative z-10 flex-grow">
         {/* Hero Section */}
         <HeroSection />
         
@@ -63,7 +66,9 @@ const Index = () => {
       </main>
       
       {/* Footer */}
-      <Footer />
+      <div className="relative z-10">
+        <Footer />
+      </div>
     </div>
   );
 };

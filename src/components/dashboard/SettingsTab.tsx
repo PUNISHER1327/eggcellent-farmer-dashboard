@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
@@ -9,10 +9,63 @@ import { Label } from '@/components/ui/label';
 import { Globe, Bell, Database, User } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { toast } from '@/components/ui/use-toast';
 
 const SettingsTab: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
+  
+  // User settings state
+  const [pushNotifications, setPushNotifications] = useState(true);
+  const [emailNotifications, setEmailNotifications] = useState(false);
+  const [alertThresholds, setAlertThresholds] = useState(true);
+  const [dataInterval, setDataInterval] = useState('15min');
+  const [extendedStorage, setExtendedStorage] = useState(true);
+  const [automaticBackup, setAutomaticBackup] = useState(false);
+  const [compactView, setCompactView] = useState(false);
+  const [animations, setAnimations] = useState(true);
+  
+  // Load settings from localStorage on component mount
+  useEffect(() => {
+    const loadSettings = () => {
+      const pushNotif = localStorage.getItem('pushNotifications');
+      const emailNotif = localStorage.getItem('emailNotifications');
+      const alertThresh = localStorage.getItem('alertThresholds');
+      const dataInterv = localStorage.getItem('dataCollectionInterval');
+      const extStorage = localStorage.getItem('extendedDataStorage');
+      const autoBackup = localStorage.getItem('automaticBackup');
+      const compView = localStorage.getItem('compactView');
+      const anims = localStorage.getItem('uiAnimations');
+      
+      if (pushNotif) setPushNotifications(pushNotif === 'true');
+      if (emailNotif) setEmailNotifications(emailNotif === 'true');
+      if (alertThresh) setAlertThresholds(alertThresh === 'true');
+      if (dataInterv) setDataInterval(dataInterv);
+      if (extStorage) setExtendedStorage(extStorage === 'true');
+      if (autoBackup) setAutomaticBackup(autoBackup === 'true');
+      if (compView) setCompactView(compView === 'true');
+      if (anims) setAnimations(anims === 'true');
+    };
+    
+    loadSettings();
+  }, []);
+  
+  const saveSettings = () => {
+    // Save all settings to localStorage
+    localStorage.setItem('pushNotifications', pushNotifications.toString());
+    localStorage.setItem('emailNotifications', emailNotifications.toString());
+    localStorage.setItem('alertThresholds', alertThresholds.toString());
+    localStorage.setItem('dataCollectionInterval', dataInterval);
+    localStorage.setItem('extendedDataStorage', extendedStorage.toString());
+    localStorage.setItem('automaticBackup', automaticBackup.toString());
+    localStorage.setItem('compactView', compactView.toString());
+    localStorage.setItem('uiAnimations', animations.toString());
+    
+    toast({
+      title: t('settingsSaved'),
+      description: t('yourSettingsHaveBeenSaved'),
+    });
+  };
   
   const cardClass = theme === 'light' 
     ? 'glass-morphism p-4 bg-white border border-gray-200 shadow-sm'
@@ -42,7 +95,11 @@ const SettingsTab: React.FC = () => {
                 {t('pushNotificationsDesc')}
               </p>
             </div>
-            <Switch id="push-notifications" defaultChecked />
+            <Switch 
+              id="push-notifications" 
+              checked={pushNotifications} 
+              onCheckedChange={setPushNotifications} 
+            />
           </div>
           
           <div className="flex items-center justify-between">
@@ -54,7 +111,11 @@ const SettingsTab: React.FC = () => {
                 {t('emailNotificationsDesc')}
               </p>
             </div>
-            <Switch id="email-notifications" />
+            <Switch 
+              id="email-notifications" 
+              checked={emailNotifications}
+              onCheckedChange={setEmailNotifications}
+            />
           </div>
           
           <div className="flex items-center justify-between">
@@ -66,7 +127,11 @@ const SettingsTab: React.FC = () => {
                 {t('alertThresholdsDesc')}
               </p>
             </div>
-            <Switch id="alert-thresholds" defaultChecked />
+            <Switch 
+              id="alert-thresholds" 
+              checked={alertThresholds}
+              onCheckedChange={setAlertThresholds}
+            />
           </div>
         </div>
       </Card>
@@ -84,7 +149,11 @@ const SettingsTab: React.FC = () => {
             <Label className={theme === 'light' ? 'text-gray-700' : 'text-white'}>
               {t('dataCollectionInterval')}
             </Label>
-            <RadioGroup defaultValue="15min" className="flex flex-wrap space-x-4 mt-2">
+            <RadioGroup 
+              value={dataInterval} 
+              onValueChange={setDataInterval} 
+              className="flex flex-wrap space-x-4 mt-2"
+            >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="5min" id="r1" />
                 <Label htmlFor="r1" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>{t('fiveMinutes')}</Label>
@@ -113,7 +182,11 @@ const SettingsTab: React.FC = () => {
                 {t('extendedDataStorageDesc')}
               </p>
             </div>
-            <Switch id="data-storage" defaultChecked />
+            <Switch 
+              id="data-storage" 
+              checked={extendedStorage}
+              onCheckedChange={setExtendedStorage}
+            />
           </div>
           
           <div className="flex items-center justify-between">
@@ -125,7 +198,11 @@ const SettingsTab: React.FC = () => {
                 {t('automaticBackupDesc')}
               </p>
             </div>
-            <Switch id="automatic-backup" />
+            <Switch 
+              id="automatic-backup" 
+              checked={automaticBackup}
+              onCheckedChange={setAutomaticBackup}
+            />
           </div>
         </div>
       </Card>
@@ -153,28 +230,6 @@ const SettingsTab: React.FC = () => {
                 <SelectItem value="kn">ಕನ್ನಡ (Kannada)</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-          
-          <div className="flex items-center justify-between pt-2">
-            <Button 
-              variant="outline" 
-              className={`${
-                theme === 'light' 
-                  ? 'bg-white hover:bg-gray-50' 
-                  : 'bg-gray-800 hover:bg-gray-700 border-gray-700'
-              }`}
-            >
-              {t('cancel')}
-            </Button>
-            <Button 
-              className={`${
-                theme === 'light' 
-                  ? 'bg-farm-green hover:bg-farm-green/90 text-white' 
-                  : 'bg-farm-green hover:bg-farm-green/90 text-white'
-              }`}
-            >
-              {t('save')}
-            </Button>
           </div>
         </div>
       </Card>
@@ -209,7 +264,11 @@ const SettingsTab: React.FC = () => {
                 {t('compactViewDesc')}
               </p>
             </div>
-            <Switch id="compact-view" />
+            <Switch 
+              id="compact-view" 
+              checked={compactView}
+              onCheckedChange={setCompactView}
+            />
           </div>
           
           <div className="flex items-center justify-between">
@@ -221,7 +280,34 @@ const SettingsTab: React.FC = () => {
                 {t('uiAnimationsDesc')}
               </p>
             </div>
-            <Switch id="animations" defaultChecked />
+            <Switch 
+              id="animations" 
+              checked={animations}
+              onCheckedChange={setAnimations}
+            />
+          </div>
+          
+          <div className="flex items-center justify-between pt-4">
+            <Button 
+              variant="outline" 
+              className={`${
+                theme === 'light' 
+                  ? 'bg-white hover:bg-gray-50' 
+                  : 'bg-gray-800 hover:bg-gray-700 border-gray-700'
+              }`}
+            >
+              {t('cancel')}
+            </Button>
+            <Button 
+              className={`${
+                theme === 'light' 
+                  ? 'bg-farm-green hover:bg-farm-green/90 text-white' 
+                  : 'bg-farm-green hover:bg-farm-green/90 text-white'
+              }`}
+              onClick={saveSettings}
+            >
+              {t('save')}
+            </Button>
           </div>
         </div>
       </Card>

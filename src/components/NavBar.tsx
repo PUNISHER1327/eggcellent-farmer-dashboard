@@ -1,10 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Egg, Moon, Sun, Menu, X, Globe, User, LogOut } from 'lucide-react';
+import { Egg, Moon, Sun, Menu, X, Globe } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
-import { useAuth } from '@/hooks/useAuth';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import {
   DropdownMenu,
@@ -19,8 +19,8 @@ const NavBar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
-  const { user, signOut, sensorKitActivated } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,13 +42,35 @@ const NavBar: React.FC = () => {
     };
   }, [lastScrollY]);
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
-  };
-
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  // Close mobile menu when clicking a link
+  const handleNavLinkClick = () => {
+    setMobileMenuOpen(false);
+  };
+
+  // Scroll to section or navigate to page
+  const scrollToSection = (id: string) => {
+    handleNavLinkClick();
+    
+    // If on homepage, scroll to section
+    if (location.pathname === '/') {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // If on another page, navigate to homepage and then scroll
+      navigate('/');
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
   };
 
   return (
@@ -75,33 +97,35 @@ const NavBar: React.FC = () => {
             <Link 
               to="/" 
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
+              onClick={handleNavLinkClick}
             >
               {t('home')}
             </Link>
             <Link
               to="/mission"
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
+              onClick={handleNavLinkClick}
             >
               {t('mission')}
             </Link>
-            <a 
-              href="#live-data"
+            <button 
+              onClick={() => scrollToSection('live-data')}
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
             >
               {t('liveData')}
-            </a>
-            <a 
-              href="#insights"
+            </button>
+            <button 
+              onClick={() => scrollToSection('insights')}
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
             >
               {t('insights')}
-            </a>
-            <a 
-              href="#contact"
+            </button>
+            <button 
+              onClick={() => scrollToSection('contact')}
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
             >
               {t('contact')}
-            </a>
+            </button>
           </div>
           
           <div className="flex items-center space-x-4">
@@ -189,38 +213,35 @@ const NavBar: React.FC = () => {
           <Link 
             to="/"
             className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={handleNavLinkClick}
           >
             {t('home')}
           </Link>
           <Link 
             to="/mission"
             className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={handleNavLinkClick}
           >
             {t('mission')}
           </Link>
-          <a 
-            href="#live-data"
+          <button 
+            onClick={() => scrollToSection('live-data')}
             className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
-            onClick={() => setMobileMenuOpen(false)}
           >
             {t('liveData')}
-          </a>
-          <a 
-            href="#insights"
+          </button>
+          <button 
+            onClick={() => scrollToSection('insights')}
             className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
-            onClick={() => setMobileMenuOpen(false)}
           >
             {t('insights')}
-          </a>
-          <a 
-            href="#contact"
+          </button>
+          <button 
+            onClick={() => scrollToSection('contact')}
             className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
-            onClick={() => setMobileMenuOpen(false)}
           >
             {t('contact')}
-          </a>
+          </button>
         </div>
       </div>
     </>

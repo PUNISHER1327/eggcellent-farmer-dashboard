@@ -1,23 +1,82 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SensorCard from './SensorCard';
-import EggProductionCard from './EggProductionCard';
 import AnimatedCounter from './AnimatedCounter';
-import { useSensorData, getDataStatus, getEggProductionStatus } from '@/hooks/useSensorData';
+import { useSensorData, getDataStatus } from '@/hooks/useSensorData';
 import { Skeleton } from '@/components/ui/skeleton';
+import { toast } from '@/hooks/use-toast';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const LiveDataSection: React.FC = () => {
-  const { data, loading } = useSensorData();
+  const { data: initialData, loading: initialLoading } = useSensorData();
+  const [data, setData] = useState(initialData);
+  const [loading, setLoading] = useState(initialLoading);
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const { t } = useLanguage();
+  
+  // Get the refresh interval from localStorage or default to 15 minutes (in milliseconds)
+  const getRefreshInterval = (): number => {
+    const storedInterval = localStorage.getItem('dataCollectionInterval');
+    switch (storedInterval) {
+      case '5min': return 5 * 60 * 1000;
+      case '30min': return 30 * 60 * 1000;
+      case '60min': return 60 * 60 * 1000;
+      default: return 15 * 60 * 1000; // Default to 15 minutes
+    }
+  };
+
+  // For demo purposes, use 10 seconds instead of minutes
+  const getDemoRefreshInterval = (): number => {
+    const storedInterval = localStorage.getItem('dataCollectionInterval');
+    switch (storedInterval) {
+      case '5min': return 5 * 1000;
+      case '30min': return 10 * 1000;
+      case '60min': return 15 * 1000;
+      default: return 2 * 1000; // Default to 2 seconds for demo
+    }
+  };
+
+  useEffect(() => {
+    // Initial data load
+    if (initialData) {
+      setData(initialData);
+      setLoading(initialLoading);
+    }
+
+    // Set up the interval for refreshing data
+    const intervalId = setInterval(async () => {
+      setLoading(true);
+      try {
+        const { data: newData, loading: newLoading } = await useSensorData();
+        setData(newData);
+        setLoading(newLoading);
+        setLastUpdated(new Date());
+        toast({
+          title: t('dataRefreshed'),
+          description: t('liveDataUpdated'),
+        });
+      } catch (error) {
+        console.error('Failed to refresh sensor data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }, getDemoRefreshInterval()); // For demo purposes, use seconds instead of minutes
+
+    return () => clearInterval(intervalId);
+  }, [initialData, initialLoading, t]);
 
   return (
     <section id="live-data" className="py-20">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold mb-2 text-gradient">Live Sensor Data</h2>
-        <p className="text-lg text-white/70 mb-10">Real-time environmental conditions and egg production metrics</p>
+        <p className="text-lg text-white/70 mb-2">Real-time environmental conditions</p>
+        <p className="text-sm text-white/50 mb-10">
+          Last updated: {lastUpdated.toLocaleTimeString()}
+        </p>
         
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {Array(5).fill(0).map((_, i) => (
+            {Array(4).fill(0).map((_, i) => (
               <Skeleton key={i} className="h-[220px] w-full rounded-lg" />
             ))}
           </div>
@@ -86,12 +145,6 @@ const LiveDataSection: React.FC = () => {
                     <path d="M12 22c-4.97 0-9-7-9-11a9 9 0 0 1 18 0c0 4-4.03 11-9 11Z"></path>
                   </svg>
                 }
-              />
-              
-              <EggProductionCard
-                value={data.eggProduction}
-                maxValue={10}
-                status={getEggProductionStatus(data.eggProduction)}
               />
             </div>
 
