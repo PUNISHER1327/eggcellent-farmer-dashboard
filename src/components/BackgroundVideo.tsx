@@ -6,12 +6,21 @@ const BackgroundVideo: React.FC = () => {
   const { theme } = useTheme();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
-  // Background images - chicken images
-  const images = [
+  // Background images for light and dark mode - multiple poultry farming related images
+  const lightModeImages = [
     "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1723598489817-ecfedd9fe0c8?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2hpY2tlbiUyMGN1dGV8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1615828111625-ac4e5a89de5c?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGNoaWNrZW4lMjBjdXRlfGVufDB8fDB8fHww"
+    "https://images.unsplash.com/photo-1518754500512-7de5fca57d6f?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1563699182-58425e3d686b?q=80&w=2070&auto=format&fit=crop"
   ];
+  
+  const darkModeImages = [
+    "https://images.unsplash.com/photo-1582450880901-6c4c27a1ac51?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1569097242446-f49183ea3fac?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1558929994-08cb1c32b38c?q=80&w=2070&auto=format&fit=crop"
+  ];
+  
+  // Get the current set of images based on theme
+  const images = theme === 'light' ? lightModeImages : darkModeImages;
   
   // Different overlay intensity for light and dark mode - removed blur from light mode
   const overlayClass = theme === 'light'
