@@ -36,6 +36,33 @@ export type Database = {
         }
         Relationships: []
       }
+      sensor_kits: {
+        Row: {
+          activated: boolean
+          activated_at: string | null
+          created_at: string
+          id: string
+          kit_id: string
+          user_id: string | null
+        }
+        Insert: {
+          activated?: boolean
+          activated_at?: string | null
+          created_at?: string
+          id?: string
+          kit_id: string
+          user_id?: string | null
+        }
+        Update: {
+          activated?: boolean
+          activated_at?: string | null
+          created_at?: string
+          id?: string
+          kit_id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
