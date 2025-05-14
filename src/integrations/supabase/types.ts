@@ -36,30 +36,24 @@ export type Database = {
         }
         Relationships: []
       }
-      sensor_kits: {
+      profiles: {
         Row: {
-          activated: boolean
-          activated_at: string | null
           created_at: string
+          farm_name: string | null
+          full_name: string | null
           id: string
-          kit_id: string
-          user_id: string | null
         }
         Insert: {
-          activated?: boolean
-          activated_at?: string | null
           created_at?: string
-          id?: string
-          kit_id: string
-          user_id?: string | null
+          farm_name?: string | null
+          full_name?: string | null
+          id: string
         }
         Update: {
-          activated?: boolean
-          activated_at?: string | null
           created_at?: string
+          farm_name?: string | null
+          full_name?: string | null
           id?: string
-          kit_id?: string
-          user_id?: string | null
         }
         Relationships: []
       }

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Egg, Moon, Sun, Menu, X, Globe, User, LogOut } from 'lucide-react';
@@ -154,47 +153,6 @@ const NavBar: React.FC = () => {
               </HoverCardContent>
             </HoverCard>
             
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className={`rounded-full transition-colors duration-300 ${
-                      theme === 'light' 
-                        ? 'bg-white/70 border-gray-300 hover:bg-white/90' 
-                        : 'bg-transparent border-white/20 hover:bg-white/10'
-                    }`}
-                  >
-                    <User className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => navigate('/profile')}>
-                    {t('profile')}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleSignOut} className="text-red-500">
-                    <LogOut className="h-4 w-4 mr-2" />
-                    {t('logout')}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Link to="/auth">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className={`rounded-full transition-colors duration-300 ${
-                    theme === 'light' 
-                      ? 'bg-white/70 border-gray-300 hover:bg-white/90' 
-                      : 'bg-transparent border-white/20 hover:bg-white/10'
-                  }`}
-                >
-                  <User className="h-4 w-4" />
-                </Button>
-              </Link>
-            )}
-            
             <Button 
               variant="outline" 
               className={`hidden md:flex ${
@@ -202,9 +160,9 @@ const NavBar: React.FC = () => {
                   ? 'bg-white/70 border-gray-300 text-gray-800 hover:bg-white/90' 
                   : 'bg-transparent border-white/20 text-white hover:bg-white/10'
               }`}
-              onClick={() => navigate(sensorKitActivated ? '/' : user ? '/profile' : '/auth')}
+              onClick={() => navigate('/mission')}
             >
-              {t('dashboard')}
+              {t('learnMore')}
             </Button>
             
             <button 
@@ -263,37 +221,6 @@ const NavBar: React.FC = () => {
           >
             {t('contact')}
           </a>
-          {user ? (
-            <>
-              <Link
-                to="/profile"
-                className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {t('profile')}
-              </Link>
-              <Button 
-                onClick={() => {
-                  handleSignOut();
-                  setMobileMenuOpen(false);
-                }}
-                className="mt-6 bg-red-500 hover:bg-red-600 text-white"
-              >
-                {t('logout')}
-              </Button>
-            </>
-          ) : (
-            <Link
-              to="/auth"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <Button 
-                className="mt-6 bg-farm-green hover:bg-farm-green/80 text-white"
-              >
-                {t('signIn')}
-              </Button>
-            </Link>
-          )}
         </div>
       </div>
     </>
