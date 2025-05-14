@@ -1,24 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Egg, Moon, Sun, Menu, X, Globe } from 'lucide-react';
+import { Egg, Moon, Sun, Menu, X } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
-import { useLanguage } from '@/hooks/useLanguage';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 const NavBar: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
-  const { language, setLanguage, t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -88,7 +80,7 @@ const NavBar: React.FC = () => {
                 <div className="absolute -inset-2 rounded-full bg-white/10 scale-0 group-hover:scale-100 transition-transform duration-300"></div>
               </div>
               <span className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'} tracking-tight`}>
-                {t('farmerFriendly')}
+                Farmer Friendly
               </span>
             </Link>
           </div>
@@ -99,64 +91,36 @@ const NavBar: React.FC = () => {
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
               onClick={handleNavLinkClick}
             >
-              {t('home')}
+              Home
             </Link>
             <Link
               to="/mission"
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
               onClick={handleNavLinkClick}
             >
-              {t('mission')}
+              Our Mission
             </Link>
             <button 
               onClick={() => scrollToSection('live-data')}
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
             >
-              {t('liveData')}
+              Live Data
             </button>
             <button 
               onClick={() => scrollToSection('insights')}
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
             >
-              {t('insights')}
+              Insights
             </button>
             <button 
               onClick={() => scrollToSection('contact')}
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white/80'} hover:text-farm-green transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-farm-green after:transition-all after:duration-300`}
             >
-              {t('contact')}
+              Contact
             </button>
           </div>
           
           <div className="flex items-center space-x-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className={`rounded-full transition-colors duration-300 ${
-                    theme === 'light' 
-                      ? 'bg-white/70 border-gray-300 hover:bg-white/90' 
-                      : 'bg-transparent border-white/20 hover:bg-white/10'
-                  }`}
-                >
-                  <Globe className="h-4 w-4" />
-                  <span className="sr-only">Toggle language</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setLanguage('en')} className={language === 'en' ? 'bg-accent' : ''}>
-                  English
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLanguage('hi')} className={language === 'hi' ? 'bg-accent' : ''}>
-                  हिन्दी (Hindi)
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLanguage('kn')} className={language === 'kn' ? 'bg-accent' : ''}>
-                  ಕನ್ನಡ (Kannada)
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button 
@@ -186,7 +150,7 @@ const NavBar: React.FC = () => {
               }`}
               onClick={() => navigate('/mission')}
             >
-              {t('learnMore')}
+              Learn More
             </Button>
             
             <button 
@@ -215,32 +179,32 @@ const NavBar: React.FC = () => {
             className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
             onClick={handleNavLinkClick}
           >
-            {t('home')}
+            Home
           </Link>
           <Link 
             to="/mission"
             className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
             onClick={handleNavLinkClick}
           >
-            {t('mission')}
+            Our Mission
           </Link>
           <button 
             onClick={() => scrollToSection('live-data')}
             className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
           >
-            {t('liveData')}
+            Live Data
           </button>
           <button 
             onClick={() => scrollToSection('insights')}
             className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
           >
-            {t('insights')}
+            Insights
           </button>
           <button 
             onClick={() => scrollToSection('contact')}
             className={`text-2xl font-semibold ${theme === 'light' ? 'text-gray-800' : 'text-white'} hover:text-farm-green transition-colors`}
           >
-            {t('contact')}
+            Contact
           </button>
         </div>
       </div>
