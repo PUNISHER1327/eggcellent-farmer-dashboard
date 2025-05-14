@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -12,17 +13,17 @@ export interface SensorData {
   chickens: number;
 }
 
-export const getDataStatus = (value: number, min: number, max: number): 'normal' | 'warning' | 'critical' => {
+export const getDataStatus = (value: number, min: number, max: number): 'good' | 'warning' | 'danger' => {
   if (value < min || value > max) {
-    return value < min * 0.8 || value > max * 1.2 ? 'critical' : 'warning';
+    return value < min * 0.8 || value > max * 1.2 ? 'danger' : 'warning';
   }
-  return 'normal';
+  return 'good';
 };
 
-export const getEggProductionStatus = (value: number): 'low' | 'normal' | 'high' => {
+export const getEggProductionStatus = (value: number): 'low' | 'medium' | 'high' => {
   if (value < 0.4) return 'low';
   if (value > 0.8) return 'high';
-  return 'normal';
+  return 'medium';
 };
 
 export const useSensorData = () => {
