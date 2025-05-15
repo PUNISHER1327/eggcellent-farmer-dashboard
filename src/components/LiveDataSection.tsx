@@ -170,34 +170,42 @@ const LiveDataSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <SensorCard
             title={t('temperature')}
-            value={`${sensorData.temperature}°C`}
+            value={sensorData.temperature}
+            unit="°C"
+            min={18}
+            max={30}
             status={getDataStatus(sensorData.temperature, 18, 30)}
-            icon="temperature"
-            loading={loading}
+            icon={<span className="text-red-500">🌡️</span>}
           />
           
           <SensorCard
             title={t('humidity')}
-            value={`${sensorData.humidity}%`}
+            value={sensorData.humidity}
+            unit="%"
+            min={50}
+            max={70}
             status={getDataStatus(sensorData.humidity, 50, 70)}
-            icon="humidity"
-            loading={loading}
+            icon={<span className="text-blue-500">💧</span>}
           />
           
           <SensorCard
             title={t('co2Level')}
-            value={`${sensorData.co2} ppm`}
+            value={sensorData.co2}
+            unit="ppm"
+            min={350}
+            max={1000}
             status={getDataStatus(sensorData.co2, 350, 1000)}
-            icon="co2"
-            loading={loading}
+            icon={<span className="text-gray-500">☁️</span>}
           />
           
           <SensorCard
             title={t('ammoniaLevel')}
-            value={`${sensorData.ammonia} ppm`}
+            value={sensorData.ammonia}
+            unit="ppm"
+            min={0}
+            max={15}
             status={getDataStatus(sensorData.ammonia, 0, 15)}
-            icon="ammonia"
-            loading={loading}
+            icon={<span className="text-yellow-500">⚠️</span>}
           />
         </div>
       </div>
