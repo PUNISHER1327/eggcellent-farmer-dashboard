@@ -3,10 +3,18 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
+import { Globe, Menu, X } from 'lucide-react';
+import { Button } from './ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const NavBar = () => {
   const { theme } = useTheme();
-  const { t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -25,9 +33,12 @@ const NavBar = () => {
     };
   }, [scrolled]);
   
-  const toggleMenu = () => setIsOpen(!isOpen);
+  useEffect(() => {
+    // Close mobile menu when route changes
+    setIsOpen(false);
+  }, [location]);
   
-  const closeMenu = () => setIsOpen(false);
+  const toggleMenu = () => setIsOpen(!isOpen);
   
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -49,6 +60,10 @@ const NavBar = () => {
         ? 'text-gray-800 hover:text-farm-green'
         : 'text-gray-100 hover:text-farm-green'
     }`;
+  };
+
+  const handleLanguageChange = (newLanguage: 'en' | 'hi' | 'kn') => {
+    setLanguage(newLanguage);
   };
 
   return (
@@ -75,6 +90,35 @@ const NavBar = () => {
             <Link to="/contact" className={linkClass('/contact')}>
               {t('contact')}
             </Link>
+            
+            {/* Language Selector */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="flex items-center space-x-1">
+                  <Globe className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem 
+                  onClick={() => handleLanguageChange('en')}
+                  className={language === 'en' ? 'bg-accent' : ''}
+                >
+                  English
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => handleLanguageChange('hi')}
+                  className={language === 'hi' ? 'bg-accent' : ''}
+                >
+                  हिन्दी (Hindi)
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => handleLanguageChange('kn')}
+                  className={language === 'kn' ? 'bg-accent' : ''}
+                >
+                  ಕನ್ನಡ (Kannada)
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           
           {/* Mobile menu button */}
@@ -83,29 +127,11 @@ const NavBar = () => {
               onClick={toggleMenu}
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white'} focus:outline-none`}
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {isOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16m-7 6h7"
-                  />
-                )}
-              </svg>
+              {isOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>
@@ -121,7 +147,6 @@ const NavBar = () => {
           <div className="px-2 pt-2 pb-3 space-y-1">
             <Link
               to="/"
-              onClick={closeMenu}
               className={`block px-3 py-2 rounded-md ${
                 isActive('/')
                   ? 'bg-farm-green/10 text-farm-green'
@@ -134,7 +159,6 @@ const NavBar = () => {
             </Link>
             <Link
               to="/mission"
-              onClick={closeMenu}
               className={`block px-3 py-2 rounded-md ${
                 isActive('/mission')
                   ? 'bg-farm-green/10 text-farm-green'
@@ -147,7 +171,6 @@ const NavBar = () => {
             </Link>
             <Link
               to="/profile"
-              onClick={closeMenu}
               className={`block px-3 py-2 rounded-md ${
                 isActive('/profile')
                   ? 'bg-farm-green/10 text-farm-green'
@@ -160,7 +183,6 @@ const NavBar = () => {
             </Link>
             <Link
               to="/contact"
-              onClick={closeMenu}
               className={`block px-3 py-2 rounded-md ${
                 isActive('/contact')
                   ? 'bg-farm-green/10 text-farm-green'
@@ -171,6 +193,51 @@ const NavBar = () => {
             >
               {t('contact')}
             </Link>
+            
+            {/* Mobile Language Selector */}
+            <div className="mt-3 px-3 py-2">
+              <div className="text-sm font-medium mb-2">
+                {t('selectLanguage')}:
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => handleLanguageChange('en')}
+                  className={`px-2 py-1 rounded text-sm ${
+                    language === 'en'
+                      ? 'bg-farm-green text-white'
+                      : theme === 'light'
+                      ? 'bg-gray-100 text-gray-800'
+                      : 'bg-gray-800 text-gray-200'
+                  }`}
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => handleLanguageChange('hi')}
+                  className={`px-2 py-1 rounded text-sm ${
+                    language === 'hi'
+                      ? 'bg-farm-green text-white'
+                      : theme === 'light'
+                      ? 'bg-gray-100 text-gray-800'
+                      : 'bg-gray-800 text-gray-200'
+                  }`}
+                >
+                  HI
+                </button>
+                <button
+                  onClick={() => handleLanguageChange('kn')}
+                  className={`px-2 py-1 rounded text-sm ${
+                    language === 'kn'
+                      ? 'bg-farm-green text-white'
+                      : theme === 'light'
+                      ? 'bg-gray-100 text-gray-800'
+                      : 'bg-gray-800 text-gray-200'
+                  }`}
+                >
+                  KN
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

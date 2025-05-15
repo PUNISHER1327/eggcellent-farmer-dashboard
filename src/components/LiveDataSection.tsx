@@ -1,207 +1,205 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import SensorCard from './SensorCard';
-import AnimatedCounter from './AnimatedCounter';
-import { useSensorData, getDataStatus } from '@/hooks/useSensorData';
-import { Skeleton } from '@/components/ui/skeleton';
-import { toast } from '@/hooks/use-toast';
+import { SensorData, getDataStatus } from '@/hooks/useSensorData';
+import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
+import { toast } from '@/components/ui/use-toast';
+import { RefreshCcw } from 'lucide-react';
 
-const LiveDataSection: React.FC = () => {
-  const { data: initialData, loading: initialLoading } = useSensorData();
-  const [data, setData] = useState(initialData);
-  const [loading, setLoading] = useState(initialLoading);
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+const LiveDataSection = () => {
+  const { theme } = useTheme();
   const { t } = useLanguage();
-  
-  // Get the refresh interval from localStorage or default to 15 minutes (in milliseconds)
-  const getRefreshInterval = (): number => {
-    const storedInterval = localStorage.getItem('dataCollectionInterval');
-    switch (storedInterval) {
-      case '5sec': return 5 * 1000; // 5 seconds
-      case '5min': return 5 * 60 * 1000;
-      case '30min': return 30 * 60 * 1000;
-      case '60min': return 60 * 60 * 1000;
-      default: return 15 * 60 * 1000; // Default to 15 minutes
-    }
-  };
+  const [sensorData, setSensorData] = useState<SensorData>({
+    temperature: 0,
+    humidity: 0,
+    co2: 0,
+    ammonia: 0,
+    eggProduction: 0,
+    totalEggsToday: 0,
+    activeSensors: 0,
+    chickens: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [refreshInterval, setRefreshInterval] = useState(300000); // Default to 5 minutes
 
-  // For demo purposes, use actual seconds instead of minutes
-  const getDemoRefreshInterval = (): number => {
-    const storedInterval = localStorage.getItem('dataCollectionInterval');
-    switch (storedInterval) {
-      case '5sec': return 5 * 1000; // 5 seconds
-      case '5min': return 5 * 1000; // 5 seconds for "5 minutes" setting
-      case '30min': return 10 * 1000;
-      case '60min': return 15 * 1000;
-      default: return 2 * 1000; // Default to 2 seconds for demo
-    }
-  };
+  // Function to generate mock data
+  const generateMockData = useCallback(() => {
+    return {
+      temperature: Math.floor(Math.random() * (30 - 20 + 1)) + 20,
+      humidity: Math.floor(Math.random() * (80 - 50 + 1)) + 50,
+      co2: Math.floor(Math.random() * (1500 - 400 + 1)) + 400,
+      ammonia: Math.floor(Math.random() * (20 - 2 + 1)) + 2,
+      eggProduction: parseFloat((Math.random() * (0.9 - 0.6) + 0.6).toFixed(2)),
+      totalEggsToday: Math.floor(Math.random() * (300 - 150 + 1)) + 150,
+      activeSensors: Math.floor(Math.random() * (10 - 5 + 1)) + 5,
+      chickens: Math.floor(Math.random() * (500 - 200 + 1)) + 200,
+    };
+  }, []);
 
+  // Load refresh interval from localStorage
   useEffect(() => {
-    // Initial data load
-    if (initialData) {
-      setData(initialData);
-      setLoading(initialLoading);
+    const storedInterval = localStorage.getItem('dataCollectionInterval');
+    if (storedInterval) {
+      switch (storedInterval) {
+        case '5sec':
+          setRefreshInterval(5000);
+          break;
+        case '5min':
+          setRefreshInterval(300000);
+          break;
+        case '15min':
+          setRefreshInterval(900000);
+          break;
+        case '30min':
+          setRefreshInterval(1800000);
+          break;
+        case '60min':
+          setRefreshInterval(3600000);
+          break;
+        default:
+          setRefreshInterval(300000); // Default to 5 minutes
+      }
     }
+  }, []);
 
-    // Set up the interval for refreshing data
-    const intervalId = setInterval(async () => {
+  // Data fetch effect
+  useEffect(() => {
+    const fetchData = async () => {
       setLoading(true);
       try {
-        const { data: newData, loading: newLoading } = await useSensorData();
-        setData(newData);
-        setLoading(newLoading);
+        // Simulate network request
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setSensorData(generateMockData());
         setLastUpdated(new Date());
-        toast({
-          title: t('dataRefreshed'),
-          description: t('liveDataUpdated'),
-        });
+        setLoading(false);
       } catch (error) {
-        console.error('Failed to refresh sensor data:', error);
-      } finally {
+        console.error("Failed to fetch data:", error);
         setLoading(false);
       }
-    }, getDemoRefreshInterval()); // For demo purposes, use seconds instead of minutes
+    };
 
+    // Fetch data immediately on mount
+    fetchData();
+
+    // Set up interval for refreshing data
+    const intervalId = setInterval(() => {
+      fetchData();
+      toast({
+        title: t('dataRefreshed'),
+        description: t('liveDataUpdated'),
+      });
+    }, refreshInterval);
+
+    // Clean up interval on unmount
     return () => clearInterval(intervalId);
-  }, [initialData, initialLoading, t]);
+  }, [generateMockData, refreshInterval, t]);
+
+  // Monitor localStorage for changes to refresh interval
+  useEffect(() => {
+    const checkSettings = () => {
+      const storedInterval = localStorage.getItem('dataCollectionInterval');
+      if (storedInterval) {
+        switch (storedInterval) {
+          case '5sec':
+            setRefreshInterval(5000);
+            break;
+          case '5min':
+            setRefreshInterval(300000);
+            break;
+          case '15min':
+            setRefreshInterval(900000);
+            break;
+          case '30min':
+            setRefreshInterval(1800000);
+            break;
+          case '60min':
+            setRefreshInterval(3600000);
+            break;
+          default:
+            setRefreshInterval(300000); // Default to 5 minutes
+        }
+      }
+    };
+
+    // Check for setting changes every second
+    const settingsChecker = setInterval(checkSettings, 1000);
+    
+    return () => clearInterval(settingsChecker);
+  }, []);
+
+  const manualRefresh = async () => {
+    setLoading(true);
+    // Simulate network request
+    await new Promise(resolve => setTimeout(resolve, 500));
+    setSensorData(generateMockData());
+    setLastUpdated(new Date());
+    setLoading(false);
+    
+    toast({
+      title: t('dataRefreshed'),
+      description: t('liveDataUpdated'),
+    });
+  };
 
   return (
-    <section id="live-data" className="py-20">
+    <section className="relative py-16 z-10" id="live-data">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-gradient">{t('liveDataTitle')}</h2>
-        <p className="text-lg text-white/70 mb-2">{t('liveDataSubtitle')}</p>
-        <p className="text-sm text-white/50 mb-10">
-          {t('lastUpdated')}: {lastUpdated.toLocaleTimeString()}
-        </p>
-        
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {Array(4).fill(0).map((_, i) => (
-              <Skeleton key={i} className="h-[220px] w-full rounded-lg" />
-            ))}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-2">
+            {t('liveDataTitle')}
+          </h2>
+          <p className="text-xl">
+            {t('liveDataSubtitle')}
+          </p>
+          <div className="flex items-center justify-center mt-3 space-x-2">
+            <span className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
+              {t('lastUpdated')}: {lastUpdated.toLocaleTimeString()}
+            </span>
+            <button 
+              onClick={manualRefresh}
+              className="inline-flex items-center justify-center rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              disabled={loading}
+            >
+              <RefreshCcw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            </button>
           </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <SensorCard
-                title={t('co2Level')}
-                value={data.co2}
-                unit="ppm"
-                min={300}
-                max={2000}
-                status={getDataStatus(data.co2, 300, 2000)}
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M8 2v4"></path>
-                    <path d="M16 2v4"></path>
-                    <path d="M3 10h18"></path>
-                    <path d="M10 18H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4"></path>
-                    <path d="M10 18a2 2 0 1 0 4 0m-4 0a2 2 0 1 1 4 0"></path>
-                    <path d="M11 12h2"></path>
-                  </svg>
-                }
-              />
-              
-              <SensorCard
-                title={t('ammoniaLevel')}
-                value={data.ammonia}
-                unit="ppm"
-                min={5}
-                max={50}
-                status={getDataStatus(data.ammonia, 5, 50)}
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4.16 4.17a11.95 11.95 0 0 0 16.46 16.47"></path>
-                    <path d="M19.84 19.83a11.95 11.95 0 0 0-16.47-16.46"></path>
-                    <path d="M12 3v18"></path>
-                    <path d="M3 12h18"></path>
-                  </svg>
-                }
-              />
-              
-              <SensorCard
-                title={t('temperature')}
-                value={data.temperature}
-                unit="°C"
-                min={20}
-                max={35}
-                status={getDataStatus(data.temperature, 20, 35)}
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"></path>
-                  </svg>
-                }
-              />
-              
-              <SensorCard
-                title={t('humidity')}
-                value={data.humidity}
-                unit="%"
-                min={40}
-                max={90}
-                status={getDataStatus(data.humidity, 40, 90)}
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 22c-4.97 0-9-7-9-11a9 9 0 0 1 18 0c0 4-4.03 11-9 11Z"></path>
-                  </svg>
-                }
-              />
-            </div>
+        </div>
 
-            <h3 className="text-2xl font-bold mt-16 mb-6 text-white">{t('farmOverview')}</h3>
-            
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              <AnimatedCounter
-                title={t('totalEggsToday')}
-                targetValue={data.totalEggsToday}
-                unit={t('eggs')}
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 22c-4.97 0-9-7-9-11a9 9 0 0 1 18 0c0 4-4.03 11-9 11z" />
-                  </svg>
-                }
-              />
-              
-              <AnimatedCounter
-                title={t('activeSensors')}
-                targetValue={data.activeSensors}
-                unit={t('units')}
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
-                    <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
-                    <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
-                    <path d="M12 20h.01"></path>
-                  </svg>
-                }
-              />
-              
-              <AnimatedCounter
-                title={t('chickens')}
-                targetValue={data.chickens}
-                unit={t('birds')}
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path>
-                  </svg>
-                }
-              />
-              
-              <AnimatedCounter
-                title={t('avgFarmTemp')}
-                targetValue={25}
-                unit="°C"
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"></path>
-                  </svg>
-                }
-              />
-            </div>
-          </>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <SensorCard
+            title={t('temperature')}
+            value={`${sensorData.temperature}°C`}
+            status={getDataStatus(sensorData.temperature, 18, 30)}
+            icon="temperature"
+            loading={loading}
+          />
+          
+          <SensorCard
+            title={t('humidity')}
+            value={`${sensorData.humidity}%`}
+            status={getDataStatus(sensorData.humidity, 50, 70)}
+            icon="humidity"
+            loading={loading}
+          />
+          
+          <SensorCard
+            title={t('co2Level')}
+            value={`${sensorData.co2} ppm`}
+            status={getDataStatus(sensorData.co2, 350, 1000)}
+            icon="co2"
+            loading={loading}
+          />
+          
+          <SensorCard
+            title={t('ammoniaLevel')}
+            value={`${sensorData.ammonia} ppm`}
+            status={getDataStatus(sensorData.ammonia, 0, 15)}
+            icon="ammonia"
+            loading={loading}
+          />
+        </div>
       </div>
     </section>
   );
