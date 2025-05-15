@@ -1,21 +1,42 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import SensorCard from './SensorCard';
-import { SensorData, getDataStatus, useSensorData } from '@/hooks/useSensorData';
+import { SensorData, getDataStatus } from '@/hooks/useSensorData';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
 import { toast } from '@/components/ui/use-toast';
 import { RefreshCcw } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useFarmSelection } from '@/hooks/useFarmSelection';
 
 const LiveDataSection = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
-  const { farms, selectedFarmId, setSelectedFarmId } = useFarmSelection();
-  const { data: sensorData, loading } = useSensorData();
+  const [sensorData, setSensorData] = useState<SensorData>({
+    temperature: 0,
+    humidity: 0,
+    co2: 0,
+    ammonia: 0,
+    eggProduction: 0,
+    totalEggsToday: 0,
+    activeSensors: 0,
+    chickens: 0,
+  });
+  const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [refreshInterval, setRefreshInterval] = useState(300000); // Default to 5 minutes
+
+  // Function to generate mock data
+  const generateMockData = useCallback(() => {
+    return {
+      temperature: Math.floor(Math.random() * (30 - 20 + 1)) + 20,
+      humidity: Math.floor(Math.random() * (80 - 50 + 1)) + 50,
+      co2: Math.floor(Math.random() * (1500 - 400 + 1)) + 400,
+      ammonia: Math.floor(Math.random() * (20 - 2 + 1)) + 2,
+      eggProduction: parseFloat((Math.random() * (0.9 - 0.6) + 0.6).toFixed(2)),
+      totalEggsToday: Math.floor(Math.random() * (300 - 150 + 1)) + 150,
+      activeSensors: Math.floor(Math.random() * (10 - 5 + 1)) + 5,
+      chickens: Math.floor(Math.random() * (500 - 200 + 1)) + 200,
+    };
+  }, []);
 
   // Load refresh interval from localStorage
   useEffect(() => {
@@ -45,9 +66,26 @@ const LiveDataSection = () => {
 
   // Data fetch effect
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // Simulate network request
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setSensorData(generateMockData());
+        setLastUpdated(new Date());
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+        setLoading(false);
+      }
+    };
+
+    // Fetch data immediately on mount
+    fetchData();
+
     // Set up interval for refreshing data
     const intervalId = setInterval(() => {
-      setLastUpdated(new Date());
+      fetchData();
       toast({
         title: t('dataRefreshed'),
         description: t('liveDataUpdated'),
@@ -56,7 +94,7 @@ const LiveDataSection = () => {
 
     // Clean up interval on unmount
     return () => clearInterval(intervalId);
-  }, [refreshInterval, t]);
+  }, [generateMockData, refreshInterval, t]);
 
   // Monitor localStorage for changes to refresh interval
   useEffect(() => {
@@ -91,25 +129,18 @@ const LiveDataSection = () => {
     return () => clearInterval(settingsChecker);
   }, []);
 
-  const manualRefresh = () => {
+  const manualRefresh = async () => {
     setLoading(true);
+    // Simulate network request
+    await new Promise(resolve => setTimeout(resolve, 500));
+    setSensorData(generateMockData());
     setLastUpdated(new Date());
+    setLoading(false);
     
-    // Force a small delay to show loading state
-    setTimeout(() => {
-      setLoading(false);
-      
-      toast({
-        title: t('dataRefreshed'),
-        description: t('liveDataUpdated'),
-      });
-    }, 300);
-  };
-
-  // Handle farm selection change
-  const handleFarmChange = (farmId: string) => {
-    setSelectedFarmId(farmId);
-    setLastUpdated(new Date());
+    toast({
+      title: t('dataRefreshed'),
+      description: t('liveDataUpdated'),
+    });
   };
 
   return (
@@ -122,23 +153,6 @@ const LiveDataSection = () => {
           <p className="text-xl">
             {t('liveDataSubtitle')}
           </p>
-          
-          {/* Farm Selection */}
-          <div className="mt-4 mb-6">
-            <Select value={selectedFarmId} onValueChange={handleFarmChange}>
-              <SelectTrigger className="mx-auto w-full max-w-xs">
-                <SelectValue placeholder={t('selectFarm')} />
-              </SelectTrigger>
-              <SelectContent>
-                {farms.map(farm => (
-                  <SelectItem key={farm.id} value={farm.id}>
-                    {farm.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
           <div className="flex items-center justify-center mt-3 space-x-2">
             <span className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
               {t('lastUpdated')}: {lastUpdated.toLocaleTimeString()}

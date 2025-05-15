@@ -1,6 +1,5 @@
-
 import { useEffect, useState } from 'react';
-import { useFarmSelection } from './useFarmSelection';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface SensorData {
   temperature: number;
@@ -26,79 +25,7 @@ export const getEggProductionStatus = (value: number): 'low' | 'medium' | 'high'
   return 'medium';
 };
 
-// Farm data ranges for consistent but unique sensor values
-const farmDataRanges = {
-  'farm1': { // Green Valley Farm
-    temperature: { min: 22, max: 28 },
-    humidity: { min: 55, max: 65 },
-    co2: { min: 500, max: 800 },
-    ammonia: { min: 8, max: 15 },
-    eggProduction: { min: 0.7, max: 0.9 },
-    chickens: { min: 4500, max: 5000 }
-  },
-  'farm2': { // Sunrise Poultry
-    temperature: { min: 19, max: 25 },
-    humidity: { min: 60, max: 70 },
-    co2: { min: 400, max: 600 },
-    ammonia: { min: 5, max: 12 },
-    eggProduction: { min: 0.6, max: 0.8 },
-    chickens: { min: 3200, max: 3800 }
-  },
-  'farm3': { // Golden Eggs Farm
-    temperature: { min: 24, max: 30 },
-    humidity: { min: 50, max: 60 },
-    co2: { min: 600, max: 900 },
-    ammonia: { min: 10, max: 18 },
-    eggProduction: { min: 0.75, max: 0.95 },
-    chickens: { min: 5800, max: 6500 }
-  },
-  'farm4': { // River View Poultry
-    temperature: { min: 20, max: 26 },
-    humidity: { min: 58, max: 68 },
-    co2: { min: 450, max: 700 },
-    ammonia: { min: 7, max: 14 },
-    eggProduction: { min: 0.65, max: 0.85 },
-    chickens: { min: 4500, max: 5000 }
-  },
-  'farm5': { // Mountain Top Farm
-    temperature: { min: 18, max: 24 },
-    humidity: { min: 65, max: 75 },
-    co2: { min: 500, max: 750 },
-    ammonia: { min: 9, max: 16 },
-    eggProduction: { min: 0.55, max: 0.75 },
-    chickens: { min: 2800, max: 3500 }
-  }
-};
-
-// Generate farm-specific sensor data
-const generateFarmData = (farmId: string): SensorData => {
-  const ranges = farmDataRanges[farmId as keyof typeof farmDataRanges] || farmDataRanges.farm1;
-  
-  const getRandomInRange = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
-  
-  const temperature = getRandomInRange(ranges.temperature.min, ranges.temperature.max);
-  const humidity = getRandomInRange(ranges.humidity.min, ranges.humidity.max);
-  const co2 = getRandomInRange(ranges.co2.min, ranges.co2.max);
-  const ammonia = getRandomInRange(ranges.ammonia.min, ranges.ammonia.max);
-  const eggProduction = parseFloat((Math.random() * (ranges.eggProduction.max - ranges.eggProduction.min) + ranges.eggProduction.min).toFixed(2));
-  const chickens = getRandomInRange(ranges.chickens.min, ranges.chickens.max);
-  const totalEggsToday = Math.floor(chickens * eggProduction);
-  const activeSensors = Math.floor(Math.random() * 6) + 5; // 5-10 active sensors
-
-  return {
-    temperature,
-    humidity,
-    co2,
-    ammonia,
-    eggProduction,
-    totalEggsToday,
-    activeSensors,
-    chickens
-  };
-};
-
 export const useSensorData = () => {
-  const { selectedFarmId } = useFarmSelection();
   const [data, setData] = useState<SensorData>({
     temperature: 0,
     humidity: 0,
@@ -115,10 +42,21 @@ export const useSensorData = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Mock data for demonstration based on selected farm
-        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
+        // Mock data for demonstration
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
         
-        setData(generateFarmData(selectedFarmId));
+        const mockSensorData: SensorData = {
+          temperature: Math.floor(Math.random() * (30 - 20 + 1)) + 20,
+          humidity: Math.floor(Math.random() * (80 - 50 + 1)) + 50,
+          co2: Math.floor(Math.random() * (1500 - 400 + 1)) + 400,
+          ammonia: Math.floor(Math.random() * (20 - 2 + 1)) + 2,
+          eggProduction: parseFloat((Math.random() * (0.9 - 0.6 + 1) + 0.6).toFixed(2)),
+          totalEggsToday: Math.floor(Math.random() * (300 - 150 + 1)) + 150,
+          activeSensors: Math.floor(Math.random() * (10 - 5 + 1)) + 5,
+          chickens: Math.floor(Math.random() * (500 - 200 + 1)) + 200,
+        };
+        
+        setData(mockSensorData);
       } catch (error) {
         console.error("Failed to fetch sensor data:", error);
       } finally {
@@ -127,7 +65,7 @@ export const useSensorData = () => {
     };
 
     fetchData();
-  }, [selectedFarmId]);
+  }, []);
 
   return { data, loading };
 };
