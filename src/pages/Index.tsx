@@ -19,7 +19,7 @@ const Index = () => {
 
   useEffect(() => {
     // Set document title
-    document.title = t("farmFriendlyDashboard") || "Farmer Friendly - Poultry Farm Dashboard";
+    document.title = t('farmFriendlyDashboard');
     
     // Apply body class for custom cursor
     document.body.classList.add('cursor-hen');

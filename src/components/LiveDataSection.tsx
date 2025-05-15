@@ -18,6 +18,7 @@ const LiveDataSection: React.FC = () => {
   const getRefreshInterval = (): number => {
     const storedInterval = localStorage.getItem('dataCollectionInterval');
     switch (storedInterval) {
+      case '5sec': return 5 * 1000; // 5 seconds
       case '5min': return 5 * 60 * 1000;
       case '30min': return 30 * 60 * 1000;
       case '60min': return 60 * 60 * 1000;
@@ -25,11 +26,12 @@ const LiveDataSection: React.FC = () => {
     }
   };
 
-  // For demo purposes, use 10 seconds instead of minutes
+  // For demo purposes, use actual seconds instead of minutes
   const getDemoRefreshInterval = (): number => {
     const storedInterval = localStorage.getItem('dataCollectionInterval');
     switch (storedInterval) {
-      case '5min': return 5 * 1000;
+      case '5sec': return 5 * 1000; // 5 seconds
+      case '5min': return 5 * 1000; // 5 seconds for "5 minutes" setting
       case '30min': return 10 * 1000;
       case '60min': return 15 * 1000;
       default: return 2 * 1000; // Default to 2 seconds for demo
@@ -68,10 +70,10 @@ const LiveDataSection: React.FC = () => {
   return (
     <section id="live-data" className="py-20">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-gradient">Live Sensor Data</h2>
-        <p className="text-lg text-white/70 mb-2">Real-time environmental conditions</p>
+        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-gradient">{t('liveDataTitle')}</h2>
+        <p className="text-lg text-white/70 mb-2">{t('liveDataSubtitle')}</p>
         <p className="text-sm text-white/50 mb-10">
-          Last updated: {lastUpdated.toLocaleTimeString()}
+          {t('lastUpdated')}: {lastUpdated.toLocaleTimeString()}
         </p>
         
         {loading ? (
@@ -84,7 +86,7 @@ const LiveDataSection: React.FC = () => {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <SensorCard
-                title="CO₂ Level"
+                title={t('co2Level')}
                 value={data.co2}
                 unit="ppm"
                 min={300}
@@ -103,7 +105,7 @@ const LiveDataSection: React.FC = () => {
               />
               
               <SensorCard
-                title="Ammonia Level"
+                title={t('ammoniaLevel')}
                 value={data.ammonia}
                 unit="ppm"
                 min={5}
@@ -120,7 +122,7 @@ const LiveDataSection: React.FC = () => {
               />
               
               <SensorCard
-                title="Temperature"
+                title={t('temperature')}
                 value={data.temperature}
                 unit="°C"
                 min={20}
@@ -134,7 +136,7 @@ const LiveDataSection: React.FC = () => {
               />
               
               <SensorCard
-                title="Humidity"
+                title={t('humidity')}
                 value={data.humidity}
                 unit="%"
                 min={40}
@@ -148,13 +150,13 @@ const LiveDataSection: React.FC = () => {
               />
             </div>
 
-            <h3 className="text-2xl font-bold mt-16 mb-6 text-white">Farm Overview</h3>
+            <h3 className="text-2xl font-bold mt-16 mb-6 text-white">{t('farmOverview')}</h3>
             
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               <AnimatedCounter
-                title="Total Eggs Today"
+                title={t('totalEggsToday')}
                 targetValue={data.totalEggsToday}
-                unit="eggs"
+                unit={t('eggs')}
                 icon={
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 22c-4.97 0-9-7-9-11a9 9 0 0 1 18 0c0 4-4.03 11-9 11z" />
@@ -163,9 +165,9 @@ const LiveDataSection: React.FC = () => {
               />
               
               <AnimatedCounter
-                title="Active Sensors"
+                title={t('activeSensors')}
                 targetValue={data.activeSensors}
-                unit="units"
+                unit={t('units')}
                 icon={
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
@@ -177,9 +179,9 @@ const LiveDataSection: React.FC = () => {
               />
               
               <AnimatedCounter
-                title="Chickens"
+                title={t('chickens')}
                 targetValue={data.chickens}
-                unit="birds"
+                unit={t('birds')}
                 icon={
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path>
@@ -188,7 +190,7 @@ const LiveDataSection: React.FC = () => {
               />
               
               <AnimatedCounter
-                title="Avg. Farm Temp"
+                title={t('avgFarmTemp')}
                 targetValue={25}
                 unit="°C"
                 icon={

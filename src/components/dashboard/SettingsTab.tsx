@@ -155,6 +155,10 @@ const SettingsTab: React.FC = () => {
               className="flex flex-wrap space-x-4 mt-2"
             >
               <div className="flex items-center space-x-2">
+                <RadioGroupItem value="5sec" id="r0" />
+                <Label htmlFor="r0" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>{t('fiveSeconds')}</Label>
+              </div>
+              <div className="flex items-center space-x-2">
                 <RadioGroupItem value="5min" id="r1" />
                 <Label htmlFor="r1" className={theme === 'light' ? 'text-gray-700' : 'text-white'}>{t('fiveMinutes')}</Label>
               </div>
