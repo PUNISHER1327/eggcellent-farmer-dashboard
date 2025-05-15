@@ -52,7 +52,7 @@ const NavBar = () => {
   }`;
 
   const linkClass = (path: string) => {
-    return `font-medium text-sm transition-colors duration-200 ${
+    return `font-bold text-base transition-colors duration-200 ${
       isActive(path)
         ? theme === 'light'
           ? 'text-farm-green'
@@ -73,27 +73,33 @@ const NavBar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <span className="text-2xl font-bold text-gradient">FarmerFriendly</span>
+              <span className="text-3xl font-bold text-gradient">FarmerFriendly</span>
             </Link>
           </div>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <Link to="/" className={linkClass('/')}>
-              {t('home')}
+              <span className="flex items-center">
+                <span className="text-xl mr-1">🏠</span> {t('home')}
+              </span>
             </Link>
             <Link to="/mission" className={linkClass('/mission')}>
-              {t('mission')}
+              <span className="flex items-center">
+                <span className="text-xl mr-1">🚀</span> {t('mission')}
+              </span>
             </Link>
             <Link to="/contact" className={linkClass('/contact')}>
-              {t('contact')}
+              <span className="flex items-center">
+                <span className="text-xl mr-1">📞</span> {t('contact')}
+              </span>
             </Link>
             
             {/* Language Selector */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="flex items-center space-x-1 p-1">
-                  <Globe className="h-5 w-5" />
+                  <Globe className="h-6 w-6" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -118,15 +124,15 @@ const NavBar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             
-            {/* Profile Avatar Link */}
+            {/* Profile Avatar Link - Moved to the end */}
             <Link to="/profile" className="ml-2">
-              <Avatar className={`h-8 w-8 border-2 transition-all hover:scale-110 ${
+              <Avatar className={`h-10 w-10 border-2 transition-all hover:scale-110 ${
                 isActive('/profile') ? 'border-farm-green' : theme === 'light' ? 'border-gray-200' : 'border-gray-700'
               }`}>
                 <AvatarFallback className={`text-sm ${
                   isActive('/profile') ? 'bg-farm-green/20 text-farm-green' : ''
                 }`}>
-                  <User className="h-4 w-4" />
+                  <User className="h-5 w-5" />
                 </AvatarFallback>
               </Avatar>
             </Link>
@@ -138,7 +144,7 @@ const NavBar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="mr-2">
-                  <Globe className="h-5 w-5" />
+                  <Globe className="h-6 w-6" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -165,13 +171,13 @@ const NavBar = () => {
             
             {/* Mobile Profile Link */}
             <Link to="/profile" className="mr-4">
-              <Avatar className={`h-8 w-8 border-2 ${
+              <Avatar className={`h-10 w-10 border-2 ${
                 isActive('/profile') ? 'border-farm-green' : theme === 'light' ? 'border-gray-200' : 'border-gray-700'
               }`}>
                 <AvatarFallback className={`text-sm ${
                   isActive('/profile') ? 'bg-farm-green/20 text-farm-green' : ''
                 }`}>
-                  <User className="h-4 w-4" />
+                  <User className="h-5 w-5" />
                 </AvatarFallback>
               </Avatar>
             </Link>
@@ -181,9 +187,9 @@ const NavBar = () => {
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white'} focus:outline-none`}
             >
               {isOpen ? (
-                <X className="w-6 h-6" />
+                <X className="w-7 h-7" />
               ) : (
-                <Menu className="w-6 h-6" />
+                <Menu className="w-7 h-7" />
               )}
             </button>
           </div>
@@ -200,7 +206,7 @@ const NavBar = () => {
           <div className="px-2 pt-2 pb-3 space-y-1">
             <Link
               to="/"
-              className={`block px-3 py-2 rounded-md ${
+              className={`block px-3 py-2 rounded-md font-bold text-base ${
                 isActive('/')
                   ? 'bg-farm-green/10 text-farm-green'
                   : theme === 'light'
@@ -208,11 +214,13 @@ const NavBar = () => {
                   : 'text-gray-100 hover:bg-gray-800'
               }`}
             >
-              {t('home')}
+              <span className="flex items-center">
+                <span className="text-xl mr-1">🏠</span> {t('home')}
+              </span>
             </Link>
             <Link
               to="/mission"
-              className={`block px-3 py-2 rounded-md ${
+              className={`block px-3 py-2 rounded-md font-bold text-base ${
                 isActive('/mission')
                   ? 'bg-farm-green/10 text-farm-green'
                   : theme === 'light'
@@ -220,11 +228,13 @@ const NavBar = () => {
                   : 'text-gray-100 hover:bg-gray-800'
               }`}
             >
-              {t('mission')}
+              <span className="flex items-center">
+                <span className="text-xl mr-1">🚀</span> {t('mission')}
+              </span>
             </Link>
             <Link
               to="/contact"
-              className={`block px-3 py-2 rounded-md ${
+              className={`block px-3 py-2 rounded-md font-bold text-base ${
                 isActive('/contact')
                   ? 'bg-farm-green/10 text-farm-green'
                   : theme === 'light'
@@ -232,7 +242,9 @@ const NavBar = () => {
                   : 'text-gray-100 hover:bg-gray-800'
               }`}
             >
-              {t('contact')}
+              <span className="flex items-center">
+                <span className="text-xl mr-1">📞</span> {t('contact')}
+              </span>
             </Link>
           </div>
         </div>
