@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card } from '@/components/ui/card';
@@ -8,30 +8,121 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Camera, MapPin, Calendar, Bird, Phone, Mail, AlertTriangle } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import BackgroundVideo from '../components/BackgroundVideo';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
+
+// Farm Data Interface
+interface FarmData {
+  id: string;
+  name: string;
+  location: string;
+  chickenCount: number;
+  ammoniaLevel: number;
+  threshold: number;
+  isConveyorOn: boolean;
+  healthAlerts: {
+    id: number;
+    date: string;
+    message: string;
+    severity: 'low' | 'medium' | 'high';
+  }[];
+}
 
 const ProfilePage: React.FC = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedFarmId, setSelectedFarmId] = useState<string>('farm1');
+  
+  // Base user profile data
   const [profileData, setProfileData] = useState({
     name: "Rajesh Kumar",
     email: "rajesh@farmerfriendly.com",
     phone: "+91 98765 43210",
     location: "Bangalore Rural, Karnataka",
     joinDate: "15 January, 2023",
-    chickenCount: 5000,
     avatarUrl: "",
   });
   
-  // Mock health alerts
-  const healthAlerts = [
-    { id: 1, date: "2025-05-02", message: t('lowFeedAlert'), severity: "medium" },
-    { id: 2, date: "2025-05-01", message: t('temperatureAlert'), severity: "high" },
-    { id: 3, date: "2025-04-28", message: t('vaccinationReminder'), severity: "low" },
-  ];
+  // Farm data with multiple farms
+  const [farms, setFarms] = useState<FarmData[]>([
+    {
+      id: 'farm1',
+      name: 'Green Valley Farm',
+      location: 'Bangalore Rural, Karnataka',
+      chickenCount: 5000,
+      ammoniaLevel: 30,
+      threshold: 25,
+      isConveyorOn: true,
+      healthAlerts: [
+        { id: 1, date: "2025-05-02", message: t('lowFeedAlert'), severity: "medium" },
+        { id: 2, date: "2025-05-01", message: t('temperatureAlert'), severity: "high" },
+        { id: 3, date: "2025-04-28", message: t('vaccinationReminder'), severity: "low" },
+      ]
+    },
+    {
+      id: 'farm2',
+      name: 'Sunrise Poultry',
+      location: 'Mysore, Karnataka',
+      chickenCount: 3500,
+      ammoniaLevel: 18,
+      threshold: 25,
+      isConveyorOn: false,
+      healthAlerts: [
+        { id: 1, date: "2025-05-03", message: t('waterSupplyAlert'), severity: "low" },
+        { id: 2, date: "2025-04-30", message: t('eggProductionDown'), severity: "medium" },
+      ]
+    },
+    {
+      id: 'farm3',
+      name: 'Golden Eggs Farm',
+      location: 'Hassan, Karnataka',
+      chickenCount: 6200,
+      ammoniaLevel: 28,
+      threshold: 25,
+      isConveyorOn: true,
+      healthAlerts: [
+        { id: 1, date: "2025-05-04", message: t('highHumidityAlert'), severity: "high" },
+        { id: 2, date: "2025-05-01", message: t('equipmentMaintenance'), severity: "low" },
+      ]
+    },
+    {
+      id: 'farm4',
+      name: 'River View Poultry',
+      location: 'Mangalore, Karnataka',
+      chickenCount: 4800,
+      ammoniaLevel: 22,
+      threshold: 25,
+      isConveyorOn: false,
+      healthAlerts: [
+        { id: 1, date: "2025-05-02", message: t('predatorAlert'), severity: "high" },
+      ]
+    },
+    {
+      id: 'farm5',
+      name: 'Mountain Top Farm',
+      location: 'Chikmagalur, Karnataka',
+      chickenCount: 3200,
+      ammoniaLevel: 32,
+      threshold: 25,
+      isConveyorOn: true,
+      healthAlerts: [
+        { id: 1, date: "2025-05-03", message: t('powerOutageWarning'), severity: "medium" },
+        { id: 2, date: "2025-05-01", message: t('feedQualityIssue'), severity: "low" },
+        { id: 3, date: "2025-04-29", message: t('staffShortage'), severity: "medium" },
+      ]
+    }
+  ]);
+
+  // Get current farm data based on selection
+  const selectedFarm = farms.find(farm => farm.id === selectedFarmId) || farms[0];
+  
+  // Handle farm change
+  const handleFarmChange = (farmId: string) => {
+    setSelectedFarmId(farmId);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -53,6 +144,23 @@ const ProfilePage: React.FC = () => {
     }
   };
 
+  // Update farm data
+  const handleFarmDataChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, farmId: string) => {
+    const { name, value } = e.target;
+    const updatedFarms = farms.map(farm => {
+      if (farm.id === farmId) {
+        return { 
+          ...farm, 
+          [name]: name === 'chickenCount' || name === 'ammoniaLevel' || name === 'threshold' 
+            ? parseInt(value) 
+            : value 
+        };
+      }
+      return farm;
+    });
+    setFarms(updatedFarms);
+  };
+
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
@@ -61,6 +169,18 @@ const ProfilePage: React.FC = () => {
     // In a real app, you would save these changes to a database
     setIsEditing(false);
     console.log("Saving profile data:", profileData);
+    console.log("Saving farm data:", farms);
+  };
+
+  // Toggle conveyor belt status
+  const toggleConveyorBelt = (farmId: string) => {
+    const updatedFarms = farms.map(farm => {
+      if (farm.id === farmId) {
+        return { ...farm, isConveyorOn: !farm.isConveyorOn };
+      }
+      return farm;
+    });
+    setFarms(updatedFarms);
   };
 
   return (
@@ -78,16 +198,33 @@ const ProfilePage: React.FC = () => {
             {t('farmerProfile')}
           </h1>
           
+          {/* Farm Selector */}
+          <div className="mb-8">
+            <label className="block text-sm font-medium mb-2">{t('selectFarm')}</label>
+            <Select value={selectedFarmId} onValueChange={handleFarmChange}>
+              <SelectTrigger className="w-full md:w-72">
+                <SelectValue placeholder={t('selectFarm')} />
+              </SelectTrigger>
+              <SelectContent>
+                {farms.map(farm => (
+                  <SelectItem key={farm.id} value={farm.id}>
+                    {farm.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Profile Information Card */}
             <Card className={`${theme === 'light' ? 'light-glass-morphism' : 'glass-morphism'} p-6 col-span-1`}>
               <div className="flex flex-col items-center mb-6">
                 <div className="relative mb-4 group">
-                  <Avatar className="w-32 h-32 border-4 border-farm-green">
+                  <Avatar className="w-24 h-24 md:w-32 md:h-32 border-4 border-farm-green">
                     {profileData.avatarUrl ? (
                       <AvatarImage src={profileData.avatarUrl} alt={profileData.name} />
                     ) : (
-                      <AvatarFallback className="text-4xl bg-farm-green/20">
+                      <AvatarFallback className="text-3xl md:text-4xl bg-farm-green/20">
                         {profileData.name.charAt(0)}
                       </AvatarFallback>
                     )}
@@ -158,7 +295,7 @@ const ProfilePage: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <MapPin className="h-5 w-5 text-farm-green flex-shrink-0" />
                   <div className="flex-grow">
-                    <p className="text-sm opacity-70">{t('farmLocation')}</p>
+                    <p className="text-sm opacity-70">{t('userLocation')}</p>
                     {isEditing ? (
                       <Textarea 
                         name="location"
@@ -168,24 +305,6 @@ const ProfilePage: React.FC = () => {
                       />
                     ) : (
                       <p>{profileData.location}</p>
-                    )}
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <Bird className="h-5 w-5 text-farm-green flex-shrink-0" />
-                  <div className="flex-grow">
-                    <p className="text-sm opacity-70">{t('chickenCount')}</p>
-                    {isEditing ? (
-                      <Input 
-                        name="chickenCount"
-                        value={profileData.chickenCount.toString()} 
-                        onChange={handleInputChange}
-                        type="number" 
-                        className="bg-secondary/50"
-                      />
-                    ) : (
-                      <p>{profileData.chickenCount.toLocaleString()}</p>
                     )}
                   </div>
                 </div>
@@ -227,8 +346,65 @@ const ProfilePage: React.FC = () => {
               </div>
             </Card>
             
-            {/* Health Status & Conveyor Belt Status Cards */}
+            {/* Farm Data Cards */}
             <div className="col-span-1 lg:col-span-2 space-y-8">
+              {/* Current Farm Info Card */}
+              <Card className={`${theme === 'light' ? 'light-glass-morphism' : 'glass-morphism'} p-6`}>
+                <div className="flex flex-wrap justify-between items-center mb-4">
+                  <h3 className="text-xl font-semibold">{selectedFarm.name}</h3>
+                  {isEditing && (
+                    <div className="mt-2 sm:mt-0">
+                      <Input 
+                        name="name"
+                        value={selectedFarm.name} 
+                        onChange={(e) => handleFarmDataChange(e, selectedFarm.id)}
+                        className="bg-secondary/50 w-full"
+                        placeholder={t('farmName')}
+                      />
+                    </div>
+                  )}
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <MapPin className="h-5 w-5 text-farm-green flex-shrink-0" />
+                      <div className="flex-grow">
+                        <p className="text-sm opacity-70">{t('farmLocation')}</p>
+                        {isEditing ? (
+                          <Textarea 
+                            name="location"
+                            value={selectedFarm.location} 
+                            onChange={(e) => handleFarmDataChange(e, selectedFarm.id)}
+                            className="bg-secondary/50"
+                          />
+                        ) : (
+                          <p>{selectedFarm.location}</p>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      <Bird className="h-5 w-5 text-farm-green flex-shrink-0" />
+                      <div className="flex-grow">
+                        <p className="text-sm opacity-70">{t('chickenCount')}</p>
+                        {isEditing ? (
+                          <Input 
+                            name="chickenCount"
+                            value={selectedFarm.chickenCount.toString()} 
+                            onChange={(e) => handleFarmDataChange(e, selectedFarm.id)}
+                            type="number" 
+                            className="bg-secondary/50"
+                          />
+                        ) : (
+                          <p>{selectedFarm.chickenCount.toLocaleString()}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+              
               {/* Conveyor Belt Status Card */}
               <Card className={`${theme === 'light' ? 'light-glass-morphism' : 'glass-morphism'} p-6`}>
                 <h3 className="text-xl font-semibold mb-4">{t('conveyorBeltStatus')}</h3>
@@ -238,20 +414,20 @@ const ProfilePage: React.FC = () => {
                     <div className="mb-6">
                       <p className="text-sm opacity-70 mb-2">{t('currentStatus')}</p>
                       <div className="flex items-center">
-                        <div className={`h-4 w-4 rounded-full ${30 > 25 ? 'bg-green-500 animate-pulse' : 'bg-red-500'} mr-2`}></div>
-                        <span className="text-lg font-medium">{30 > 25 ? t('on') : t('off')}</span>
+                        <div className={`h-4 w-4 rounded-full ${selectedFarm.isConveyorOn ? 'bg-green-500 animate-pulse' : 'bg-red-500'} mr-2`}></div>
+                        <span className="text-lg font-medium">{selectedFarm.isConveyorOn ? t('on') : t('off')}</span>
                       </div>
                     </div>
                     
                     <div className="mb-6">
                       <div className="flex justify-between items-center mb-2">
                         <p className="text-sm opacity-70">{t('ammoniaLevel')}</p>
-                        <span className="text-lg font-medium">30 ppm</span>
+                        <span className="text-lg font-medium">{selectedFarm.ammoniaLevel} ppm</span>
                       </div>
                       <div className="h-2 bg-secondary rounded-full overflow-hidden">
                         <div 
                           className="h-full bg-farm-green rounded-full" 
-                          style={{ width: `${(30 / 50) * 100}%` }}
+                          style={{ width: `${(selectedFarm.ammoniaLevel / 50) * 100}%` }}
                         ></div>
                       </div>
                     </div>
@@ -259,24 +435,33 @@ const ProfilePage: React.FC = () => {
                     <div>
                       <div className="flex justify-between items-center mb-2">
                         <p className="text-sm opacity-70">{t('thresholdValue')}</p>
-                        <span className="text-lg font-medium">25 ppm</span>
+                        <span className="text-lg font-medium">{selectedFarm.threshold} ppm</span>
                       </div>
                       <div className="h-2 bg-secondary rounded-full overflow-hidden">
                         <div 
                           className="h-full bg-farm-yellow rounded-full" 
-                          style={{ width: `${(25 / 50) * 100}%` }}
+                          style={{ width: `${(selectedFarm.threshold / 50) * 100}%` }}
                         ></div>
                       </div>
+                    </div>
+                    
+                    <div className="mt-6">
+                      <Button 
+                        onClick={() => toggleConveyorBelt(selectedFarm.id)}
+                        className={`w-full ${selectedFarm.isConveyorOn ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'}`}
+                      >
+                        {selectedFarm.isConveyorOn ? t('turnOffConveyor') : t('turnOnConveyor')}
+                      </Button>
                     </div>
                   </div>
                   
                   <div className="flex flex-col">
                     <p className="text-sm opacity-70 mb-2">{t('statusMessage')}</p>
-                    <div className={`flex-grow p-4 rounded-lg ${30 > 25 ? 'bg-green-500/20 border border-green-500/30' : 'bg-red-500/20 border border-red-500/30'}`}>
+                    <div className={`flex-grow p-4 rounded-lg ${selectedFarm.ammoniaLevel > selectedFarm.threshold ? 'bg-green-500/20 border border-green-500/30' : 'bg-red-500/20 border border-red-500/30'}`}>
                       <p>
-                        {30 > 25 
-                          ? t('conveyorBeltOnMessage', { ammonia: '30', threshold: '25' })
-                          : t('conveyorBeltOffMessage', { ammonia: '30', threshold: '25' })
+                        {selectedFarm.ammoniaLevel > selectedFarm.threshold 
+                          ? t('conveyorBeltOnMessage', { ammonia: selectedFarm.ammoniaLevel.toString(), threshold: selectedFarm.threshold.toString() })
+                          : t('conveyorBeltOffMessage', { ammonia: selectedFarm.ammoniaLevel.toString(), threshold: selectedFarm.threshold.toString() })
                         }
                       </p>
                     </div>
@@ -289,8 +474,8 @@ const ProfilePage: React.FC = () => {
                 <h3 className="text-xl font-semibold mb-4">{t('healthStatus')}</h3>
                 
                 <div className="space-y-4">
-                  {healthAlerts.length > 0 ? (
-                    healthAlerts.map((alert) => (
+                  {selectedFarm.healthAlerts.length > 0 ? (
+                    selectedFarm.healthAlerts.map((alert) => (
                       <div 
                         key={alert.id} 
                         className={`p-4 rounded-lg border ${

@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
-import { Globe, Menu, X } from 'lucide-react';
+import { Globe, Menu, X, User } from 'lucide-react';
 import { Button } from './ui/button';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -84,9 +85,6 @@ const NavBar = () => {
             <Link to="/mission" className={linkClass('/mission')}>
               {t('mission')}
             </Link>
-            <Link to="/profile" className={linkClass('/profile')}>
-              {t('profile')}
-            </Link>
             <Link to="/contact" className={linkClass('/contact')}>
               {t('contact')}
             </Link>
@@ -94,7 +92,7 @@ const NavBar = () => {
             {/* Language Selector */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="flex items-center space-x-1">
+                <Button variant="ghost" size="icon" className="flex items-center space-x-1 p-1">
                   <Globe className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
@@ -119,10 +117,65 @@ const NavBar = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            
+            {/* Profile Avatar Link */}
+            <Link to="/profile" className="ml-2">
+              <Avatar className={`h-8 w-8 border-2 transition-all hover:scale-110 ${
+                isActive('/profile') ? 'border-farm-green' : theme === 'light' ? 'border-gray-200' : 'border-gray-700'
+              }`}>
+                <AvatarFallback className={`text-sm ${
+                  isActive('/profile') ? 'bg-farm-green/20 text-farm-green' : ''
+                }`}>
+                  <User className="h-4 w-4" />
+                </AvatarFallback>
+              </Avatar>
+            </Link>
           </div>
           
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center">
+            {/* Mobile Language Selector */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="mr-2">
+                  <Globe className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem 
+                  onClick={() => handleLanguageChange('en')}
+                  className={language === 'en' ? 'bg-accent' : ''}
+                >
+                  English
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => handleLanguageChange('hi')}
+                  className={language === 'hi' ? 'bg-accent' : ''}
+                >
+                  हिन्दी (Hindi)
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => handleLanguageChange('kn')}
+                  className={language === 'kn' ? 'bg-accent' : ''}
+                >
+                  ಕನ್ನಡ (Kannada)
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            {/* Mobile Profile Link */}
+            <Link to="/profile" className="mr-4">
+              <Avatar className={`h-8 w-8 border-2 ${
+                isActive('/profile') ? 'border-farm-green' : theme === 'light' ? 'border-gray-200' : 'border-gray-700'
+              }`}>
+                <AvatarFallback className={`text-sm ${
+                  isActive('/profile') ? 'bg-farm-green/20 text-farm-green' : ''
+                }`}>
+                  <User className="h-4 w-4" />
+                </AvatarFallback>
+              </Avatar>
+            </Link>
+            
             <button
               onClick={toggleMenu}
               className={`${theme === 'light' ? 'text-gray-800' : 'text-white'} focus:outline-none`}
@@ -170,18 +223,6 @@ const NavBar = () => {
               {t('mission')}
             </Link>
             <Link
-              to="/profile"
-              className={`block px-3 py-2 rounded-md ${
-                isActive('/profile')
-                  ? 'bg-farm-green/10 text-farm-green'
-                  : theme === 'light'
-                  ? 'text-gray-800 hover:bg-farm-green/5'
-                  : 'text-gray-100 hover:bg-gray-800'
-              }`}
-            >
-              {t('profile')}
-            </Link>
-            <Link
               to="/contact"
               className={`block px-3 py-2 rounded-md ${
                 isActive('/contact')
@@ -193,51 +234,6 @@ const NavBar = () => {
             >
               {t('contact')}
             </Link>
-            
-            {/* Mobile Language Selector */}
-            <div className="mt-3 px-3 py-2">
-              <div className="text-sm font-medium mb-2">
-                {t('selectLanguage')}:
-              </div>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => handleLanguageChange('en')}
-                  className={`px-2 py-1 rounded text-sm ${
-                    language === 'en'
-                      ? 'bg-farm-green text-white'
-                      : theme === 'light'
-                      ? 'bg-gray-100 text-gray-800'
-                      : 'bg-gray-800 text-gray-200'
-                  }`}
-                >
-                  EN
-                </button>
-                <button
-                  onClick={() => handleLanguageChange('hi')}
-                  className={`px-2 py-1 rounded text-sm ${
-                    language === 'hi'
-                      ? 'bg-farm-green text-white'
-                      : theme === 'light'
-                      ? 'bg-gray-100 text-gray-800'
-                      : 'bg-gray-800 text-gray-200'
-                  }`}
-                >
-                  HI
-                </button>
-                <button
-                  onClick={() => handleLanguageChange('kn')}
-                  className={`px-2 py-1 rounded text-sm ${
-                    language === 'kn'
-                      ? 'bg-farm-green text-white'
-                      : theme === 'light'
-                      ? 'bg-gray-100 text-gray-800'
-                      : 'bg-gray-800 text-gray-200'
-                  }`}
-                >
-                  KN
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       )}
