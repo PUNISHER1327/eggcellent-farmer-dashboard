@@ -10,6 +10,7 @@ import ProfilePage from "./pages/ProfilePage";
 import { ThemeProvider } from "./hooks/useTheme";
 import { LanguageProvider } from "./hooks/useLanguage";
 import { AuthProvider } from "./hooks/useAuth";
+import { FarmSelectionProvider } from "./hooks/useFarmSelection";
 import Mission from "./pages/Mission";
 import Auth from "./pages/Auth";
 import DashboardAccessCheck from "./components/DashboardAccessCheck";
@@ -20,26 +21,28 @@ const App = () => (
   <ThemeProvider>
     <LanguageProvider>
       <AuthProvider>
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={
-                  <DashboardAccessCheck>
-                    <Index />
-                  </DashboardAccessCheck>
-                } />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/mission" element={<Mission />} />
-                <Route path="/auth" element={<Auth />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </TooltipProvider>
-        </QueryClientProvider>
+        <FarmSelectionProvider>
+          <QueryClientProvider client={queryClient}>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={
+                    <DashboardAccessCheck>
+                      <Index />
+                    </DashboardAccessCheck>
+                  } />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/mission" element={<Mission />} />
+                  <Route path="/auth" element={<Auth />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </TooltipProvider>
+          </QueryClientProvider>
+        </FarmSelectionProvider>
       </AuthProvider>
     </LanguageProvider>
   </ThemeProvider>

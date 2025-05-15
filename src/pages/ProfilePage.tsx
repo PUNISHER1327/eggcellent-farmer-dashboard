@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useFarmSelection } from '@/hooks/useFarmSelection';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,7 +13,7 @@ import BackgroundVideo from '../components/BackgroundVideo';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 
-// Farm Data Interface
+// Farm Data Interface with health alerts
 interface FarmData {
   id: string;
   name: string;
@@ -33,89 +33,66 @@ interface FarmData {
 const ProfilePage: React.FC = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
+  const { farms: baseFarms, selectedFarmId, setSelectedFarmId } = useFarmSelection();
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedFarmId, setSelectedFarmId] = useState<string>('farm1');
   
   // Base user profile data
   const [profileData, setProfileData] = useState({
-    name: "Rajesh Kumar",
-    email: "rajesh@farmerfriendly.com",
+    name: "Aditya Manhas",
+    email: "aditya@farmerfriendly.com",
     phone: "+91 98765 43210",
     location: "Bangalore Rural, Karnataka",
     joinDate: "15 January, 2023",
     avatarUrl: "",
   });
   
-  // Farm data with multiple farms
-  const [farms, setFarms] = useState<FarmData[]>([
-    {
-      id: 'farm1',
-      name: 'Green Valley Farm',
-      location: 'Bangalore Rural, Karnataka',
-      chickenCount: 5000,
-      ammoniaLevel: 30,
-      threshold: 25,
-      isConveyorOn: true,
-      healthAlerts: [
-        { id: 1, date: "2025-05-02", message: t('lowFeedAlert'), severity: "medium" },
-        { id: 2, date: "2025-05-01", message: t('temperatureAlert'), severity: "high" },
-        { id: 3, date: "2025-04-28", message: t('vaccinationReminder'), severity: "low" },
-      ]
-    },
-    {
-      id: 'farm2',
-      name: 'Sunrise Poultry',
-      location: 'Mysore, Karnataka',
-      chickenCount: 3500,
-      ammoniaLevel: 18,
-      threshold: 25,
-      isConveyorOn: false,
-      healthAlerts: [
-        { id: 1, date: "2025-05-03", message: t('waterSupplyAlert'), severity: "low" },
-        { id: 2, date: "2025-04-30", message: t('eggProductionDown'), severity: "medium" },
-      ]
-    },
-    {
-      id: 'farm3',
-      name: 'Golden Eggs Farm',
-      location: 'Hassan, Karnataka',
-      chickenCount: 6200,
-      ammoniaLevel: 28,
-      threshold: 25,
-      isConveyorOn: true,
-      healthAlerts: [
-        { id: 1, date: "2025-05-04", message: t('highHumidityAlert'), severity: "high" },
-        { id: 2, date: "2025-05-01", message: t('equipmentMaintenance'), severity: "low" },
-      ]
-    },
-    {
-      id: 'farm4',
-      name: 'River View Poultry',
-      location: 'Mangalore, Karnataka',
-      chickenCount: 4800,
-      ammoniaLevel: 22,
-      threshold: 25,
-      isConveyorOn: false,
-      healthAlerts: [
-        { id: 1, date: "2025-05-02", message: t('predatorAlert'), severity: "high" },
-      ]
-    },
-    {
-      id: 'farm5',
-      name: 'Mountain Top Farm',
-      location: 'Chikmagalur, Karnataka',
-      chickenCount: 3200,
-      ammoniaLevel: 32,
-      threshold: 25,
-      isConveyorOn: true,
-      healthAlerts: [
-        { id: 1, date: "2025-05-03", message: t('powerOutageWarning'), severity: "medium" },
-        { id: 2, date: "2025-05-01", message: t('feedQualityIssue'), severity: "low" },
-        { id: 3, date: "2025-04-29", message: t('staffShortage'), severity: "medium" },
-      ]
-    }
-  ]);
+  // Extend farms with health alerts data
+  const [farms, setFarms] = useState<FarmData[]>([]);
+  
+  // Initialize extended farm data
+  useEffect(() => {
+    const extendedFarms: FarmData[] = baseFarms.map(farm => {
+      // Get health alerts based on farm id
+      const healthAlerts = getHealthAlertsForFarm(farm.id);
+      
+      return {
+        ...farm,
+        healthAlerts
+      };
+    });
+    
+    setFarms(extendedFarms);
+  }, [baseFarms]);
 
+  // Function to get health alerts for a specific farm
+  const getHealthAlertsForFarm = (farmId: string) => {
+    const alerts = {
+      'farm1': [
+        { id: 1, date: "2025-05-02", message: t('lowFeedAlert'), severity: "medium" as const },
+        { id: 2, date: "2025-05-01", message: t('temperatureAlert'), severity: "high" as const },
+        { id: 3, date: "2025-04-28", message: t('vaccinationReminder'), severity: "low" as const },
+      ],
+      'farm2': [
+        { id: 1, date: "2025-05-03", message: t('waterSupplyAlert'), severity: "low" as const },
+        { id: 2, date: "2025-04-30", message: t('eggProductionDown'), severity: "medium" as const },
+      ],
+      'farm3': [
+        { id: 1, date: "2025-05-04", message: t('highHumidityAlert'), severity: "high" as const },
+        { id: 2, date: "2025-05-01", message: t('equipmentMaintenance'), severity: "low" as const },
+      ],
+      'farm4': [
+        { id: 1, date: "2025-05-02", message: t('predatorAlert'), severity: "high" as const },
+      ],
+      'farm5': [
+        { id: 1, date: "2025-05-03", message: t('powerOutageWarning'), severity: "medium" as const },
+        { id: 2, date: "2025-05-01", message: t('feedQualityIssue'), severity: "low" as const },
+        { id: 3, date: "2025-04-29", message: t('staffShortage'), severity: "medium" as const },
+      ]
+    };
+    
+    return alerts[farmId as keyof typeof alerts] || [];
+  };
+  
   // Get current farm data based on selection
   const selectedFarm = farms.find(farm => farm.id === selectedFarmId) || farms[0];
   

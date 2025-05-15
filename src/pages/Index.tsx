@@ -12,10 +12,12 @@ import AnalyticsDashboard from '../components/AnalyticsDashboard';
 import ConveyorBeltStatus from '../components/ConveyorBeltStatus';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useFarmSelection } from '@/hooks/useFarmSelection';
 
 const Index = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
+  const { selectedFarmId } = useFarmSelection();
 
   useEffect(() => {
     // Set document title
