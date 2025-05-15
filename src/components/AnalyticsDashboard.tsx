@@ -20,11 +20,8 @@ const AnalyticsDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
   
   return (
-    <section id="analytics" className={`py-20 relative ${theme === 'light' ? 'bg-soft-blue' : 'bg-gray-900'}`}>
-      {/* Simple background gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-indigo-100/5 dark:to-indigo-900/10 pointer-events-none"></div>
-      
-      <div className="container mx-auto px-4 relative z-10">
+    <section id="analytics" className="py-20">
+      <div className="container mx-auto px-4">
         <h2 className={`text-3xl md:text-4xl font-bold mb-2 ${theme === 'light' ? 'text-gray-800' : 'text-gradient'}`}>
           {t('advancedAnalytics')}
         </h2>
@@ -41,8 +38,8 @@ const AnalyticsDashboard: React.FC = () => {
           <div className="overflow-x-auto pb-2">
             <TabsList className={`flex flex-nowrap gap-1 mb-6 p-1 ${
               theme === 'light' 
-                ? 'bg-white/80 backdrop-blur-sm' 
-                : 'bg-gray-800/50 backdrop-blur-sm'
+                ? 'bg-gray-100' 
+                : 'bg-gray-800/50'
             }`}>
               <TabsTrigger 
                 value="overview"

@@ -23,103 +23,20 @@ const LiveDataSection = () => {
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [refreshInterval, setRefreshInterval] = useState(300000); // Default to 5 minutes
-  const [selectedFarmId, setSelectedFarmId] = useState<string>('farm1');
 
-  // Get selected farm from localStorage
-  useEffect(() => {
-    const storedFarmId = localStorage.getItem('selectedFarmId');
-    if (storedFarmId) {
-      setSelectedFarmId(storedFarmId);
-    }
-  }, []);
-
-  // Function to generate mock data based on farm ID
-  const generateMockData = useCallback((farmId: string) => {
-    // Farm-specific data ranges
-    const farmRanges = {
-      farm1: { // Green Valley Farm
-        temp: { min: 20, max: 30 },
-        humidity: { min: 50, max: 80 },
-        co2: { min: 400, max: 1500 },
-        ammonia: { min: 2, max: 20 },
-        eggProduction: { min: 0.6, max: 0.9 },
-        totalEggs: { min: 150, max: 300 },
-        activeSensors: { min: 5, max: 10 },
-        chickens: { min: 200, max: 500 },
-      },
-      farm2: { // Sunrise Poultry
-        temp: { min: 18, max: 25 },
-        humidity: { min: 60, max: 85 },
-        co2: { min: 350, max: 1000 },
-        ammonia: { min: 1, max: 15 },
-        eggProduction: { min: 0.5, max: 0.8 },
-        totalEggs: { min: 100, max: 250 },
-        activeSensors: { min: 4, max: 8 },
-        chickens: { min: 150, max: 300 },
-      },
-      farm3: { // Golden Eggs Farm
-        temp: { min: 22, max: 32 },
-        humidity: { min: 45, max: 75 },
-        co2: { min: 450, max: 1700 },
-        ammonia: { min: 3, max: 25 },
-        eggProduction: { min: 0.7, max: 0.95 },
-        totalEggs: { min: 200, max: 350 },
-        activeSensors: { min: 6, max: 12 },
-        chickens: { min: 250, max: 550 },
-      },
-      farm4: { // River View Poultry
-        temp: { min: 19, max: 28 },
-        humidity: { min: 55, max: 78 },
-        co2: { min: 380, max: 1300 },
-        ammonia: { min: 2, max: 18 },
-        eggProduction: { min: 0.55, max: 0.85 },
-        totalEggs: { min: 130, max: 270 },
-        activeSensors: { min: 5, max: 9 },
-        chickens: { min: 180, max: 400 },
-      },
-      farm5: { // Mountain Top Farm
-        temp: { min: 17, max: 26 },
-        humidity: { min: 65, max: 90 },
-        co2: { min: 420, max: 1600 },
-        ammonia: { min: 4, max: 22 },
-        eggProduction: { min: 0.65, max: 0.9 },
-        totalEggs: { min: 170, max: 320 },
-        activeSensors: { min: 7, max: 14 },
-        chickens: { min: 220, max: 480 },
-      }
-    };
-
-    // Default to farm1 if farmId doesn't match any known farm
-    const range = farmRanges[farmId as keyof typeof farmRanges] || farmRanges.farm1;
-    
-    const randomInRange = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
-    
+  // Function to generate mock data
+  const generateMockData = useCallback(() => {
     return {
-      temperature: randomInRange(range.temp.min, range.temp.max),
-      humidity: randomInRange(range.humidity.min, range.humidity.max),
-      co2: randomInRange(range.co2.min, range.co2.max),
-      ammonia: randomInRange(range.ammonia.min, range.ammonia.max),
-      eggProduction: parseFloat((Math.random() * (range.eggProduction.max - range.eggProduction.min) + range.eggProduction.min).toFixed(2)),
-      totalEggsToday: randomInRange(range.totalEggs.min, range.totalEggs.max),
-      activeSensors: randomInRange(range.activeSensors.min, range.activeSensors.max),
-      chickens: randomInRange(range.chickens.min, range.chickens.max),
+      temperature: Math.floor(Math.random() * (30 - 20 + 1)) + 20,
+      humidity: Math.floor(Math.random() * (80 - 50 + 1)) + 50,
+      co2: Math.floor(Math.random() * (1500 - 400 + 1)) + 400,
+      ammonia: Math.floor(Math.random() * (20 - 2 + 1)) + 2,
+      eggProduction: parseFloat((Math.random() * (0.9 - 0.6) + 0.6).toFixed(2)),
+      totalEggsToday: Math.floor(Math.random() * (300 - 150 + 1)) + 150,
+      activeSensors: Math.floor(Math.random() * (10 - 5 + 1)) + 5,
+      chickens: Math.floor(Math.random() * (500 - 200 + 1)) + 200,
     };
   }, []);
-
-  // Check for farm selection changes
-  useEffect(() => {
-    const checkFarmSelection = () => {
-      const storedFarmId = localStorage.getItem('selectedFarmId');
-      if (storedFarmId && storedFarmId !== selectedFarmId) {
-        setSelectedFarmId(storedFarmId);
-      }
-    };
-    
-    // Check every second for farm selection changes
-    const farmChecker = setInterval(checkFarmSelection, 1000);
-    
-    return () => clearInterval(farmChecker);
-  }, [selectedFarmId]);
 
   // Load refresh interval from localStorage
   useEffect(() => {
@@ -154,7 +71,7 @@ const LiveDataSection = () => {
       try {
         // Simulate network request
         await new Promise(resolve => setTimeout(resolve, 500));
-        setSensorData(generateMockData(selectedFarmId));
+        setSensorData(generateMockData());
         setLastUpdated(new Date());
         setLoading(false);
       } catch (error) {
@@ -163,7 +80,7 @@ const LiveDataSection = () => {
       }
     };
 
-    // Fetch data immediately on mount or when farmId changes
+    // Fetch data immediately on mount
     fetchData();
 
     // Set up interval for refreshing data
@@ -175,9 +92,9 @@ const LiveDataSection = () => {
       });
     }, refreshInterval);
 
-    // Clean up interval on unmount or when dependencies change
+    // Clean up interval on unmount
     return () => clearInterval(intervalId);
-  }, [generateMockData, refreshInterval, t, selectedFarmId]);
+  }, [generateMockData, refreshInterval, t]);
 
   // Monitor localStorage for changes to refresh interval
   useEffect(() => {
@@ -216,7 +133,7 @@ const LiveDataSection = () => {
     setLoading(true);
     // Simulate network request
     await new Promise(resolve => setTimeout(resolve, 500));
-    setSensorData(generateMockData(selectedFarmId));
+    setSensorData(generateMockData());
     setLastUpdated(new Date());
     setLoading(false);
     

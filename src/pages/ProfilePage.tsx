@@ -36,10 +36,10 @@ const ProfilePage: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedFarmId, setSelectedFarmId] = useState<string>('farm1');
   
-  // Base user profile data with updated name
+  // Base user profile data
   const [profileData, setProfileData] = useState({
-    name: "Aditya Manhas",
-    email: "aditya@farmerfriendly.com",
+    name: "Rajesh Kumar",
+    email: "rajesh@farmerfriendly.com",
     phone: "+91 98765 43210",
     location: "Bangalore Rural, Karnataka",
     joinDate: "15 January, 2023",
@@ -119,15 +119,9 @@ const ProfilePage: React.FC = () => {
   // Get current farm data based on selection
   const selectedFarm = farms.find(farm => farm.id === selectedFarmId) || farms[0];
   
-  // Update localStorage when selected farm changes
-  useEffect(() => {
-    localStorage.setItem('selectedFarmId', selectedFarmId);
-  }, [selectedFarmId]);
-  
   // Handle farm change
   const handleFarmChange = (farmId: string) => {
     setSelectedFarmId(farmId);
-    localStorage.setItem('selectedFarmId', farmId);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -187,9 +181,6 @@ const ProfilePage: React.FC = () => {
       return farm;
     });
     setFarms(updatedFarms);
-    
-    // Update the selected farm in localStorage to maintain sync with other components
-    localStorage.setItem('selectedFarmId', selectedFarmId);
   };
 
   return (
