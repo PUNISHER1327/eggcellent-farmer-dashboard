@@ -34,6 +34,7 @@ const App = () => (
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/mission" element={<Mission />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/contact" element={<ContactSection />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
