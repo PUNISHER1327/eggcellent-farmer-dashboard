@@ -11,6 +11,7 @@ import { ThemeProvider } from "./hooks/useTheme";
 import { LanguageProvider } from "./hooks/useLanguage";
 import { AuthProvider } from "./hooks/useAuth";
 import Mission from "./pages/Mission";
+import Contact from "./pages/ContactSection";
 import Auth from "./pages/Auth";
 import DashboardAccessCheck from "./components/DashboardAccessCheck";
 
