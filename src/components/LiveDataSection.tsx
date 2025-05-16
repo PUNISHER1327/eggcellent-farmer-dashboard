@@ -11,10 +11,11 @@ import { supabase } from '@/integrations/supabase/client';
 const LiveDataSection = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
-  const { data: sensorData, loading: initialLoading } = useSensorData();
+  const { data: initialSensorData, loading: initialLoading } = useSensorData();
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [refreshInterval, setRefreshInterval] = useState(300000); // Default to 5 minutes
   const [loading, setLoading] = useState(false);
+  const [sensorData, setSensorData] = useState<SensorData>(initialSensorData);
 
   // Function to fetch latest sensor data from Supabase
   const fetchLatestData = useCallback(async () => {
@@ -75,16 +76,13 @@ const LiveDataSection = () => {
       }
     }
   }, []);
-
-  // State for sensor data
-  const [sensorData, setSensorData] = useState<SensorData>(sensorData);
   
   // Update sensorData state when useSensorData hook returns data
   useEffect(() => {
     if (!initialLoading) {
-      setSensorData(sensorData);
+      setSensorData(initialSensorData);
     }
-  }, [initialLoading, sensorData]);
+  }, [initialLoading, initialSensorData]);
 
   // Data refresh effect
   useEffect(() => {
