@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import SensorCard from './SensorCard';
 import { SensorData, getDataStatus, useSensorData } from '@/hooks/useSensorData';
@@ -190,8 +189,8 @@ const LiveDataSection = () => {
             value={sensorData.co2}
             unit="ppm"
             min={300}
-            max={2000}
-            status={getDataStatus(sensorData.co2, 300, 2000)}
+            max={1000}
+            status={getDataStatus(sensorData.co2, 300, 1000)}
             icon={<span className="text-gray-500">☁️</span>}
           />
           
