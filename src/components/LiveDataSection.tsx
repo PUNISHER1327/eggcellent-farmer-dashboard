@@ -15,6 +15,17 @@ const LiveDataSection = () => {
   const [refreshInterval, setRefreshInterval] = useState(300000); // Default to 5 minutes
   const [loading, setLoading] = useState(false);
   const [sensorData, setSensorData] = useState<SensorData>(initialSensorData);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const checkThresholds = (data: SensorData) => {
+    if (data.co2 > 1000 || data.ammonia > 50) {
+      let message = '';
+      if (data.co2 > 1000) message += `High CO₂ detected: ${data.co2} ppm. `;
+      if (data.ammonia > 50) message += `High Ammonia detected: ${data.ammonia} ppm.`;
+      setAlertMessage(message);
+      setTimeout(() => setAlertMessage(null), 10000);
+    }
+  };
 
   // Function to fetch latest sensor data from Supabase
   const fetchLatestData = useCallback(async () => {
@@ -39,9 +50,9 @@ const LiveDataSection = () => {
           ammonia: latestData[0].ammonia || sensorData.ammonia,
         };
 
-        // Update state with new data
         setSensorData(newData);
         setLastUpdated(new Date());
+        checkThresholds(newData);
       }
     } catch (error) {
       console.error("Failed to fetch latest sensor data:", error);
@@ -75,17 +86,14 @@ const LiveDataSection = () => {
       }
     }
   }, []);
-  
-  // Update sensorData state when useSensorData hook returns data
+
   useEffect(() => {
     if (!initialLoading) {
       setSensorData(initialSensorData);
     }
   }, [initialLoading, initialSensorData]);
 
-  // Data refresh effect
   useEffect(() => {
-    // Set up interval for refreshing data
     const intervalId = setInterval(() => {
       fetchLatestData();
       toast({
@@ -93,12 +101,9 @@ const LiveDataSection = () => {
         description: t('liveDataUpdated'),
       });
     }, refreshInterval);
-
-    // Clean up interval on unmount
     return () => clearInterval(intervalId);
   }, [fetchLatestData, refreshInterval, t]);
 
-  // Monitor localStorage for changes to refresh interval
   useEffect(() => {
     const checkSettings = () => {
       const storedInterval = localStorage.getItem('dataCollectionInterval');
@@ -120,14 +125,11 @@ const LiveDataSection = () => {
             setRefreshInterval(3600000);
             break;
           default:
-            setRefreshInterval(300000); // Default to 5 minutes
+            setRefreshInterval(300000);
         }
       }
     };
-
-    // Check for setting changes every second
     const settingsChecker = setInterval(checkSettings, 1000);
-    
     return () => clearInterval(settingsChecker);
   }, []);
 
@@ -163,6 +165,12 @@ const LiveDataSection = () => {
           </div>
         </div>
 
+        {alertMessage && (
+          <div className="mb-6 p-4 text-red-800 bg-red-200 border border-red-300 rounded-md text-center font-semibold">
+            🚨 {alertMessage}
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <SensorCard
             title={t('temperature')}
@@ -173,7 +181,7 @@ const LiveDataSection = () => {
             status={getDataStatus(sensorData.temperature, 20, 35)}
             icon={<span className="text-red-500">🌡️</span>}
           />
-          
+
           <SensorCard
             title={t('humidity')}
             value={sensorData.humidity}
@@ -183,7 +191,7 @@ const LiveDataSection = () => {
             status={getDataStatus(sensorData.humidity, 40, 90)}
             icon={<span className="text-blue-500">💧</span>}
           />
-          
+
           <SensorCard
             title={t('co2Level')}
             value={sensorData.co2}
@@ -193,7 +201,7 @@ const LiveDataSection = () => {
             status={getDataStatus(sensorData.co2, 300, 1000)}
             icon={<span className="text-gray-500">☁️</span>}
           />
-          
+
           <SensorCard
             title={t('ammoniaLevel')}
             value={sensorData.ammonia}
