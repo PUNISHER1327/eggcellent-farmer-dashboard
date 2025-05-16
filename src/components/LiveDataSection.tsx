@@ -169,9 +169,9 @@ const LiveDataSection = () => {
             title={t('temperature')}
             value={sensorData.temperature}
             unit="°C"
-            min={18}
-            max={30}
-            status={getDataStatus(sensorData.temperature, 18, 30)}
+            min={20}
+            max={35}
+            status={getDataStatus(sensorData.temperature, 20, 35)}
             icon={<span className="text-red-500">🌡️</span>}
           />
           
@@ -179,9 +179,9 @@ const LiveDataSection = () => {
             title={t('humidity')}
             value={sensorData.humidity}
             unit="%"
-            min={50}
-            max={70}
-            status={getDataStatus(sensorData.humidity, 50, 70)}
+            min={40}
+            max={90}
+            status={getDataStatus(sensorData.humidity, 40, 90)}
             icon={<span className="text-blue-500">💧</span>}
           />
           
@@ -189,9 +189,9 @@ const LiveDataSection = () => {
             title={t('co2Level')}
             value={sensorData.co2}
             unit="ppm"
-            min={350}
-            max={1000}
-            status={getDataStatus(sensorData.co2, 350, 1000)}
+            min={300}
+            max={2000}
+            status={getDataStatus(sensorData.co2, 300, 2000)}
             icon={<span className="text-gray-500">☁️</span>}
           />
           
@@ -199,9 +199,9 @@ const LiveDataSection = () => {
             title={t('ammoniaLevel')}
             value={sensorData.ammonia}
             unit="ppm"
-            min={0}
-            max={15}
-            status={getDataStatus(sensorData.ammonia, 0, 15)}
+            min={5}
+            max={50}
+            status={getDataStatus(sensorData.ammonia, 5, 50)}
             icon={<span className="text-yellow-500">⚠️</span>}
           />
         </div>
