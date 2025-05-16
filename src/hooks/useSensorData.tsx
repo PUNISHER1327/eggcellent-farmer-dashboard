@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -42,21 +43,46 @@ export const useSensorData = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Mock data for demonstration
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
-        
-        const mockSensorData: SensorData = {
-          temperature: Math.floor(Math.random() * (30 - 20 + 1)) + 20,
-          humidity: Math.floor(Math.random() * (80 - 50 + 1)) + 50,
-          co2: Math.floor(Math.random() * (1500 - 400 + 1)) + 400,
-          ammonia: Math.floor(Math.random() * (20 - 2 + 1)) + 2,
-          eggProduction: parseFloat((Math.random() * (0.9 - 0.6 + 1) + 0.6).toFixed(2)),
-          totalEggsToday: Math.floor(Math.random() * (300 - 150 + 1)) + 150,
-          activeSensors: Math.floor(Math.random() * (10 - 5 + 1)) + 5,
-          chickens: Math.floor(Math.random() * (500 - 200 + 1)) + 200,
-        };
-        
-        setData(mockSensorData);
+        // Fetch the most recent sensor data from Supabase
+        const { data: sensorData, error } = await supabase
+          .from('sensor_data')
+          .select('temperature, humidity, carbon_dioxide, ammonia, timestamp')
+          .order('timestamp', { ascending: false })
+          .limit(1);
+
+        if (error) {
+          throw error;
+        }
+
+        if (sensorData && sensorData.length > 0) {
+          const latestData = sensorData[0];
+          
+          // Map the Supabase data to our SensorData interface
+          // For fields not in the table, we'll use reasonable defaults or calculated values
+          setData({
+            temperature: latestData.temperature || 25,
+            humidity: latestData.humidity || 60,
+            co2: latestData.carbon_dioxide || 800,
+            ammonia: latestData.ammonia || 10,
+            eggProduction: 0.75, // Default value as this isn't in the sensor_data table
+            totalEggsToday: 200, // Default value as this isn't in the sensor_data table
+            activeSensors: 7,    // Default value as this isn't in the sensor_data table
+            chickens: 350,       // Default value as this isn't in the sensor_data table
+          });
+        } else {
+          console.log("No sensor data found in the database");
+          // If no data is found, use sensible defaults
+          setData({
+            temperature: 25,
+            humidity: 60,
+            co2: 800,
+            ammonia: 10,
+            eggProduction: 0.75,
+            totalEggsToday: 200,
+            activeSensors: 7,
+            chickens: 350,
+          });
+        }
       } catch (error) {
         console.error("Failed to fetch sensor data:", error);
       } finally {
