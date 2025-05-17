@@ -5,9 +5,7 @@ const BackgroundVideo = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
   const images = [
-    "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1723598489817-ecfedd9fe0c8?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2hpY2tlbiUyMGN1dGV8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1615828111625-ac4e5a89de5c?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGNoaWNrZW4lMjBjdXRlfGVufDB8fDB8fHww"
+    "https://media.istockphoto.com/id/2178456042/photo/abstract-background-dark-pattern-gradient-red-yellow-green-rough-texture-noise-grain.jpg?s=612x612&w=0&k=20&c=DfZlmSDfxJg6Q4aaI8UmkxuvVn9fi1kseZXwljHWYlM="
   ];
 
   useEffect(() => {
