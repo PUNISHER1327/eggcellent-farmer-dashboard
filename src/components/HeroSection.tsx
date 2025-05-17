@@ -41,7 +41,7 @@ const HeroSection = () => {
           {/* Wing */}
           <div className="w-5 h-2 bg-white absolute top-18 left-5 rounded-full"></div>
         </div>
-        <p className="mt-2 text-sm text-orange-300 font-semibold text-center select-none">ChickBot™</p>
+        <p className="mt-2 text-sm text-orange-300 font-semibold text-center select-none"></p>
       </div>
 
       {/* Main Text Content with fade and slide in */}
