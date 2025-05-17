@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
@@ -8,127 +7,112 @@ import Footer from './Footer';
 const MissionPage: React.FC = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
-  
+
+  const orange = '#fb923c';
+  const green = '#22c55e';
+
   return (
-    <div className={theme === 'light' ? 'light-mode min-h-screen' : 'dark-mode min-h-screen'}>
+    <div className={theme === 'light' ? 'light-mode min-h-screen bg-white text-gray-800' : 'dark-mode min-h-screen bg-[#0f0f0f] text-gray-200'}>
       <NavBar />
-      
+
       <main className="pt-24 pb-16 px-4">
-        <div className="container mx-auto">
-          <h1 className={`text-4xl font-bold mb-6 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-            {t('ourMission')}
+        <div className="container mx-auto max-w-6xl">
+          <h1 className="text-5xl font-extrabold mb-10 text-center" style={{ color: orange }}>
+            Our Mission in Poultry Innovation
           </h1>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-            <div>
-              <h2 className={`text-2xl font-semibold mb-4 ${theme === 'light' ? 'text-gray-700' : 'text-gray-100'}`}>
-                {t('vision')}
-              </h2>
-              <p className={`mb-4 ${theme === 'light' ? 'text-gray-600' : 'text-gray-300'}`}>
-                {t('visionDescription')}
-              </p>
-              <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
-                {t('visionGoal')}
-              </p>
-            </div>
-            
-            <div className={`rounded-lg overflow-hidden ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'} h-64 md:h-auto`}>
-              <img 
-                src="https://images.unsplash.com/photo-1516253593875-bd7ba052fbc5?auto=format&fit=crop&q=80&w=1000" 
-                alt={t('farmVision')} 
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-          
-          <div className={`p-8 rounded-lg mb-16 ${theme === 'light' ? 'bg-gray-50' : 'bg-gray-800/50'}`}>
-            <h2 className={`text-2xl font-semibold mb-4 ${theme === 'light' ? 'text-gray-700' : 'text-gray-100'}`}>
-              {t('whatWeDo')}
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className={`p-4 rounded ${theme === 'light' ? 'bg-white' : 'bg-gray-700/50'}`}>
-                <h3 className={`text-xl font-medium mb-2 ${theme === 'light' ? 'text-gray-700' : 'text-gray-100'}`}>
-                  {t('monitoring')}
-                </h3>
-                <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
-                  {t('monitoringDescription')}
+
+          <section className="mb-16 text-center">
+            <p className="text-lg md:text-xl max-w-3xl mx-auto">
+              We're on a mission to revolutionize poultry farming through smart, sustainable, and inclusive technology. Our systems empower farmers to raise healthier birds, increase productivity, and reduce environmental impact.
+            </p>
+          </section>
+
+          <section className="mb-24">
+            <div className="grid md:grid-cols-2 gap-10">
+              <div className={`p-8 rounded-2xl shadow-lg ${theme === 'light' ? 'bg-orange-50 text-gray-800' : 'bg-[#1a1a1a] text-gray-200'}`}>
+                <h3 className="text-2xl font-bold mb-3" style={{ color: orange }}>Healthier Birds</h3>
+                <p>
+                  With real-time monitoring of ammonia, CO₂, temperature, and humidity, we ensure the coop stays safe and optimal for poultry health.
                 </p>
               </div>
-              
-              <div className={`p-4 rounded ${theme === 'light' ? 'bg-white' : 'bg-gray-700/50'}`}>
-                <h3 className={`text-xl font-medium mb-2 ${theme === 'light' ? 'text-gray-700' : 'text-gray-100'}`}>
-                  {t('analytics')}
-                </h3>
-                <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
-                  {t('analyticsDescription')}
+
+              <div className={`p-8 rounded-2xl shadow-lg ${theme === 'light' ? 'bg-orange-50 text-gray-800' : 'bg-[#1a1a1a] text-gray-200'}`}>
+                <h3 className="text-2xl font-bold mb-3" style={{ color: orange }}>Empowered Farmers</h3>
+                <p>
+                  From small rural farms to larger coops, our tech simplifies farming, reduces manual labor, and improves decision-making.
                 </p>
               </div>
-              
-              <div className={`p-4 rounded ${theme === 'light' ? 'bg-white' : 'bg-gray-700/50'}`}>
-                <h3 className={`text-xl font-medium mb-2 ${theme === 'light' ? 'text-gray-700' : 'text-gray-100'}`}>
-                  {t('automation')}
-                </h3>
-                <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
-                  {t('automationDescription')}
+
+              <div className={`p-8 rounded-2xl shadow-lg ${theme === 'light' ? 'bg-orange-50 text-gray-800' : 'bg-[#1a1a1a] text-gray-200'}`}>
+                <h3 className="text-2xl font-bold mb-3" style={{ color: orange }}>Environmental Impact</h3>
+                <p>
+                  By reducing gas emissions and improving ventilation, we contribute to cleaner, greener, and more sustainable farming.
+                </p>
+              </div>
+
+              <div className={`p-8 rounded-2xl shadow-lg ${theme === 'light' ? 'bg-orange-50 text-gray-800' : 'bg-[#1a1a1a] text-gray-200'}`}>
+                <h3 className="text-2xl font-bold mb-3" style={{ color: orange }}>Accessible for All</h3>
+                <p>
+                  Available in English, Hindi, and Kannada, our system is designed for every farmer — no matter their background.
                 </p>
               </div>
             </div>
-          </div>
-          
-          <div className="mb-16">
-            <h2 className={`text-2xl font-semibold mb-6 ${theme === 'light' ? 'text-gray-700' : 'text-gray-100'}`}>
-              {t('ourSensorKit')}
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          </section>
+
+          <section className="mb-24">
+            <h2 className="text-3xl font-bold text-center mb-12" style={{ color: green }}>Milestones & Vision</h2>
+            <div className="relative border-l-4 pl-6 space-y-10" style={{ borderColor: green }}>
               <div>
-                <img 
-                  src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&q=80&w=1000" 
-                  alt={t('sensorKit')} 
-                  className="w-full h-64 object-cover rounded-lg mb-4"
-                />
-                <h3 className={`text-xl font-medium mb-2 ${theme === 'light' ? 'text-gray-700' : 'text-gray-100'}`}>
-                  {t('completeMonitoringSolution')}
-                </h3>
-                <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
-                  {t('sensorKitDescription')}
+                <h3 className="text-xl font-semibold" style={{ color: orange }}>2023 – Prototype Launch</h3>
+                <p>
+                  Introduced our first sensor kit in select farms in Karnataka. Farmers reported over 20% improvement in flock health.
                 </p>
               </div>
-              
-              <div className={`p-6 rounded-lg ${theme === 'light' ? 'bg-farm-green/10' : 'bg-farm-green/20'}`}>
-                <h3 className={`text-xl font-medium mb-4 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-                  {t('keyFeatures')}
-                </h3>
-                
-                <ul className="space-y-3">
-                  <li className="flex items-start">
-                    <span className={`inline-block mr-2 mt-1 ${theme === 'light' ? 'text-farm-green' : 'text-farm-green'}`}>✓</span>
-                    <span className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>{t('feature1')}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className={`inline-block mr-2 mt-1 ${theme === 'light' ? 'text-farm-green' : 'text-farm-green'}`}>✓</span>
-                    <span className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>{t('feature2')}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className={`inline-block mr-2 mt-1 ${theme === 'light' ? 'text-farm-green' : 'text-farm-green'}`}>✓</span>
-                    <span className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>{t('feature3')}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className={`inline-block mr-2 mt-1 ${theme === 'light' ? 'text-farm-green' : 'text-farm-green'}`}>✓</span>
-                    <span className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>{t('feature4')}</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className={`inline-block mr-2 mt-1 ${theme === 'light' ? 'text-farm-green' : 'text-farm-green'}`}>✓</span>
-                    <span className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>{t('feature5')}</span>
-                  </li>
-                </ul>
+              <div>
+                <h3 className="text-xl font-semibold" style={{ color: orange }}>2024 – Dashboard Expansion</h3>
+                <p>
+                  Rolled out multilingual dashboards, automated alert systems, and mobile-friendly interfaces.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold" style={{ color: orange }}>2025 – Global Integration</h3>
+                <p>
+                  Set to expand our sensor network globally, integrating with AI models for predictive maintenance and health forecasting.
+                </p>
               </div>
             </div>
-          </div>
+          </section>
+
+          <section className="mb-24">
+            <h2 className="text-3xl font-bold text-center mb-12" style={{ color: green }}>Voices from the Ground</h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              {[{
+                name: 'Ravi K.', quote: 'Before this tech, I had no idea ammonia was harming my flock. Now, I can see the data and act instantly.'
+              }, {
+                name: 'Lakshmi N.', quote: 'The dashboard in Kannada made everything simple. My chickens are healthier and production is up!'
+              }, {
+                name: 'Suresh B.', quote: 'It’s like having a vet and a manager in my pocket. I sleep better at night knowing my farm is safe.'
+              }].map(({ name, quote }) => (
+                <div key={name} className={`p-6 rounded-xl shadow-md ${theme === 'light' ? 'bg-orange-50 text-gray-800' : 'bg-[#1a1a1a] text-gray-200'}`}>
+                  <p className="italic mb-4">"{quote}"</p>
+                  <h4 className="font-semibold text-sm" style={{ color: orange }}>{name}</h4>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="text-center">
+            <h2 className="text-4xl font-extrabold mb-6" style={{ color: orange }}>Join Our Mission</h2>
+            <p className="text-lg mb-8">
+              Whether you're a farmer, developer, or environmentalist — there's a place for you in this movement.
+            </p>
+            <button className="px-6 py-3 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition">
+              Get Involved
+            </button>
+          </section>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );
