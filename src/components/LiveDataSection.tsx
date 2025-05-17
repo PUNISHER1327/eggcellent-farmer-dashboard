@@ -190,7 +190,7 @@ const LiveDataSection = () => {
             unit="ppm"
             min={300}
             max={1000}
-            status={getDataStatus(sensorData.co2, 300, 1000)}
+            status={getDataStatus(sensorData.co2, 300, 1500)}
             icon={<span className="text-gray-500">☁️</span>}
           />
           
