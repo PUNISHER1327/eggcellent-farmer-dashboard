@@ -2,9 +2,10 @@
 const translations = {
   en: {
     // General
-    farmFriendlyDashboard: "Farmer Friendly - Poultry Farm Dashboard",
-    heroTitle: "Poultry Farm Monitoring Dashboard",
-    heroSubtitle: "Real-time insights for optimal poultry management.",
+    farmFriendlyDashboard: "Powering the Smartest Poultry Farms of Tomorrow",
+    heroTitle: "Automate insights. Track your flock. Boost productivity with intelligent tools built for poultry excellence.",
+    heroButtonOne: "Explore Live Data",
+    heroButtonTwo: "Visit Dashboard",
     
     // Navigation
     home: "Home",
@@ -125,9 +126,11 @@ const translations = {
   
   hi: {
     // General
-    farmFriendlyDashboard: "किसान मित्र - पोल्ट्री फार्म डैशबोर्ड",
-    heroTitle: "पोल्ट्री फार्म मॉनिटरिंग डैशबोर्ड",
-    heroSubtitle: "इष्टतम पोल्ट्री प्रबंधन के लिए वास्तविक समय में जानकारी।",
+    farmFriendlyDashboard: "भविष्य के सबसे स्मार्ट पोल्ट्री फार्म को शक्ति प्रदान करना",
+    heroTitle: "जानकारी को स्वचालित करें। अपने पक्षियों की निगरानी करें। पोल्ट्री उत्कृष्टता के लिए बनाए गए स्मार्ट टूल्स के साथ उत्पादकता बढ़ाएँ।",
+    heroButtonOne: "लाइव डेटा एक्सप्लोर करें",
+    heroButtonTwo: "डैशबोर्ड पर जाएं",
+    
     
     // Navigation
     home: "होम",
@@ -138,6 +141,7 @@ const translations = {
     dashboard: "डैशबोर्ड",
     profile: "प्रोफ़ाइल",
     logout: "लॉग आउट",
+
     
     // Live Data Section
     liveData: "लाइव डेटा",
@@ -248,9 +252,10 @@ const translations = {
   
   kn: {
     // General
-    farmFriendlyDashboard: "ರೈತ ಸ್ನೇಹಿ - ಕೋಳಿ ಫಾರ್ಮ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
-    heroTitle: "ಕೋಳಿ ಫಾರ್ಮ್ ಮೇಲ್ವಿಚಾರಣೆ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
-    heroSubtitle: "ಉತ್ತಮ ಕೋಳಿ ನಿರ್ವಹಣೆಗೆ ನೈಜ ಸಮಯದ ಒಳನೋಟಗಳು.",
+    farmFriendlyDashboard: "ಭವಿಷ್ಯದ ಅತ್ಯಂತ ಬುದ್ಧಿವಂತ ಕೋಳಿ ಫಾರ್ಮ್‌ಗಳಿಗೆ ಶಕ್ತಿ ನೀಡುವುದು",
+    heroTitle: "ಅನ್ವೇಷಣೆಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತಗೊಳಿಸಿ. ನಿಮ್ಮ ಕೋಳಿಗಳನ್ನು ಹಕ್ಕಿ ಮಾಡಿ. ಕೋಳಿ ಶ್ರೇಷ್ಟತೆಗೆ ನಿರ್ಮಿತ ಬುದ್ಧಿವಂತ ಸಾಧನಗಳೊಂದಿಗೆ ಉತ್ಪಾದಕತೆಯನ್ನು ಹೆಚ್ಚಿಸಿ.",
+    heroButtonOne: "ಲೈವ್ ಡೇಟಾವನ್ನು ಅನ್ವೇಷಿಸಿ",
+    heroButtonTwo: "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗೆ ಭೇಟಿ ನೀಡಿ",
     
     // Navigation
     home: "ಮುಖಪುಟ",
