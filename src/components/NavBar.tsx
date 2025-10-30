@@ -52,7 +52,7 @@ const NavBar = () => {
   }`;
 
   const linkClass = (path: string) => {
-    return `font-medium text-sm transition-colors duration-200 ${
+    return `font-semibold text-base transition-colors duration-200 ${
       isActive(path)
         ? theme === 'light'
           ? 'text-farm-green'
@@ -73,7 +73,7 @@ const NavBar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <span className="text-2xl font-bold text-gradient">FarmerFriendly</span>
+              <span className="text-3xl font-bold text-gradient">FarmerFriendly</span>
             </Link>
           </div>
           

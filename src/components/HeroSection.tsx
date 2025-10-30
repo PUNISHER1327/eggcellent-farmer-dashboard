@@ -1,4 +1,8 @@
+import { useLanguage } from '@/hooks/useLanguage';
+
 const HeroSection = () => {
+  const { t } = useLanguage();
+  
   const scrollToLiveData = () => {
     const element = document.getElementById('live-data');
     if (element) {
@@ -8,8 +12,7 @@ const HeroSection = () => {
 
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center bg-cover bg-center text-white px-6 overflow-hidden"
-      
+      className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/20 via-background to-primary/10 text-foreground px-6 overflow-hidden"
     >
       {/* Overlay with slow shimmer animation */}
       
@@ -45,25 +48,28 @@ const HeroSection = () => {
       </div>
 
       {/* Main Text Content with fade and slide in */}
-      <div className="z-10 text-center max-w-2xl animate-[fadeSlideIn_1.2s_ease_forwards] opacity-0 translate-y-6">
-        <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-6 drop-shadow-lg text-shadow-glow">
-          Powering the Smartest<br />
-          <span className="text-orange-400 relative underline-animated">Poultry Farms</span> of Tomorrow
+      <div className="z-10 text-center max-w-4xl animate-[fadeSlideIn_1.2s_ease_forwards] opacity-0 translate-y-6">
+        <h1 className="text-6xl md:text-7xl font-black leading-tight mb-8 bg-gradient-to-r from-primary via-orange-500 to-primary bg-clip-text text-transparent drop-shadow-2xl">
+          {t('farmFriendlyDashboard')}
         </h1>
 
-        <p className="text-lg md:text-xl text-white/80 font-medium mb-8">
-          Automate insights. Track your flock. Boost productivity with intelligent tools built for poultry excellence.
+        <p className="text-xl md:text-2xl font-semibold mb-10 text-foreground/90 max-w-3xl mx-auto leading-relaxed">
+          {t('heroTitle')}
         </p>
 
-        <div className="flex justify-center gap-6">
+        <div className="flex flex-col sm:flex-row justify-center gap-6">
           <button
             onClick={scrollToLiveData}
-            className="px-6 py-3 bg-orange-500 font-bold rounded-lg shadow-xl hover:bg-orange-600 transition hover:scale-105 animate-pulse-onhover"
+            className="group px-8 py-4 bg-gradient-to-r from-primary to-orange-500 font-bold text-lg rounded-xl shadow-2xl hover:shadow-primary/50 transition-all duration-300 hover:scale-105 text-white relative overflow-hidden"
           >
-            Explore Live Data
+            <span className="relative z-10">{t('heroButtonOne')}</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
-          <button className="px-6 py-3 bg-white/80 text-gray-900 font-semibold rounded-lg shadow-md hover:bg-white transition hover:scale-105">
-            Visit Dashboard
+          <button 
+            onClick={() => window.location.href = '/auth'}
+            className="px-8 py-4 bg-background/80 backdrop-blur-sm border-2 border-primary text-foreground font-bold text-lg rounded-xl shadow-xl hover:bg-background hover:shadow-2xl transition-all duration-300 hover:scale-105"
+          >
+            {t('heroButtonTwo')}
           </button>
         </div>
       </div>

@@ -14,7 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      farm2_sensor_data: {
+        Row: {
+          ammonia: number | null
+          carbon_dioxide: number | null
+          humidity: number | null
+          id: number
+          temperature: number | null
+          timestamp: string | null
+        }
+        Insert: {
+          ammonia?: number | null
+          carbon_dioxide?: number | null
+          humidity?: number | null
+          id?: number
+          temperature?: number | null
+          timestamp?: string | null
+        }
+        Update: {
+          ammonia?: number | null
+          carbon_dioxide?: number | null
+          humidity?: number | null
+          id?: number
+          temperature?: number | null
+          timestamp?: string | null
+        }
+        Relationships: []
+      }
+      sensor_data: {
+        Row: {
+          ammonia: number | null
+          carbon_dioxide: number | null
+          humidity: number | null
+          id: number
+          temperature: number | null
+          timestamp: string | null
+        }
+        Insert: {
+          ammonia?: number | null
+          carbon_dioxide?: number | null
+          humidity?: number | null
+          id?: number
+          temperature?: number | null
+          timestamp?: string | null
+        }
+        Update: {
+          ammonia?: number | null
+          carbon_dioxide?: number | null
+          humidity?: number | null
+          id?: number
+          temperature?: number | null
+          timestamp?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
