@@ -3,6 +3,11 @@ import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
 import NavBar from './NavBar';
 import Footer from './Footer';
+import missionHero from '@/assets/mission-hero.jpg';
+import healthyBirds from '@/assets/healthy-birds.jpg';
+import empoweredFarmers from '@/assets/empowered-farmers.jpg';
+import environmentalImpact from '@/assets/environmental-impact.jpg';
+import accessibleForAll from '@/assets/accessible-for-all.jpg';
 
 const MissionPage: React.FC = () => {
   const { theme } = useTheme();
@@ -17,44 +22,81 @@ const MissionPage: React.FC = () => {
 
       <main className="pt-24 pb-16 px-4">
         <div className="container mx-auto max-w-6xl">
-          <h1 className="text-5xl font-extrabold mb-10 text-center" style={{ color: orange }}>
-            Our Mission in Poultry Innovation
-          </h1>
-
-          <section className="mb-16 text-center">
-            <p className="text-lg md:text-xl max-w-3xl mx-auto">
-              We're on a mission to revolutionize poultry farming through smart, sustainable, and inclusive technology. Our systems empower farmers to raise healthier birds, increase productivity, and reduce environmental impact.
-            </p>
-          </section>
+          {/* Hero Image Section */}
+          <div className="relative w-full h-[400px] md:h-[500px] rounded-3xl overflow-hidden mb-12 shadow-2xl">
+            <img 
+              src={missionHero} 
+              alt="Modern poultry farm with healthy chickens" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex items-end">
+              <div className="p-8 md:p-12 w-full">
+                <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-white">
+                  Our Mission in Poultry Innovation
+                </h1>
+                <p className="text-lg md:text-xl text-white/90 max-w-3xl">
+                  We're on a mission to revolutionize poultry farming through smart, sustainable, and inclusive technology.
+                </p>
+              </div>
+            </div>
+          </div>
 
           <section className="mb-24">
             <div className="grid md:grid-cols-2 gap-10">
-              <div className={`p-8 rounded-2xl shadow-lg ${theme === 'light' ? 'bg-orange-50 text-gray-800' : 'bg-[#1a1a1a] text-gray-200'}`}>
-                <h3 className="text-2xl font-bold mb-3" style={{ color: orange }}>Healthier Birds</h3>
-                <p>
-                  With real-time monitoring of ammonia, CO₂, temperature, and humidity, we ensure the coop stays safe and optimal for poultry health.
-                </p>
+              <div className={`rounded-2xl shadow-lg overflow-hidden ${theme === 'light' ? 'bg-orange-50 text-gray-800' : 'bg-[#1a1a1a] text-gray-200'}`}>
+                <img 
+                  src={healthyBirds} 
+                  alt="Healthy chickens in modern coop" 
+                  className="w-full h-56 object-cover"
+                />
+                <div className="p-8">
+                  <h3 className="text-2xl font-bold mb-3" style={{ color: orange }}>Healthier Birds</h3>
+                  <p>
+                    With real-time monitoring of ammonia, CO₂, temperature, and humidity, we ensure the coop stays safe and optimal for poultry health.
+                  </p>
+                </div>
               </div>
 
-              <div className={`p-8 rounded-2xl shadow-lg ${theme === 'light' ? 'bg-orange-50 text-gray-800' : 'bg-[#1a1a1a] text-gray-200'}`}>
-                <h3 className="text-2xl font-bold mb-3" style={{ color: orange }}>Empowered Farmers</h3>
-                <p>
-                  From small rural farms to larger coops, our tech simplifies farming, reduces manual labor, and improves decision-making.
-                </p>
+              <div className={`rounded-2xl shadow-lg overflow-hidden ${theme === 'light' ? 'bg-orange-50 text-gray-800' : 'bg-[#1a1a1a] text-gray-200'}`}>
+                <img 
+                  src={empoweredFarmers} 
+                  alt="Farmer using digital dashboard" 
+                  className="w-full h-56 object-cover"
+                />
+                <div className="p-8">
+                  <h3 className="text-2xl font-bold mb-3" style={{ color: orange }}>Empowered Farmers</h3>
+                  <p>
+                    From small rural farms to larger coops, our tech simplifies farming, reduces manual labor, and improves decision-making.
+                  </p>
+                </div>
               </div>
 
-              <div className={`p-8 rounded-2xl shadow-lg ${theme === 'light' ? 'bg-orange-50 text-gray-800' : 'bg-[#1a1a1a] text-gray-200'}`}>
-                <h3 className="text-2xl font-bold mb-3" style={{ color: orange }}>Environmental Impact</h3>
-                <p>
-                  By reducing gas emissions and improving ventilation, we contribute to cleaner, greener, and more sustainable farming.
-                </p>
+              <div className={`rounded-2xl shadow-lg overflow-hidden ${theme === 'light' ? 'bg-orange-50 text-gray-800' : 'bg-[#1a1a1a] text-gray-200'}`}>
+                <img 
+                  src={environmentalImpact} 
+                  alt="Sustainable green farming with solar panels" 
+                  className="w-full h-56 object-cover"
+                />
+                <div className="p-8">
+                  <h3 className="text-2xl font-bold mb-3" style={{ color: orange }}>Environmental Impact</h3>
+                  <p>
+                    By reducing gas emissions and improving ventilation, we contribute to cleaner, greener, and more sustainable farming.
+                  </p>
+                </div>
               </div>
 
-              <div className={`p-8 rounded-2xl shadow-lg ${theme === 'light' ? 'bg-orange-50 text-gray-800' : 'bg-[#1a1a1a] text-gray-200'}`}>
-                <h3 className="text-2xl font-bold mb-3" style={{ color: orange }}>Accessible for All</h3>
-                <p>
-                  Available in English, Hindi, and Kannada, our system is designed for every farmer — no matter their background.
-                </p>
+              <div className={`rounded-2xl shadow-lg overflow-hidden ${theme === 'light' ? 'bg-orange-50 text-gray-800' : 'bg-[#1a1a1a] text-gray-200'}`}>
+                <img 
+                  src={accessibleForAll} 
+                  alt="Diverse farmers using technology together" 
+                  className="w-full h-56 object-cover"
+                />
+                <div className="p-8">
+                  <h3 className="text-2xl font-bold mb-3" style={{ color: orange }}>Accessible for All</h3>
+                  <p>
+                    Available in English, Hindi, and Kannada, our system is designed for every farmer — no matter their background.
+                  </p>
+                </div>
               </div>
             </div>
           </section>
