@@ -10,6 +10,7 @@ import Footer from '../components/Footer';
 import CustomCursor from '../components/CustomCursor';
 import AnalyticsDashboard from '../components/AnalyticsDashboard';
 import ConveyorBeltStatus from '../components/ConveyorBeltStatus';
+import LiveSensorDataTable from '../components/LiveSensorDataTable';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
 
@@ -51,6 +52,9 @@ const Index = () => {
         
         {/* Live Data Section */}
         <LiveDataSection />
+        
+        {/* Live Sensor Data Table */}
+        <LiveSensorDataTable />
         
         {/* Conveyor Belt Status */}
         <ConveyorBeltStatus />

@@ -7,6 +7,7 @@ import { AlertTriangle, ThumbsUp, ToggleLeft, ToggleRight } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const ConveyorBeltStatus: React.FC = () => {
   const { theme } = useTheme();
@@ -17,41 +18,77 @@ const ConveyorBeltStatus: React.FC = () => {
   const [ammoniaHistory, setAmmoniaHistory] = useState<{ time: string, value: number }[]>([]);
   const [autoMode, setAutoMode] = useState(true);
 
-  // Generate initial ammonia history data
+  // Fetch real ammonia data from Supabase
   useEffect(() => {
-    const now = new Date();
-    const initialData = Array.from({ length: 24 }, (_, i) => {
-      const time = new Date(now);
-      time.setHours(now.getHours() - 23 + i);
-      return {
-        time: time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        value: Math.floor(Math.random() * 15) + 20, // Random value between 20-35
-      };
-    });
-    setAmmoniaHistory(initialData);
-  }, []);
+    const fetchAmmoniaData = async () => {
+      try {
+        // Fetch latest ammonia level
+        const { data: latest, error: latestError } = await supabase
+          .from('sensor_data')
+          .select('ammonia')
+          .order('timestamp', { ascending: false })
+          .limit(1);
 
-  // Simulate ammonia level changes
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newAmmonia = Math.floor(Math.random() * 20) + 15; // Random value between 15-35
-      setAmmoniaLevel(newAmmonia);
-      
-      // Update history
-      const now = new Date();
-      const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      
-      setAmmoniaHistory(prev => {
-        const newHistory = [...prev, { time: timeString, value: newAmmonia }];
-        // Keep only last 24 readings
-        if (newHistory.length > 24) {
-          return newHistory.slice(-24);
+        if (latestError) throw latestError;
+        if (latest && latest.length > 0) {
+          setAmmoniaLevel(latest[0].ammonia || 30);
         }
-        return newHistory;
-      });
-    }, 10000); // Update every 10 seconds
-    
-    return () => clearInterval(interval);
+
+        // Fetch historical data for the last 24 readings
+        const { data: history, error: historyError } = await supabase
+          .from('sensor_data')
+          .select('ammonia, timestamp')
+          .order('timestamp', { ascending: false })
+          .limit(24);
+
+        if (historyError) throw historyError;
+        if (history && history.length > 0) {
+          const formattedHistory = history.reverse().map(reading => ({
+            time: new Date(reading.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            value: reading.ammonia || 0,
+          }));
+          setAmmoniaHistory(formattedHistory);
+        }
+      } catch (error) {
+        console.error('Error fetching ammonia data:', error);
+      }
+    };
+
+    fetchAmmoniaData();
+
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('ammonia_updates')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'sensor_data'
+        },
+        (payload) => {
+          const newData = payload.new as any;
+          const newAmmonia = newData.ammonia || 30;
+          setAmmoniaLevel(newAmmonia);
+          
+          const now = new Date();
+          const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          
+          setAmmoniaHistory(prev => {
+            const newHistory = [...prev, { time: timeString, value: newAmmonia }];
+            // Keep only last 24 readings
+            if (newHistory.length > 24) {
+              return newHistory.slice(-24);
+            }
+            return newHistory;
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   // Control conveyor belt based on ammonia level (only in auto mode)

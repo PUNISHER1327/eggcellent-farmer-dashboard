@@ -2,24 +2,22 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { useSensorData } from '@/hooks/useSensorData';
+import { useSensorHistory } from '@/hooks/useSensorHistory';
 import { LineChart, XAxis, YAxis, CartesianGrid, Line, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { useTheme } from '@/hooks/useTheme';
 
 const ChartSection: React.FC = () => {
   const { data } = useSensorData();
+  const { data: historicalData, loading: historyLoading } = useSensorHistory(24);
   const { theme } = useTheme();
   
-  // Create data for time series chart
-  const timeSeriesData = [
-    { name: '00:00', temperature: 24, humidity: 65 },
-    { name: '04:00', temperature: 23, humidity: 68 },
-    { name: '08:00', temperature: 25, humidity: 63 },
-    { name: '12:00', temperature: 28, humidity: 55 },
-    { name: '16:00', temperature: 27, humidity: 58 },
-    { name: '20:00', temperature: 25, humidity: 62 },
-    { name: '24:00', temperature: 24, humidity: 64 },
-  ];
+  // Map historical data for time series chart
+  const timeSeriesData = historicalData.map(reading => ({
+    name: reading.time,
+    temperature: reading.temperature,
+    humidity: reading.humidity,
+  }));
   
   // Data for egg production trend
   const eggProductionData = [
@@ -41,9 +39,13 @@ const ChartSection: React.FC = () => {
   
   const COLORS = ['#4CAF50', '#FFC107', '#F44336'];
   
-  // Calculate summary stats
-  const averageTemp = Math.round((timeSeriesData.reduce((sum, item) => sum + item.temperature, 0) / timeSeriesData.length) * 10) / 10;
-  const averageHumidity = Math.round((timeSeriesData.reduce((sum, item) => sum + item.humidity, 0) / timeSeriesData.length) * 10) / 10;
+  // Calculate summary stats from real data
+  const averageTemp = timeSeriesData.length > 0 
+    ? Math.round((timeSeriesData.reduce((sum, item) => sum + item.temperature, 0) / timeSeriesData.length) * 10) / 10 
+    : 0;
+  const averageHumidity = timeSeriesData.length > 0
+    ? Math.round((timeSeriesData.reduce((sum, item) => sum + item.humidity, 0) / timeSeriesData.length) * 10) / 10
+    : 0;
   const totalEggs = eggProductionData.reduce((sum, item) => sum + item.production, 0);
   const avgEggs = Math.round(totalEggs / eggProductionData.length);
   

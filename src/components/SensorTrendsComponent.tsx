@@ -5,26 +5,11 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/
 import { LineChart, XAxis, YAxis, CartesianGrid, Line, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { useTheme } from '@/hooks/useTheme';
 import { ChartLine } from 'lucide-react';
+import { useSensorHistory } from '@/hooks/useSensorHistory';
 
 const SensorTrendsComponent: React.FC = () => {
   const { theme } = useTheme();
-  
-  // Sample historical data for the last 24 hours
-  const historicalData = [
-    { time: '00:00', co2: 750, ammonia: 12, temperature: 23, humidity: 62 },
-    { time: '02:00', co2: 800, ammonia: 15, temperature: 23, humidity: 64 },
-    { time: '04:00', co2: 830, ammonia: 17, temperature: 22, humidity: 65 },
-    { time: '06:00', co2: 780, ammonia: 14, temperature: 23, humidity: 63 },
-    { time: '08:00', co2: 820, ammonia: 16, temperature: 24, humidity: 62 },
-    { time: '10:00', co2: 900, ammonia: 20, temperature: 26, humidity: 58 },
-    { time: '12:00', co2: 950, ammonia: 22, temperature: 28, humidity: 54 },
-    { time: '14:00', co2: 980, ammonia: 25, temperature: 29, humidity: 52 },
-    { time: '16:00', co2: 920, ammonia: 21, temperature: 27, humidity: 56 },
-    { time: '18:00', co2: 850, ammonia: 18, temperature: 25, humidity: 60 },
-    { time: '20:00', co2: 800, ammonia: 15, temperature: 24, humidity: 63 },
-    { time: '22:00', co2: 780, ammonia: 13, temperature: 23, humidity: 64 },
-    { time: '24:00', co2: 760, ammonia: 12, temperature: 23, humidity: 63 },
-  ];
+  const { data: historicalData, loading } = useSensorHistory(24);
   
   // Chart configuration
   const chartConfig = {
@@ -47,7 +32,16 @@ const SensorTrendsComponent: React.FC = () => {
         </h3>
       </div>
       
-      <div className="h-[400px]">
+      {loading ? (
+        <div className="h-[400px] flex items-center justify-center">
+          <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-400'}>Loading sensor data...</p>
+        </div>
+      ) : historicalData.length === 0 ? (
+        <div className="h-[400px] flex items-center justify-center">
+          <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-400'}>No sensor data available</p>
+        </div>
+      ) : (
+        <div className="h-[400px]">
         <ChartContainer config={chartConfig} className="h-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
@@ -119,9 +113,11 @@ const SensorTrendsComponent: React.FC = () => {
             </LineChart>
           </ResponsiveContainer>
         </ChartContainer>
-      </div>
+        </div>
+      )}
       
       {/* Stats summary */}
+      {!loading && historicalData.length > 0 && (
       <div className="grid grid-cols-4 gap-4 mt-6">
         <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-purple-50' : 'bg-purple-900/20'}`}>
           <p className={`text-sm font-medium ${theme === 'light' ? 'text-purple-700' : 'text-purple-300'}`}>Average CO2</p>
@@ -148,6 +144,7 @@ const SensorTrendsComponent: React.FC = () => {
           </p>
         </div>
       </div>
+      )}
     </Card>
   );
 };

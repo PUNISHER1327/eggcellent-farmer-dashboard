@@ -91,6 +91,33 @@ export const useSensorData = () => {
     };
 
     fetchData();
+
+    // Set up real-time subscription for live updates
+    const channel = supabase
+      .channel('sensor_data_realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'sensor_data'
+        },
+        (payload) => {
+          const newData = payload.new as any;
+          setData(prev => ({
+            ...prev,
+            temperature: newData.temperature || prev.temperature,
+            humidity: newData.humidity || prev.humidity,
+            co2: newData.carbon_dioxide || prev.co2,
+            ammonia: newData.ammonia || prev.ammonia,
+          }));
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return { data, loading };
