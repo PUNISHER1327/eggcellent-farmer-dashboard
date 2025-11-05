@@ -12,26 +12,13 @@ const HeroSection = () => {
 
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/20 via-background to-primary/10 text-foreground px-6 overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-accent/10 text-foreground px-6 overflow-hidden"
     >
-      {/* Overlay with slow shimmer animation */}
-      
-      {/* Floating Particles */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        {[...Array(30)].map((_, i) => (
-          <span
-            key={i}
-            className="absolute rounded-full bg-orange-400 opacity-30"
-            style={{
-              width: `${Math.random() * 6 + 3}px`,
-              height: `${Math.random() * 6 + 3}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animation: `floatUp ${10 + Math.random() * 10}s linear infinite`,
-              animationDelay: `${-Math.random() * 20}s`,
-            }}
-          />
-        ))}
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 animate-pulse"></div>
+        <div className="absolute top-0 -left-1/4 w-1/2 h-1/2 bg-primary/10 rounded-full blur-3xl animate-[float_8s_ease-in-out_infinite]"></div>
+        <div className="absolute bottom-0 -right-1/4 w-1/2 h-1/2 bg-accent/10 rounded-full blur-3xl animate-[float_8s_ease-in-out_infinite_reverse]"></div>
       </div>
 
       {/* Chick Illustration with bounce + blinking eye */}
@@ -84,10 +71,6 @@ const HeroSection = () => {
           0%, 20%, 40%, 60%, 80%, 100% { opacity: 1; }
           10%, 30%, 50%, 70%, 90% { opacity: 0; }
         }
-        @keyframes bob {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-6px); }
-        }
         @keyframes fadeSlideIn {
           0% {
             opacity: 0;
@@ -98,18 +81,9 @@ const HeroSection = () => {
             transform: translateY(0);
           }
         }
-        @keyframes shimmer {
-          0% {
-            background-position: -200% 0;
-          }
-          100% {
-            background-position: 200% 0;
-          }
-        }
-        @keyframes floatUp {
-          0% { transform: translateY(0) translateX(0); opacity: 0.3; }
-          50% { opacity: 1; }
-          100% { transform: translateY(-20px) translateX(15px); opacity: 0; }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
         }
 
         .text-shadow-glow {

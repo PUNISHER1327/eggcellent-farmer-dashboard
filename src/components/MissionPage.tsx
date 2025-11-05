@@ -114,10 +114,10 @@ const MissionPage: React.FC = () => {
               {missionCards.map((card, index) => {
                 const IconComponent = card.icon;
                 return (
-                  <div 
+                   <div 
                     key={card.title}
                     ref={(el) => { if (el) sectionsRef.current[index] = el; }}
-                    className={`group relative rounded-3xl overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 opacity-0 ${
+                    className={`group relative rounded-3xl overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 ${
                       theme === 'light' ? 'bg-white' : 'bg-[#1a1a1a]'
                     }`}
                   >
@@ -151,7 +151,7 @@ const MissionPage: React.FC = () => {
 
           {/* Timeline */}
           <section className="mb-32" ref={(el) => { if (el) sectionsRef.current[4] = el as HTMLDivElement; }}>
-            <div className="text-center mb-16 opacity-0">
+            <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent">
                 Milestones & Vision
               </h2>
@@ -213,7 +213,7 @@ const MissionPage: React.FC = () => {
 
           {/* Testimonials */}
           <section className="mb-32" ref={(el) => { if (el) sectionsRef.current[5] = el as HTMLDivElement; }}>
-            <div className="text-center mb-16 opacity-0">
+            <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent">
                 Voices from the Ground
               </h2>
@@ -274,7 +274,7 @@ const MissionPage: React.FC = () => {
 
           {/* CTA Section */}
           <section className="relative overflow-hidden" ref={(el) => { if (el) sectionsRef.current[6] = el as HTMLDivElement; }}>
-            <div className={`relative rounded-3xl p-12 md:p-16 text-center shadow-2xl opacity-0 ${
+            <div className={`relative rounded-3xl p-12 md:p-16 text-center shadow-2xl ${
               theme === 'light' 
                 ? 'bg-gradient-to-br from-orange-50 via-white to-orange-50' 
                 : 'bg-gradient-to-br from-[#1a1a1a] via-[#252525] to-[#1a1a1a]'
