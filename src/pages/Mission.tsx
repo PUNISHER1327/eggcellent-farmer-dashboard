@@ -3,9 +3,11 @@ import NavBar from '@/components/NavBar';
 import MissionPage from "@/components/MissionPage";
 import Footer from '@/components/Footer';
 import { useTheme } from '@/hooks/useTheme';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const Mission = () => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
   
   return (
     <div className={`${theme === 'light' ? 'light-mode' : 'dark-mode'} flex flex-col min-h-screen`}>

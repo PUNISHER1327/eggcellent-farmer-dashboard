@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
-import NavBar from './NavBar';
-import Footer from './Footer';
 import missionHero from '@/assets/mission-hero.jpg';
 import healthyBirds from '@/assets/healthy-birds.jpg';
 import empoweredFarmers from '@/assets/empowered-farmers.jpg';
@@ -72,10 +70,7 @@ const MissionPage: React.FC = () => {
   ];
 
   return (
-    <div className={theme === 'light' ? 'light-mode min-h-screen bg-gradient-to-b from-white via-orange-50/30 to-white' : 'dark-mode min-h-screen bg-gradient-to-b from-[#0f0f0f] via-[#1a1a1a] to-[#0f0f0f]'}>
-      <NavBar />
-
-      <main className="pt-24 pb-16 px-4 overflow-hidden">
+    <div className="pt-24 pb-16 px-4 overflow-hidden">
         <div className="container mx-auto max-w-7xl">
           {/* Hero Section */}
           <div className="relative w-full h-[500px] md:h-[600px] rounded-3xl overflow-hidden mb-20 shadow-2xl group">
@@ -319,9 +314,6 @@ const MissionPage: React.FC = () => {
             </div>
           </section>
         </div>
-      </main>
-
-      <Footer />
     </div>
   );
 };

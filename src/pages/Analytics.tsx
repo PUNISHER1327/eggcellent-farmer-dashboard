@@ -1,17 +1,21 @@
 import React from 'react';
 import NavBar from '../components/NavBar';
+import BackgroundVideo from '../components/BackgroundVideo';
 import Footer from '../components/Footer';
 import AnalyticsDashboard from '../components/AnalyticsDashboard';
 import LiveSensorDataTable from '../components/LiveSensorDataTable';
 import { useTheme } from '@/hooks/useTheme';
+import { useLanguage } from '@/hooks/useLanguage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Brain, TrendingUp, Activity } from 'lucide-react';
 
 const Analytics = () => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
 
   return (
     <div className={`${theme === 'light' ? 'light-mode' : 'dark-mode'} flex flex-col min-h-screen`}>
+      <BackgroundVideo />
       <NavBar />
       
       <main className="relative z-10 flex-grow pt-20">
