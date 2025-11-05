@@ -85,6 +85,9 @@ const NavBar = () => {
             <Link to="/mission" className={linkClass('/mission')}>
               {t('mission')}
             </Link>
+            <Link to="/analytics" className={linkClass('/analytics')}>
+              Analytics
+            </Link>
             <Link to="/contact" className={linkClass('/contact')}>
               {t('contact')}
             </Link>
@@ -221,6 +224,18 @@ const NavBar = () => {
               }`}
             >
               {t('mission')}
+            </Link>
+            <Link
+              to="/analytics"
+              className={`block px-3 py-2 rounded-md ${
+                isActive('/analytics')
+                  ? 'bg-farm-green/10 text-farm-green'
+                  : theme === 'light'
+                  ? 'text-gray-800 hover:bg-farm-green/5'
+                  : 'text-gray-100 hover:bg-gray-800'
+              }`}
+            >
+              Analytics
             </Link>
             <Link
               to="/contact"

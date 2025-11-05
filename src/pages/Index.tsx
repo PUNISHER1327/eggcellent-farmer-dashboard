@@ -53,14 +53,8 @@ const Index = () => {
         {/* Live Data Section */}
         <LiveDataSection />
         
-        {/* Live Sensor Data Table */}
-        <LiveSensorDataTable />
-        
         {/* Conveyor Belt Status */}
         <ConveyorBeltStatus />
-        
-        {/* Analytics Dashboard */}
-        <AnalyticsDashboard />
         
         {/* Insights Section */}
         <InsightsSection />

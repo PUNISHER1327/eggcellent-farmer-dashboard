@@ -13,6 +13,7 @@ import { AuthProvider } from "./hooks/useAuth";
 import Mission from "./pages/Mission";
 import Auth from "./pages/Auth";
 import Contact from "./pages/Contact";
+import Analytics from "./pages/Analytics";
 import DashboardAccessCheck from "./components/DashboardAccessCheck";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/mission" element={<Mission />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/analytics" element={<Analytics />} />
                 <Route path="/auth" element={<Auth />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
