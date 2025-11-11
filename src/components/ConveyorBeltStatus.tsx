@@ -125,8 +125,8 @@ const ConveyorBeltStatus: React.FC = () => {
         const success = await arduino.sendCommand(newState ? 'ON' : 'OFF');
         if (!success) {
           toast({
-            title: 'Arduino Error',
-            description: 'Failed to send command to Arduino',
+            title: t('arduinoError'),
+            description: t('arduinoCommandFailed'),
             variant: 'destructive',
           });
         }
@@ -164,8 +164,8 @@ const ConveyorBeltStatus: React.FC = () => {
   const handleConnectArduino = async () => {
     if (!isWebSerialSupported()) {
       toast({
-        title: 'Not Supported',
-        description: 'WebSerial API is not supported in this browser. Please use Chrome, Edge, or Opera.',
+        title: t('arduinoNotSupported'),
+        description: t('arduinoNotSupportedDesc'),
         variant: 'destructive',
       });
       return;
@@ -175,8 +175,8 @@ const ConveyorBeltStatus: React.FC = () => {
       await arduino.disconnect();
       setArduinoConnected(false);
       toast({
-        title: 'Disconnected',
-        description: 'Arduino disconnected successfully',
+        title: t('arduinoDisconnected'),
+        description: t('arduinoDisconnectedSuccess'),
       });
     } else {
       const connected = await arduino.connect();
@@ -185,13 +185,13 @@ const ConveyorBeltStatus: React.FC = () => {
         // Send initial state to Arduino
         await arduino.sendCommand(isOn ? 'ON' : 'OFF');
         toast({
-          title: 'Connected',
-          description: 'Arduino connected successfully',
+          title: t('arduinoConnected'),
+          description: t('arduinoConnectedSuccess'),
         });
       } else {
         toast({
-          title: 'Connection Failed',
-          description: 'Failed to connect to Arduino',
+          title: t('arduinoConnectionFailed'),
+          description: t('arduinoConnectionFailedDesc'),
           variant: 'destructive',
         });
       }
@@ -237,7 +237,7 @@ const ConveyorBeltStatus: React.FC = () => {
                     className="flex gap-2 items-center"
                   >
                     <Usb className="h-4 w-4" />
-                    {arduinoConnected ? 'Disconnect Arduino' : 'Connect Arduino'}
+                    {arduinoConnected ? t('disconnectArduino') : t('connectArduino')}
                   </Button>
                   
                   <div className="flex items-center justify-between">
@@ -264,7 +264,7 @@ const ConveyorBeltStatus: React.FC = () => {
                   
                   {!arduinoConnected && (
                     <p className="text-xs text-muted-foreground text-center">
-                      Connect Arduino to control the motor
+                      {t('connectArduinoToControl')}
                     </p>
                   )}
                 </div>

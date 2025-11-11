@@ -116,6 +116,30 @@ const translations = {
     predictiveAnalysis: "Predictive Analysis",
     optimizationTips: "Optimization Tips",
     
+    // Arduino Control
+    connectArduino: "Connect Arduino",
+    disconnectArduino: "Disconnect Arduino",
+    arduinoConnected: "Connected",
+    arduinoDisconnected: "Disconnected",
+    arduinoConnectedSuccess: "Arduino connected successfully",
+    arduinoDisconnectedSuccess: "Arduino disconnected successfully",
+    arduinoConnectionFailed: "Connection Failed",
+    arduinoConnectionFailedDesc: "Failed to connect to Arduino",
+    arduinoError: "Arduino Error",
+    arduinoCommandFailed: "Failed to send command to Arduino",
+    arduinoNotSupported: "Not Supported",
+    arduinoNotSupportedDesc: "WebSerial API is not supported in this browser. Please use Chrome, Edge, or Opera.",
+    connectArduinoToControl: "Connect Arduino to control the motor",
+    
+    // Hero Features
+    nextGenPoultryManagement: "Next-Gen Poultry Management",
+    realtimeMonitoring: "Real-time Monitoring",
+    aiPredictions: "AI Predictions",
+    multiLanguageSupport: "Multi-language Support",
+    continuousMonitoring: "Continuous Monitoring",
+    accuracyRate: "Accuracy Rate",
+    languages: "Languages",
+    
     // Contact
     name: "Name",
     email: "Email",
@@ -242,6 +266,30 @@ const translations = {
     predictiveAnalysis: "भविष्यवादी विश्लेषण",
     optimizationTips: "अनुकूलन युक्तियां",
     
+    // Arduino Control
+    connectArduino: "Arduino कनेक्ट करें",
+    disconnectArduino: "Arduino डिस्कनेक्ट करें",
+    arduinoConnected: "कनेक्टेड",
+    arduinoDisconnected: "डिस्कनेक्टेड",
+    arduinoConnectedSuccess: "Arduino सफलतापूर्वक कनेक्ट हुआ",
+    arduinoDisconnectedSuccess: "Arduino सफलतापूर्वक डिस्कनेक्ट हुआ",
+    arduinoConnectionFailed: "कनेक्शन विफल",
+    arduinoConnectionFailedDesc: "Arduino से कनेक्ट करने में विफल",
+    arduinoError: "Arduino त्रुटि",
+    arduinoCommandFailed: "Arduino को कमांड भेजने में विफल",
+    arduinoNotSupported: "समर्थित नहीं है",
+    arduinoNotSupportedDesc: "WebSerial API इस ब्राउज़र में समर्थित नहीं है। कृपया Chrome, Edge, या Opera का उपयोग करें।",
+    connectArduinoToControl: "मोटर को नियंत्रित करने के लिए Arduino कनेक्ट करें",
+    
+    // Hero Features
+    nextGenPoultryManagement: "नेक्स्ट-जेन पोल्ट्री प्रबंधन",
+    realtimeMonitoring: "रीयल-टाइम मॉनिटरिंग",
+    aiPredictions: "एआई भविष्यवाणियां",
+    multiLanguageSupport: "बहु-भाषा समर्थन",
+    continuousMonitoring: "निरंतर निगरानी",
+    accuracyRate: "सटीकता दर",
+    languages: "भाषाएं",
+    
     // Contact
     name: "नाम",
     email: "ईमेल",
@@ -365,6 +413,30 @@ const translations = {
     historicalData: "ಐತಿಹಾಸಿಕ ಡೇಟಾ",
     predictiveAnalysis: "ಊಹಾತ್ಮಕ ವಿಶ್ಲೇಷಣೆ",
     optimizationTips: "ಆಪ್ಟಿಮೈಸೇಶನ್ ಟಿಪ್ಸ್",
+    
+    // Arduino Control
+    connectArduino: "Arduino ಸಂಪರ್ಕಿಸಿ",
+    disconnectArduino: "Arduino ಸಂಪರ್ಕ ಕಡಿತಗೊಳಿಸಿ",
+    arduinoConnected: "ಸಂಪರ್ಕಿತ",
+    arduinoDisconnected: "ಸಂಪರ್ಕ ಕಡಿತಗೊಳಿಸಲಾಗಿದೆ",
+    arduinoConnectedSuccess: "Arduino ಯಶಸ್ವಿಯಾಗಿ ಸಂಪರ್ಕಿಸಲಾಗಿದೆ",
+    arduinoDisconnectedSuccess: "Arduino ಯಶಸ್ವಿಯಾಗಿ ಸಂಪರ್ಕ ಕಡಿತಗೊಳಿಸಲಾಗಿದೆ",
+    arduinoConnectionFailed: "ಸಂಪರ್ಕ ವಿಫಲವಾಗಿದೆ",
+    arduinoConnectionFailedDesc: "Arduino ಸಂಪರ್ಕಿಸಲು ವಿಫಲವಾಗಿದೆ",
+    arduinoError: "Arduino ದೋಷ",
+    arduinoCommandFailed: "Arduino ಗೆ ಆಜ್ಞೆ ಕಳುಹಿಸಲು ವಿಫಲವಾಗಿದೆ",
+    arduinoNotSupported: "ಬೆಂಬಲಿತವಾಗಿಲ್ಲ",
+    arduinoNotSupportedDesc: "WebSerial API ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಬೆಂಬಲಿತವಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು Chrome, Edge, ಅಥವಾ Opera ಬಳಸಿ.",
+    connectArduinoToControl: "ಮೋಟರ್ ಅನ್ನು ನಿಯಂತ್ರಿಸಲು Arduino ಸಂಪರ್ಕಿಸಿ",
+    
+    // Hero Features
+    nextGenPoultryManagement: "ನೆಕ್ಸ್ಟ್-ಜೆನ್ ಕೋಳಿ ನಿರ್ವಹಣೆ",
+    realtimeMonitoring: "ರಿಯಲ್-ಟೈಮ್ ಮೇಲ್ವಿಚಾರಣೆ",
+    aiPredictions: "ಎಐ ಮುನ್ಸೂಚನೆಗಳು",
+    multiLanguageSupport: "ಬಹು-ಭಾಷಾ ಬೆಂಬಲ",
+    continuousMonitoring: "ನಿರಂತರ ಮೇಲ್ವಿಚಾರಣೆ",
+    accuracyRate: "ನಿಖರತೆ ದರ",
+    languages: "ಭಾಷೆಗಳು",
     
     // Contact
     name: "ಹೆಸರು",

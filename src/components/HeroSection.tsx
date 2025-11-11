@@ -1,4 +1,5 @@
 import { useLanguage } from '@/hooks/useLanguage';
+import { TrendingUp, Shield, Zap, BarChart3, Clock, Globe } from 'lucide-react';
 
 const HeroSection = () => {
   const { t } = useLanguage();
@@ -21,43 +22,85 @@ const HeroSection = () => {
         <div className="absolute bottom-0 -right-1/4 w-1/2 h-1/2 bg-accent/10 rounded-full blur-3xl animate-[float_8s_ease-in-out_infinite_reverse]"></div>
       </div>
 
-      {/* Chick Illustration with bounce + blinking eye */}
-      <div className="absolute bottom-6 left-10 z-10 hidden md:block">
-        <div className="w-24 h-24 bg-yellow-300 rounded-full relative shadow-lg animate-[bounce_2.5s_infinite]">
-          {/* Eye */}
-          <div className="w-3 h-3 bg-black rounded-full absolute top-6 left-7 animate-[blink_4s_infinite]"></div>
-          {/* Beak */}
-          <div className="w-4 h-4 bg-orange-500 rotate-45 absolute top-12 left-16"></div>
-          {/* Wing */}
-          <div className="w-5 h-2 bg-white absolute top-18 left-5 rounded-full"></div>
+      {/* Main Content Container */}
+      <div className="z-10 text-center max-w-6xl w-full animate-[fadeSlideIn_1.2s_ease_forwards] opacity-0 translate-y-6">
+        
+        {/* Top Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-primary/10 border border-primary/20 rounded-full backdrop-blur-sm">
+          <Zap className="w-4 h-4 text-primary" />
+          <span className="text-sm font-semibold text-primary">{t('nextGenPoultryManagement')}</span>
         </div>
-        <p className="mt-2 text-sm text-orange-300 font-semibold text-center select-none"></p>
-      </div>
 
-      {/* Main Text Content with fade and slide in */}
-      <div className="z-10 text-center max-w-4xl animate-[fadeSlideIn_1.2s_ease_forwards] opacity-0 translate-y-6">
-        <h1 className="text-6xl md:text-7xl font-black leading-tight mb-8 bg-gradient-to-r from-primary via-orange-500 to-primary bg-clip-text text-transparent drop-shadow-2xl">
+        {/* Main Heading */}
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight mb-6 bg-gradient-to-r from-primary via-orange-500 to-primary bg-clip-text text-transparent drop-shadow-2xl">
           {t('farmFriendlyDashboard')}
         </h1>
 
-        <p className="text-xl md:text-2xl font-semibold mb-10 text-foreground/90 max-w-3xl mx-auto leading-relaxed">
+        {/* Subtitle */}
+        <p className="text-lg md:text-2xl font-medium mb-12 text-foreground/80 max-w-3xl mx-auto leading-relaxed">
           {t('heroTitle')}
         </p>
 
-        <div className="flex flex-col sm:flex-row justify-center gap-6">
+        {/* Feature Pills */}
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          <div className="flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-sm border border-border rounded-full">
+            <BarChart3 className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium">{t('realtimeMonitoring')}</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-sm border border-border rounded-full">
+            <TrendingUp className="w-4 h-4 text-green-500" />
+            <span className="text-sm font-medium">{t('aiPredictions')}</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-sm border border-border rounded-full">
+            <Globe className="w-4 h-4 text-blue-500" />
+            <span className="text-sm font-medium">{t('multiLanguageSupport')}</span>
+          </div>
+        </div>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
           <button
             onClick={scrollToLiveData}
             className="group px-8 py-4 bg-gradient-to-r from-primary to-orange-500 font-bold text-lg rounded-xl shadow-2xl hover:shadow-primary/50 transition-all duration-300 hover:scale-105 text-white relative overflow-hidden"
           >
-            <span className="relative z-10">{t('heroButtonOne')}</span>
+            <span className="relative z-10 flex items-center gap-2 justify-center">
+              <BarChart3 className="w-5 h-5" />
+              {t('heroButtonOne')}
+            </span>
             <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
           <button 
             onClick={() => window.location.href = '/auth'}
-            className="px-8 py-4 bg-background/80 backdrop-blur-sm border-2 border-primary text-foreground font-bold text-lg rounded-xl shadow-xl hover:bg-background hover:shadow-2xl transition-all duration-300 hover:scale-105"
+            className="px-8 py-4 bg-background/80 backdrop-blur-sm border-2 border-primary text-foreground font-bold text-lg rounded-xl shadow-xl hover:bg-background hover:shadow-2xl transition-all duration-300 hover:scale-105 flex items-center gap-2 justify-center"
           >
+            <Shield className="w-5 h-5" />
             {t('heroButtonTwo')}
           </button>
+        </div>
+
+        {/* Stats Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+          <div className="p-6 bg-background/60 backdrop-blur-sm border border-border rounded-2xl hover:shadow-lg transition-all duration-300">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Clock className="w-5 h-5 text-primary" />
+              <div className="text-3xl font-bold text-primary">24/7</div>
+            </div>
+            <div className="text-sm text-foreground/70 font-medium">{t('continuousMonitoring')}</div>
+          </div>
+          <div className="p-6 bg-background/60 backdrop-blur-sm border border-border rounded-2xl hover:shadow-lg transition-all duration-300">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <TrendingUp className="w-5 h-5 text-green-500" />
+              <div className="text-3xl font-bold text-green-500">99%</div>
+            </div>
+            <div className="text-sm text-foreground/70 font-medium">{t('accuracyRate')}</div>
+          </div>
+          <div className="p-6 bg-background/60 backdrop-blur-sm border border-border rounded-2xl hover:shadow-lg transition-all duration-300">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Globe className="w-5 h-5 text-blue-500" />
+              <div className="text-3xl font-bold text-blue-500">3+</div>
+            </div>
+            <div className="text-sm text-foreground/70 font-medium">{t('languages')}</div>
+          </div>
         </div>
       </div>
 
