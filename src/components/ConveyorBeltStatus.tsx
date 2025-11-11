@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card } from '@/components/ui/card';
-import { AlertTriangle, ThumbsUp, ToggleLeft, ToggleRight } from 'lucide-react';
+import { AlertTriangle, ThumbsUp, ToggleLeft, ToggleRight, Usb } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { getArduinoInstance, isWebSerialSupported } from '@/utils/arduinoSerial';
 
 const ConveyorBeltStatus: React.FC = () => {
   const { theme } = useTheme();
@@ -17,6 +18,8 @@ const ConveyorBeltStatus: React.FC = () => {
   const [isOn, setIsOn] = useState(ammoniaLevel > threshold);
   const [ammoniaHistory, setAmmoniaHistory] = useState<{ time: string, value: number }[]>([]);
   const [autoMode, setAutoMode] = useState(true);
+  const [arduinoConnected, setArduinoConnected] = useState(false);
+  const arduino = getArduinoInstance();
 
   // Fetch real ammonia data from Supabase
   useEffect(() => {
@@ -94,12 +97,17 @@ const ConveyorBeltStatus: React.FC = () => {
   // Control conveyor belt based on ammonia level (only in auto mode)
   useEffect(() => {
     if (autoMode) {
-      setIsOn(ammoniaLevel > threshold);
+      const newState = ammoniaLevel > threshold;
+      setIsOn(newState);
+      // Send command to Arduino when state changes automatically
+      if (arduinoConnected) {
+        arduino.sendCommand(newState ? 'ON' : 'OFF');
+      }
     }
-  }, [ammoniaLevel, threshold, autoMode]);
+  }, [ammoniaLevel, threshold, autoMode, arduinoConnected]);
 
   // Handle manual control
-  const handleToggleConveyor = () => {
+  const handleToggleConveyor = async () => {
     if (autoMode) {
       // First, switch to manual mode when user tries to toggle
       setAutoMode(false);
@@ -109,27 +117,85 @@ const ConveyorBeltStatus: React.FC = () => {
       });
     } else {
       // Toggle conveyor state
-      setIsOn(prev => !prev);
+      const newState = !isOn;
+      setIsOn(newState);
+      
+      // Send command to Arduino
+      if (arduinoConnected) {
+        const success = await arduino.sendCommand(newState ? 'ON' : 'OFF');
+        if (!success) {
+          toast({
+            title: 'Arduino Error',
+            description: 'Failed to send command to Arduino',
+            variant: 'destructive',
+          });
+        }
+      }
+      
       toast({
-        title: isOn ? t('conveyorTurningOff') : t('conveyorTurningOn'),
-        description: isOn ? t('conveyorShuttingDown') : t('conveyorStarting'),
+        title: newState ? t('conveyorTurningOn') : t('conveyorTurningOff'),
+        description: newState ? t('conveyorStarting') : t('conveyorShuttingDown'),
       });
     }
   };
 
   // Handle toggling between auto and manual mode
-  const handleToggleMode = () => {
+  const handleToggleMode = async () => {
     setAutoMode(prev => !prev);
     
     if (!autoMode) {
       // When switching back to auto, update state based on current ammonia level
-      setIsOn(ammoniaLevel > threshold);
+      const newState = ammoniaLevel > threshold;
+      setIsOn(newState);
+      
+      // Send command to Arduino
+      if (arduinoConnected) {
+        await arduino.sendCommand(newState ? 'ON' : 'OFF');
+      }
     }
     
     toast({
       title: autoMode ? t('manualModeActivated') : t('autoModeActivated'),
       description: autoMode ? t('manualModeDescription') : t('autoModeDescription'),
     });
+  };
+
+  // Handle Arduino connection
+  const handleConnectArduino = async () => {
+    if (!isWebSerialSupported()) {
+      toast({
+        title: 'Not Supported',
+        description: 'WebSerial API is not supported in this browser. Please use Chrome, Edge, or Opera.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (arduinoConnected) {
+      await arduino.disconnect();
+      setArduinoConnected(false);
+      toast({
+        title: 'Disconnected',
+        description: 'Arduino disconnected successfully',
+      });
+    } else {
+      const connected = await arduino.connect();
+      if (connected) {
+        setArduinoConnected(true);
+        // Send initial state to Arduino
+        await arduino.sendCommand(isOn ? 'ON' : 'OFF');
+        toast({
+          title: 'Connected',
+          description: 'Arduino connected successfully',
+        });
+      } else {
+        toast({
+          title: 'Connection Failed',
+          description: 'Failed to connect to Arduino',
+          variant: 'destructive',
+        });
+      }
+    }
   };
 
   return (
@@ -163,6 +229,17 @@ const ConveyorBeltStatus: React.FC = () => {
                 
                 {/* Manual control buttons */}
                 <div className="mt-6 flex flex-col gap-3 w-full">
+                  {/* Arduino Connection Button */}
+                  <Button 
+                    variant={arduinoConnected ? "secondary" : "outline"}
+                    size="sm"
+                    onClick={handleConnectArduino}
+                    className="flex gap-2 items-center"
+                  >
+                    <Usb className="h-4 w-4" />
+                    {arduinoConnected ? 'Disconnect Arduino' : 'Connect Arduino'}
+                  </Button>
+                  
                   <div className="flex items-center justify-between">
                     <span className="text-sm">{autoMode ? t('autoMode') : t('manualMode')}</span>
                     <Button 
@@ -180,9 +257,16 @@ const ConveyorBeltStatus: React.FC = () => {
                     variant={isOn ? "destructive" : "default"}
                     onClick={handleToggleConveyor}
                     className="mt-2"
+                    disabled={!arduinoConnected}
                   >
                     {isOn ? t('turnOffConveyor') : t('turnOnConveyor')}
                   </Button>
+                  
+                  {!arduinoConnected && (
+                    <p className="text-xs text-muted-foreground text-center">
+                      Connect Arduino to control the motor
+                    </p>
+                  )}
                 </div>
               </div>
               
