@@ -41,6 +41,33 @@ export type Database = {
         }
         Relationships: []
       }
+      ml_predictions: {
+        Row: {
+          confidence: number | null
+          created_at: string | null
+          id: string
+          prediction_type: string
+          prediction_value: number
+          sensor_data: Json | null
+        }
+        Insert: {
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          prediction_type: string
+          prediction_value: number
+          sensor_data?: Json | null
+        }
+        Update: {
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          prediction_type?: string
+          prediction_value?: number
+          sensor_data?: Json | null
+        }
+        Relationships: []
+      }
       sensor_data: {
         Row: {
           ammonia: number | null
