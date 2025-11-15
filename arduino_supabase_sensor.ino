@@ -1,10 +1,10 @@
 /*
  * FarmerFriendly - Arduino Sensor Data to Supabase
  * 
- * This sketch reads combined sensor data and sends it directly to Supabase
+ * This sketch reads sensor data and sends it directly to Supabase
  * 
  * WIRING:
- * - DHT22: Data pin to Arduino pin 2
+ * - DHT22: Data pin to Arduino pin 2 (Temperature & Humidity)
  * - Air Quality Sensor (MQ-135): Analog pin A0
  * 
  * SETUP INSTRUCTIONS:
@@ -14,8 +14,8 @@
  *    - ArduinoJson by Benoit Blanchon
  * 
  * 2. Configure your settings below:
- *    - WiFi credentials
- *    - Supabase ANON key (already provided)
+ *    - WiFi credentials (lines 27-28)
+ *    - Supabase ANON key is already configured
  * 
  * 3. Upload to your Arduino board
  */
@@ -50,7 +50,7 @@ void setup() {
   
   Serial.println("FarmerFriendly Sensor System Starting...");
   Serial.println("========================================");
-  Serial.println("Two sensors: Temp&Humidity + Air Quality");
+  Serial.println("Sensors: Temperature, Humidity, Air Quality");
   
   // Initialize DHT sensor
   dht.begin();
@@ -109,10 +109,6 @@ void readAndSendSensorData() {
     return;
   }
   
-  // Combine temperature and humidity into a single value
-  // Using average: (temp + humidity) / 2
-  float tempHumidity = (temperature + humidity) / 2.0;
-  
   // Read Air Quality sensor (analog value)
   int airQualityRaw = analogRead(AIR_QUALITY_PIN);
   // Convert to 0-100 scale (adjust based on your sensor)
@@ -121,15 +117,14 @@ void readAndSendSensorData() {
   // Print readings
   Serial.print("Temperature: "); Serial.print(temperature); Serial.println(" °C");
   Serial.print("Humidity: "); Serial.print(humidity); Serial.println(" %");
-  Serial.print("Combined Temp&Humidity: "); Serial.println(tempHumidity);
   Serial.print("Air Quality (raw): "); Serial.print(airQualityRaw);
   Serial.print(" -> Scaled: "); Serial.println(airQuality);
   
   // Send to Supabase
-  sendToSupabase(tempHumidity, airQuality);
+  sendToSupabase(temperature, humidity, airQuality);
 }
 
-void sendToSupabase(float tempHumidity, float airQuality) {
+void sendToSupabase(float temperature, float humidity, float airQuality) {
   // Check WiFi connection
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi disconnected. Reconnecting...");
@@ -138,9 +133,10 @@ void sendToSupabase(float tempHumidity, float airQuality) {
   
   Serial.println("Sending data to Supabase...");
   
-  // Create JSON payload
+  // Create JSON payload with 3 separate sensors
   StaticJsonDocument<200> jsonDoc;
-  jsonDoc["temp_humidity"] = tempHumidity;
+  jsonDoc["temperature"] = temperature;
+  jsonDoc["humidity"] = humidity;
   jsonDoc["air_quality"] = airQuality;
   
   String jsonData;

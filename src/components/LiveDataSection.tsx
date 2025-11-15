@@ -22,7 +22,7 @@ const LiveDataSection = () => {
     try {
       const { data: latestData, error } = await supabase
         .from('sensor_data')
-        .select('temp_humidity, air_quality, timestamp')
+        .select('temperature, humidity, air_quality, timestamp')
         .order('timestamp', { ascending: false })
         .limit(1);
 
@@ -33,7 +33,8 @@ const LiveDataSection = () => {
       if (latestData && latestData.length > 0) {
         const newData = {
           ...sensorData,
-          tempHumidity: latestData[0].temp_humidity || sensorData.tempHumidity,
+          temperature: latestData[0].temperature || sensorData.temperature,
+          humidity: latestData[0].humidity || sensorData.humidity,
           airQuality: latestData[0].air_quality || sensorData.airQuality,
         };
 
@@ -161,15 +162,25 @@ const LiveDataSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <SensorCard
-            title="Temperature & Humidity"
-            value={sensorData.tempHumidity}
-            unit=""
+            title="Temperature"
+            value={sensorData.temperature}
+            unit="°C"
             min={20}
-            max={80}
-            status={getDataStatus(sensorData.tempHumidity, 20, 80)}
-            icon={<span className="text-orange-500">🌡️💧</span>}
+            max={35}
+            status={getDataStatus(sensorData.temperature, 20, 35)}
+            icon={<span className="text-red-500">🌡️</span>}
+          />
+          
+          <SensorCard
+            title="Humidity"
+            value={sensorData.humidity}
+            unit="%"
+            min={40}
+            max={90}
+            status={getDataStatus(sensorData.humidity, 40, 90)}
+            icon={<span className="text-blue-500">💧</span>}
           />
           
           <SensorCard

@@ -13,7 +13,8 @@ const SensorTrendsComponent: React.FC = () => {
   
   // Chart configuration
   const chartConfig = {
-    tempHumidity: { label: "Temp & Humidity", theme: { light: "#FF9800", dark: "#FF9800" } },
+    temperature: { label: "Temperature (°C)", theme: { light: "#FF9800", dark: "#FF9800" } },
+    humidity: { label: "Humidity (%)", theme: { light: "#2196F3", dark: "#2196F3" } },
     airQuality: { label: "Air Quality", theme: { light: "#4CAF50", dark: "#4CAF50" } },
   };
   
@@ -73,11 +74,20 @@ const SensorTrendsComponent: React.FC = () => {
               />
               <Line 
                 type="monotone" 
-                dataKey="tempHumidity" 
-                stroke="var(--color-tempHumidity)" 
+                dataKey="temperature" 
+                stroke="var(--color-temperature)" 
                 strokeWidth={2}
                 activeDot={{ r: 6 }}
-                name="Temp & Humidity"
+                name="Temperature"
+                dot={false}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="humidity" 
+                stroke="var(--color-humidity)" 
+                strokeWidth={2}
+                activeDot={{ r: 6 }}
+                name="Humidity"
                 dot={false}
               />
               <Line 
@@ -98,11 +108,17 @@ const SensorTrendsComponent: React.FC = () => {
       
       {/* Stats summary */}
       {!loading && historicalData.length > 0 && (
-      <div className="grid grid-cols-2 gap-4 mt-6">
+      <div className="grid grid-cols-3 gap-4 mt-6">
         <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-orange-50' : 'bg-orange-900/20'}`}>
-          <p className={`text-sm font-medium ${theme === 'light' ? 'text-orange-700' : 'text-orange-300'}`}>Avg Temp & Humidity</p>
+          <p className={`text-sm font-medium ${theme === 'light' ? 'text-orange-700' : 'text-orange-300'}`}>Avg Temperature</p>
           <p className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-            {Math.round(historicalData.reduce((sum, item) => sum + item.tempHumidity, 0) / historicalData.length)}
+            {Math.round(historicalData.reduce((sum, item) => sum + item.temperature, 0) / historicalData.length)}°C
+          </p>
+        </div>
+        <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-blue-50' : 'bg-blue-900/20'}`}>
+          <p className={`text-sm font-medium ${theme === 'light' ? 'text-blue-700' : 'text-blue-300'}`}>Avg Humidity</p>
+          <p className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
+            {Math.round(historicalData.reduce((sum, item) => sum + item.humidity, 0) / historicalData.length)}%
           </p>
         </div>
         <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-green-50' : 'bg-green-900/20'}`}>

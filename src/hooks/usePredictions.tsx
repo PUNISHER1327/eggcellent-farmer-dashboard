@@ -7,7 +7,8 @@ export interface Prediction {
   prediction_value: number;
   confidence: number;
   sensor_data: {
-    temp_humidity: number;
+    temperature: number;
+    humidity: number;
     air_quality: number;
   };
   created_at: string;
@@ -66,7 +67,8 @@ export const useRequestPrediction = () => {
   const [requesting, setRequesting] = useState(false);
 
   const requestPrediction = async (sensorData: {
-    temp_humidity: number;
+    temperature: number;
+    humidity: number;
     air_quality: number;
   }) => {
     setRequesting(true);

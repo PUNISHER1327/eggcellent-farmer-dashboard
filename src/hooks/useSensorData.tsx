@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface SensorData {
-  tempHumidity: number;
+  temperature: number;
+  humidity: number;
   airQuality: number;
   eggProduction: number;
   totalEggsToday: number;
@@ -26,7 +27,8 @@ export const getEggProductionStatus = (value: number): 'low' | 'medium' | 'high'
 
 export const useSensorData = () => {
   const [data, setData] = useState<SensorData>({
-    tempHumidity: 0,
+    temperature: 0,
+    humidity: 0,
     airQuality: 0,
     eggProduction: 0,
     totalEggsToday: 0,
@@ -42,7 +44,7 @@ export const useSensorData = () => {
         // Fetch the most recent sensor data from Supabase
         const { data: sensorData, error } = await supabase
           .from('sensor_data')
-          .select('temp_humidity, air_quality, timestamp')
+          .select('temperature, humidity, air_quality, timestamp')
           .order('timestamp', { ascending: false })
           .limit(1);
 
@@ -55,22 +57,24 @@ export const useSensorData = () => {
           
           // Map the Supabase data to our SensorData interface
           setData({
-            tempHumidity: latestData.temp_humidity || 50,
+            temperature: latestData.temperature || 25,
+            humidity: latestData.humidity || 60,
             airQuality: latestData.air_quality || 50,
             eggProduction: 0.75,
             totalEggsToday: 200,
-            activeSensors: 2,
+            activeSensors: 3,
             chickens: 350,
           });
         } else {
           console.log("No sensor data found in the database");
           // If no data is found, use sensible defaults
           setData({
-            tempHumidity: 50,
+            temperature: 25,
+            humidity: 60,
             airQuality: 50,
             eggProduction: 0.75,
             totalEggsToday: 200,
-            activeSensors: 2,
+            activeSensors: 3,
             chickens: 350,
           });
         }
@@ -97,7 +101,8 @@ export const useSensorData = () => {
           const newData = payload.new as any;
           setData(prev => ({
             ...prev,
-            tempHumidity: newData.temp_humidity || prev.tempHumidity,
+            temperature: newData.temperature || prev.temperature,
+            humidity: newData.humidity || prev.humidity,
             airQuality: newData.air_quality || prev.airQuality,
           }));
         }
