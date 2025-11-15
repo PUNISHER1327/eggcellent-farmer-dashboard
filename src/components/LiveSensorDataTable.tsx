@@ -9,7 +9,8 @@ import { Database } from 'lucide-react';
 interface SensorReading {
   id: number;
   timestamp: string;
-  temp_humidity: number;
+  temperature: number;
+  humidity: number;
   air_quality: number;
 }
 
@@ -85,7 +86,8 @@ const LiveSensorDataTable: React.FC = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead className={theme === 'light' ? 'text-gray-700' : 'text-gray-300'}>Timestamp</TableHead>
-                    <TableHead className={theme === 'light' ? 'text-gray-700' : 'text-gray-300'}>Temp & Humidity</TableHead>
+                    <TableHead className={theme === 'light' ? 'text-gray-700' : 'text-gray-300'}>Temperature (°C)</TableHead>
+                    <TableHead className={theme === 'light' ? 'text-gray-700' : 'text-gray-300'}>Humidity (%)</TableHead>
                     <TableHead className={theme === 'light' ? 'text-gray-700' : 'text-gray-300'}>Air Quality</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -96,10 +98,13 @@ const LiveSensorDataTable: React.FC = () => {
                         {new Date(reading.timestamp).toLocaleString()}
                       </TableCell>
                       <TableCell className={theme === 'light' ? 'text-gray-800' : 'text-white'}>
-                        {reading.temp_humidity?.toFixed(2) ?? 'N/A'}
+                        {reading.temperature?.toFixed(1) ?? 'N/A'}
                       </TableCell>
                       <TableCell className={theme === 'light' ? 'text-gray-800' : 'text-white'}>
-                        {reading.air_quality?.toFixed(2) ?? 'N/A'}
+                        {reading.humidity?.toFixed(1) ?? 'N/A'}
+                      </TableCell>
+                      <TableCell className={theme === 'light' ? 'text-gray-800' : 'text-white'}>
+                        {reading.air_quality?.toFixed(1) ?? 'N/A'}
                       </TableCell>
                     </TableRow>
                   ))}

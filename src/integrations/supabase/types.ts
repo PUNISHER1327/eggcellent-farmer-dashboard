@@ -44,20 +44,23 @@ export type Database = {
       sensor_data: {
         Row: {
           air_quality: number | null
+          humidity: number | null
           id: number
-          temp_humidity: number | null
+          temperature: number | null
           timestamp: string | null
         }
         Insert: {
           air_quality?: number | null
+          humidity?: number | null
           id?: number
-          temp_humidity?: number | null
+          temperature?: number | null
           timestamp?: string | null
         }
         Update: {
           air_quality?: number | null
+          humidity?: number | null
           id?: number
-          temp_humidity?: number | null
+          temperature?: number | null
           timestamp?: string | null
         }
         Relationships: []

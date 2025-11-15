@@ -10,12 +10,12 @@ This guide will help you set up your Arduino sensors to send data directly to yo
    - Or any Arduino with WiFi capability
 
 2. **Sensors**
-   - **DHT22**: Combined Temperature & Humidity sensor
+   - **DHT22**: Temperature & Humidity sensor
    - **MQ-135 or similar**: Air Quality sensor (measures CO2 and ammonia levels)
 
 ## Wiring Diagram
 
-### DHT22 Sensor
+### DHT22 Sensor (Temperature & Humidity)
 ```
 DHT22 Pin 1 (VCC)  → Arduino 5V
 DHT22 Pin 2 (Data) → Arduino Digital Pin 2
@@ -45,17 +45,13 @@ In Arduino IDE, go to **Tools > Manage Libraries** and install:
 
 1. Open the `arduino_supabase_sensor.ino` file in Arduino IDE
 
-2. Update these lines with your WiFi credentials:
+2. Update these lines with your WiFi credentials (lines 27-28):
    ```cpp
    const char* ssid = "YOUR_WIFI_SSID";      // Your WiFi name
    const char* password = "YOUR_WIFI_PASSWORD"; // Your WiFi password
    ```
 
-3. The Supabase configuration is already set:
-   ```cpp
-   const char* supabaseUrl = "ipfqxgzylmfyffeqpdrb.supabase.co";
-   const char* supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
-   ```
+3. The Supabase configuration is already set - no changes needed!
 
 ### Step 4: Upload to Arduino
 1. Connect your Arduino to your computer via USB
@@ -70,7 +66,7 @@ In Arduino IDE, go to **Tools > Manage Libraries** and install:
    ```
    FarmerFriendly Sensor System Starting...
    ========================================
-   Two sensors: Temp&Humidity + Air Quality
+   Sensors: Temperature, Humidity, Air Quality
    Connecting to WiFi: YourWiFiName
    .....
    WiFi connected!
@@ -80,26 +76,36 @@ In Arduino IDE, go to **Tools > Manage Libraries** and install:
 
 ## Understanding the Sensor Data
 
-### Sensor 1: Temperature & Humidity (Combined)
+### Sensor 1: Temperature
 - **Source**: DHT22 sensor
-- **Value**: Average of temperature (°C) and humidity (%)
-- **Formula**: `(temperature + humidity) / 2`
-- **Database column**: `temp_humidity`
+- **Unit**: Degrees Celsius (°C)
+- **Range**: -40°C to 80°C
+- **Optimal range for chickens**: 20-25°C
+- **Database column**: `temperature`
 
-### Sensor 2: Air Quality
+### Sensor 2: Humidity
+- **Source**: DHT22 sensor
+- **Unit**: Percentage (%)
+- **Range**: 0% to 100%
+- **Optimal range for chickens**: 50-70%
+- **Database column**: `humidity`
+
+### Sensor 3: Air Quality
 - **Source**: MQ-135 sensor
 - **Measures**: CO2 and ammonia levels in the air
 - **Value**: Scaled from 0-100 (0 = excellent, 100 = poor)
+- **Optimal range**: 20-40
 - **Database column**: `air_quality`
 
 ## Data Transmission
 
 - **Frequency**: Every 60 seconds (configurable)
 - **Method**: HTTPS POST to Supabase REST API
-- **Format**: JSON
+- **Format**: JSON with 3 separate values
   ```json
   {
-    "temp_humidity": 45.5,
+    "temperature": 25.5,
+    "humidity": 65.2,
     "air_quality": 32
   }
   ```
@@ -107,57 +113,72 @@ In Arduino IDE, go to **Tools > Manage Libraries** and install:
 ## Troubleshooting
 
 ### Arduino won't connect to WiFi
-- Double-check WiFi credentials
+- Double-check WiFi credentials (case-sensitive!)
 - Make sure your WiFi network is 2.4GHz (not 5GHz)
 - Check if your WiFi requires special authentication
+- Try moving Arduino closer to the router
 
 ### Sensor readings are NaN or 0
-- Check sensor wiring
-- Ensure sensors have proper power supply
+- Check sensor wiring - ensure connections are firm
+- Ensure sensors have proper power supply (5V)
 - Wait 2-3 seconds after sensor initialization
+- Try a different DHT22 sensor if problem persists
 
 ### Data not appearing in Supabase
 - Check Serial Monitor for error messages
-- Verify Supabase URL and API key
+- Verify Supabase URL is correct
 - Check if the `sensor_data` table exists in Supabase
-- Ensure RLS policies allow INSERT operations
+- Ensure RLS policies allow public INSERT operations
+- Check network firewall settings
 
 ### Connection refused errors
 - Make sure your Arduino has internet access
 - Check if port 443 (HTTPS) is open on your network
-- Try pinging the Supabase URL from another device
+- Try pinging `ipfqxgzylmfyffeqpdrb.supabase.co` from another device
+- Contact your network administrator
 
 ## Customization
 
 ### Adjust Sending Interval
-In the Arduino code, change:
+In the Arduino code (line 40), change:
 ```cpp
 const unsigned long SEND_INTERVAL = 60000; // milliseconds
 ```
+- 5000 = 5 seconds (for testing)
 - 60000 = 1 minute
 - 300000 = 5 minutes
 - 3600000 = 1 hour
 
 ### Calibrate Air Quality Sensor
-Modify the mapping in `readAndSendSensorData()`:
+Modify the mapping in `readAndSendSensorData()` (line 117):
 ```cpp
 float airQuality = map(airQualityRaw, 0, 1023, 0, 100);
 ```
 
-Adjust the range based on your sensor's specifications.
+Adjust the range based on your sensor's specifications and calibration data.
 
 ## Next Steps
 
 Once your sensors are sending data:
-1. View live data on the dashboard at: https://yourapp.lovable.app
-2. Check the "Live Sensor Data" section
-3. View historical trends in the "Analytics" section
-4. Monitor the sensor data table in Supabase
+1. View live data on your dashboard
+2. Check the "Live Sensor Data" table for recent readings
+3. View historical trends in the "Sensor Trends" chart
+4. Monitor air quality to control the conveyor belt system
+5. Check the Analytics page for detailed insights
+
+## Data in the Dashboard
+
+Your dashboard will show:
+- **Current readings**: Latest temperature, humidity, and air quality
+- **Historical charts**: 24-hour trends for all sensors
+- **Alerts**: When values are outside optimal ranges
+- **Statistics**: Average, min, max values
 
 ## Support
 
 If you need help:
-1. Check the Serial Monitor for error messages
-2. Review the wiring diagram
-3. Verify all library installations
-4. Check Supabase connection and permissions
+1. Check the Serial Monitor for detailed error messages
+2. Review the wiring diagram carefully
+3. Verify all library installations are complete
+4. Check Supabase dashboard for connection logs
+5. Ensure your Arduino board supports WiFi
