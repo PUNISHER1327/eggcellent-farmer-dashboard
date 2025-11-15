@@ -3,10 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 
 export interface HistoricalReading {
   time: string;
-  temperature: number;
-  humidity: number;
-  co2: number;
-  ammonia: number;
+  tempHumidity: number;
+  airQuality: number;
 }
 
 export const useSensorHistory = (hours: number = 24) => {
@@ -22,7 +20,7 @@ export const useSensorHistory = (hours: number = 24) => {
 
         const { data: sensorData, error } = await supabase
           .from('sensor_data')
-          .select('timestamp, temperature, humidity, carbon_dioxide, ammonia')
+          .select('timestamp, temp_humidity, air_quality')
           .gte('timestamp', hoursAgo.toISOString())
           .order('timestamp', { ascending: true });
 
@@ -31,10 +29,8 @@ export const useSensorHistory = (hours: number = 24) => {
         if (sensorData && sensorData.length > 0) {
           const formattedData = sensorData.map(reading => ({
             time: new Date(reading.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            temperature: reading.temperature || 0,
-            humidity: reading.humidity || 0,
-            co2: reading.carbon_dioxide || 0,
-            ammonia: reading.ammonia || 0,
+            tempHumidity: reading.temp_humidity || 0,
+            airQuality: reading.air_quality || 0,
           }));
           setData(formattedData);
         }

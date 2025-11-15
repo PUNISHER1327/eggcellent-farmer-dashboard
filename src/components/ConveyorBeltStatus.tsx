@@ -25,22 +25,22 @@ const ConveyorBeltStatus: React.FC = () => {
   useEffect(() => {
     const fetchAmmoniaData = async () => {
       try {
-        // Fetch latest ammonia level
+        // Fetch latest air quality level (used as ammonia indicator)
         const { data: latest, error: latestError } = await supabase
           .from('sensor_data')
-          .select('ammonia')
+          .select('air_quality')
           .order('timestamp', { ascending: false })
           .limit(1);
 
         if (latestError) throw latestError;
         if (latest && latest.length > 0) {
-          setAmmoniaLevel(latest[0].ammonia || 30);
+          setAmmoniaLevel(latest[0].air_quality || 30);
         }
 
         // Fetch historical data for the last 24 readings
         const { data: history, error: historyError } = await supabase
           .from('sensor_data')
-          .select('ammonia, timestamp')
+          .select('air_quality, timestamp')
           .order('timestamp', { ascending: false })
           .limit(24);
 
@@ -48,7 +48,7 @@ const ConveyorBeltStatus: React.FC = () => {
         if (history && history.length > 0) {
           const formattedHistory = history.reverse().map(reading => ({
             time: new Date(reading.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            value: reading.ammonia || 0,
+            value: reading.air_quality || 0,
           }));
           setAmmoniaHistory(formattedHistory);
         }
@@ -71,14 +71,14 @@ const ConveyorBeltStatus: React.FC = () => {
         },
         (payload) => {
           const newData = payload.new as any;
-          const newAmmonia = newData.ammonia || 30;
-          setAmmoniaLevel(newAmmonia);
+          const newAirQuality = newData.air_quality || 30;
+          setAmmoniaLevel(newAirQuality);
           
           const now = new Date();
           const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
           
           setAmmoniaHistory(prev => {
-            const newHistory = [...prev, { time: timeString, value: newAmmonia }];
+            const newHistory = [...prev, { time: timeString, value: newAirQuality }];
             // Keep only last 24 readings
             if (newHistory.length > 24) {
               return newHistory.slice(-24);

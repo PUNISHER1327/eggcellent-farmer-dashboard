@@ -22,7 +22,7 @@ const LiveDataSection = () => {
     try {
       const { data: latestData, error } = await supabase
         .from('sensor_data')
-        .select('temperature, humidity, carbon_dioxide, ammonia, timestamp')
+        .select('temp_humidity, air_quality, timestamp')
         .order('timestamp', { ascending: false })
         .limit(1);
 
@@ -33,10 +33,8 @@ const LiveDataSection = () => {
       if (latestData && latestData.length > 0) {
         const newData = {
           ...sensorData,
-          temperature: latestData[0].temperature || sensorData.temperature,
-          humidity: latestData[0].humidity || sensorData.humidity,
-          co2: latestData[0].carbon_dioxide || sensorData.co2,
-          ammonia: latestData[0].ammonia || sensorData.ammonia,
+          tempHumidity: latestData[0].temp_humidity || sensorData.tempHumidity,
+          airQuality: latestData[0].air_quality || sensorData.airQuality,
         };
 
         // Update state with new data
@@ -163,45 +161,25 @@ const LiveDataSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <SensorCard
-            title={t('temperature')}
-            value={sensorData.temperature}
-            unit="°C"
+            title="Temperature & Humidity"
+            value={sensorData.tempHumidity}
+            unit=""
             min={20}
-            max={35}
-            status={getDataStatus(sensorData.temperature, 20, 35)}
-            icon={<span className="text-red-500">🌡️</span>}
+            max={80}
+            status={getDataStatus(sensorData.tempHumidity, 20, 80)}
+            icon={<span className="text-orange-500">🌡️💧</span>}
           />
           
           <SensorCard
-            title={t('humidity')}
-            value={sensorData.humidity}
-            unit="%"
-            min={40}
-            max={90}
-            status={getDataStatus(sensorData.humidity, 40, 90)}
-            icon={<span className="text-blue-500">💧</span>}
-          />
-          
-          <SensorCard
-            title={t('co2Level')}
-            value={sensorData.co2}
-            unit="ppm"
-            min={300}
-            max={1000}
-            status={getDataStatus(sensorData.co2, 300, 1500)}
-            icon={<span className="text-gray-500">☁️</span>}
-          />
-          
-          <SensorCard
-            title={t('ammoniaLevel')}
-            value={sensorData.ammonia}
-            unit="ppm"
-            min={5}
-            max={50}
-            status={getDataStatus(sensorData.ammonia, 5, 50)}
-            icon={<span className="text-yellow-500">⚠️</span>}
+            title="Air Quality"
+            value={sensorData.airQuality}
+            unit=""
+            min={20}
+            max={80}
+            status={getDataStatus(sensorData.airQuality, 20, 80)}
+            icon={<span className="text-green-500">🌿</span>}
           />
         </div>
       </div>

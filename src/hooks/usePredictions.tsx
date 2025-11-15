@@ -7,10 +7,8 @@ export interface Prediction {
   prediction_value: number;
   confidence: number;
   sensor_data: {
-    temperature: number;
-    humidity: number;
-    carbon_dioxide: number;
-    ammonia: number;
+    temp_humidity: number;
+    air_quality: number;
   };
   created_at: string;
 }
@@ -53,7 +51,7 @@ export const usePredictions = () => {
         .limit(10);
 
       if (error) throw error;
-      setPredictions(data || []);
+      setPredictions((data || []) as Prediction[]);
     } catch (error) {
       console.error('Error fetching predictions:', error);
     } finally {
@@ -68,10 +66,8 @@ export const useRequestPrediction = () => {
   const [requesting, setRequesting] = useState(false);
 
   const requestPrediction = async (sensorData: {
-    temperature: number;
-    humidity: number;
-    carbon_dioxide: number;
-    ammonia: number;
+    temp_humidity: number;
+    air_quality: number;
   }) => {
     setRequesting(true);
     try {
