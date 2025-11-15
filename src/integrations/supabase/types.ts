@@ -70,27 +70,21 @@ export type Database = {
       }
       sensor_data: {
         Row: {
-          ammonia: number | null
-          carbon_dioxide: number | null
-          humidity: number | null
+          "ammonia and co2": number | null
           id: number
-          temperature: number | null
+          "temperature and humidity": number | null
           timestamp: string | null
         }
         Insert: {
-          ammonia?: number | null
-          carbon_dioxide?: number | null
-          humidity?: number | null
+          "ammonia and co2"?: number | null
           id?: number
-          temperature?: number | null
+          "temperature and humidity"?: number | null
           timestamp?: string | null
         }
         Update: {
-          ammonia?: number | null
-          carbon_dioxide?: number | null
-          humidity?: number | null
+          "ammonia and co2"?: number | null
           id?: number
-          temperature?: number | null
+          "temperature and humidity"?: number | null
           timestamp?: string | null
         }
         Relationships: []
