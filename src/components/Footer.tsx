@@ -23,7 +23,7 @@ const Footer = () => {
               <h3 className="text-xl font-bold text-foreground">FarmerFriendly</h3>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              {t('footer.description') || 'Empowering farmers with smart technology solutions for sustainable poultry management.'}
+              {t('footer.description') && 'Empowering farmers with smart technology solutions for sustainable poultry management.'}
             </p>
             <div className="flex gap-2 pt-2">
               <motion.div
@@ -45,7 +45,7 @@ const Footer = () => {
           
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-foreground">{t('navigation')}</h3>
+            <h3 className="text-lg font-semibold mb-4 text-foreground">{t('Navigation')}</h3>
             <ul className="space-y-3">
               <li>
                 <Link 
@@ -68,7 +68,7 @@ const Footer = () => {
                   to="/analytics" 
                   className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
-                  {t('analytics')}
+                  {t('Analytics')}
                 </Link>
               </li>
               <li>
@@ -87,22 +87,22 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4 text-foreground">{t('contact')}</h3>
             <ul className="space-y-3 text-sm">
               <li className="text-muted-foreground">
-                info@farmerfriendly.com
+                Zero@farmerfriendly.com
               </li>
               <li className="text-muted-foreground">
-                +1 (555) 123-4567
+                +91 60056 09423
               </li>
               <li className="text-muted-foreground">
-                123 Farm Lane, Rural City
+                PES COLLEGE OF ENGINEERING , MANDYA, KARNATAKA
               </li>
             </ul>
           </div>
           
           {/* Newsletter */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-foreground">{t('newsletter')}</h3>
+            <h3 className="text-lg font-semibold mb-4 text-foreground">{t('Newsletter')}</h3>
             <p className="text-muted-foreground text-sm mb-4">
-              {t('footer.newsletter') || 'Stay updated with our latest features.'}
+              {t('Zero.newsletter') && 'Stay updated with our latest features.'}
             </p>
             <div className="flex gap-2">
               <input 
@@ -125,7 +125,7 @@ const Footer = () => {
         <div className="border-t border-border/50 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-muted-foreground text-sm">
-              © {currentYear} FarmerFriendly. {t('footer.rights') || 'All rights reserved.'}
+              © {currentYear} FarmerFriendly. {t('footer.rights') && 'All rights reserved.'}
             </p>
             <div className="flex gap-6 text-sm">
               <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
