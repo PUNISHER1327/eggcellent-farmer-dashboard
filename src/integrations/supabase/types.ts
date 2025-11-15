@@ -14,33 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      farm2_sensor_data: {
-        Row: {
-          ammonia: number | null
-          carbon_dioxide: number | null
-          humidity: number | null
-          id: number
-          temperature: number | null
-          timestamp: string | null
-        }
-        Insert: {
-          ammonia?: number | null
-          carbon_dioxide?: number | null
-          humidity?: number | null
-          id?: number
-          temperature?: number | null
-          timestamp?: string | null
-        }
-        Update: {
-          ammonia?: number | null
-          carbon_dioxide?: number | null
-          humidity?: number | null
-          id?: number
-          temperature?: number | null
-          timestamp?: string | null
-        }
-        Relationships: []
-      }
       ml_predictions: {
         Row: {
           confidence: number | null
@@ -70,21 +43,21 @@ export type Database = {
       }
       sensor_data: {
         Row: {
-          "ammonia and co2": number | null
+          air_quality: number | null
           id: number
-          "temperature and humidity": number | null
+          temp_humidity: number | null
           timestamp: string | null
         }
         Insert: {
-          "ammonia and co2"?: number | null
+          air_quality?: number | null
           id?: number
-          "temperature and humidity"?: number | null
+          temp_humidity?: number | null
           timestamp?: string | null
         }
         Update: {
-          "ammonia and co2"?: number | null
+          air_quality?: number | null
           id?: number
-          "temperature and humidity"?: number | null
+          temp_humidity?: number | null
           timestamp?: string | null
         }
         Relationships: []

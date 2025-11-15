@@ -13,10 +13,8 @@ const SensorTrendsComponent: React.FC = () => {
   
   // Chart configuration
   const chartConfig = {
-    co2: { label: "CO2 (ppm)", theme: { light: "#8884d8", dark: "#8884d8" } },
-    ammonia: { label: "Ammonia (ppm)", theme: { light: "#F44336", dark: "#F44336" } },
-    temperature: { label: "Temperature (°C)", theme: { light: "#FF9800", dark: "#FF9800" } },
-    humidity: { label: "Humidity (%)", theme: { light: "#2196F3", dark: "#2196F3" } },
+    tempHumidity: { label: "Temp & Humidity", theme: { light: "#FF9800", dark: "#FF9800" } },
+    airQuality: { label: "Air Quality", theme: { light: "#4CAF50", dark: "#4CAF50" } },
   };
   
   const cardClass = theme === 'light' 
@@ -75,38 +73,20 @@ const SensorTrendsComponent: React.FC = () => {
               />
               <Line 
                 type="monotone" 
-                dataKey="co2" 
-                stroke="var(--color-co2)" 
+                dataKey="tempHumidity" 
+                stroke="var(--color-tempHumidity)" 
                 strokeWidth={2}
                 activeDot={{ r: 6 }}
-                name="co2"
+                name="Temp & Humidity"
                 dot={false}
               />
               <Line 
                 type="monotone" 
-                dataKey="ammonia" 
-                stroke="var(--color-ammonia)" 
+                dataKey="airQuality" 
+                stroke="var(--color-airQuality)" 
                 strokeWidth={2} 
                 activeDot={{ r: 6 }}
-                name="ammonia"
-                dot={false}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="temperature" 
-                stroke="var(--color-temperature)" 
-                strokeWidth={2} 
-                activeDot={{ r: 6 }}
-                name="temperature"
-                dot={false}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="humidity" 
-                stroke="var(--color-humidity)" 
-                strokeWidth={2} 
-                activeDot={{ r: 6 }}
-                name="humidity"
+                name="Air Quality"
                 dot={false}
               />
               <Legend />
@@ -118,29 +98,17 @@ const SensorTrendsComponent: React.FC = () => {
       
       {/* Stats summary */}
       {!loading && historicalData.length > 0 && (
-      <div className="grid grid-cols-4 gap-4 mt-6">
-        <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-purple-50' : 'bg-purple-900/20'}`}>
-          <p className={`text-sm font-medium ${theme === 'light' ? 'text-purple-700' : 'text-purple-300'}`}>Average CO2</p>
-          <p className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-            {Math.round(historicalData.reduce((sum, item) => sum + item.co2, 0) / historicalData.length)} ppm
-          </p>
-        </div>
-        <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-red-50' : 'bg-red-900/20'}`}>
-          <p className={`text-sm font-medium ${theme === 'light' ? 'text-red-700' : 'text-red-300'}`}>Average Ammonia</p>
-          <p className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-            {Math.round(historicalData.reduce((sum, item) => sum + item.ammonia, 0) / historicalData.length)} ppm
-          </p>
-        </div>
+      <div className="grid grid-cols-2 gap-4 mt-6">
         <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-orange-50' : 'bg-orange-900/20'}`}>
-          <p className={`text-sm font-medium ${theme === 'light' ? 'text-orange-700' : 'text-orange-300'}`}>Average Temp</p>
+          <p className={`text-sm font-medium ${theme === 'light' ? 'text-orange-700' : 'text-orange-300'}`}>Avg Temp & Humidity</p>
           <p className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-            {Math.round(historicalData.reduce((sum, item) => sum + item.temperature, 0) / historicalData.length)}°C
+            {Math.round(historicalData.reduce((sum, item) => sum + item.tempHumidity, 0) / historicalData.length)}
           </p>
         </div>
-        <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-blue-50' : 'bg-blue-900/20'}`}>
-          <p className={`text-sm font-medium ${theme === 'light' ? 'text-blue-700' : 'text-blue-300'}`}>Average Humidity</p>
+        <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-green-50' : 'bg-green-900/20'}`}>
+          <p className={`text-sm font-medium ${theme === 'light' ? 'text-green-700' : 'text-green-300'}`}>Avg Air Quality</p>
           <p className={`text-xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-            {Math.round(historicalData.reduce((sum, item) => sum + item.humidity, 0) / historicalData.length)}%
+            {Math.round(historicalData.reduce((sum, item) => sum + item.airQuality, 0) / historicalData.length)}
           </p>
         </div>
       </div>

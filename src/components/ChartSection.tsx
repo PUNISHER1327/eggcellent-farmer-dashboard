@@ -15,8 +15,8 @@ const ChartSection: React.FC = () => {
   // Map historical data for time series chart
   const timeSeriesData = historicalData.map(reading => ({
     name: reading.time,
-    temperature: reading.temperature,
-    humidity: reading.humidity,
+    tempHumidity: reading.tempHumidity,
+    airQuality: reading.airQuality,
   }));
   
   // Data for egg production trend
@@ -40,11 +40,11 @@ const ChartSection: React.FC = () => {
   const COLORS = ['#4CAF50', '#FFC107', '#F44336'];
   
   // Calculate summary stats from real data
-  const averageTemp = timeSeriesData.length > 0 
-    ? Math.round((timeSeriesData.reduce((sum, item) => sum + item.temperature, 0) / timeSeriesData.length) * 10) / 10 
+  const averageTempHumidity = timeSeriesData.length > 0 
+    ? Math.round((timeSeriesData.reduce((sum, item) => sum + item.tempHumidity, 0) / timeSeriesData.length) * 10) / 10 
     : 0;
-  const averageHumidity = timeSeriesData.length > 0
-    ? Math.round((timeSeriesData.reduce((sum, item) => sum + item.humidity, 0) / timeSeriesData.length) * 10) / 10
+  const averageAirQuality = timeSeriesData.length > 0
+    ? Math.round((timeSeriesData.reduce((sum, item) => sum + item.airQuality, 0) / timeSeriesData.length) * 10) / 10
     : 0;
   const totalEggs = eggProductionData.reduce((sum, item) => sum + item.production, 0);
   const avgEggs = Math.round(totalEggs / eggProductionData.length);
@@ -67,18 +67,18 @@ const ChartSection: React.FC = () => {
     <div className="mb-12">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Card className={cardClass}>
-          <h3 className={`text-xl font-semibold mb-2 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>Average Temperature</h3>
+          <h3 className={`text-xl font-semibold mb-2 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>Temp & Humidity Sensor</h3>
           <div className="flex items-end gap-2">
-            <span className={`text-3xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>{averageTemp}</span>
-            <span className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-300'}`}>°C</span>
+            <span className={`text-3xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>{averageTempHumidity}</span>
+            <span className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-300'}`}>avg</span>
           </div>
         </Card>
         
         <Card className={cardClass}>
-          <h3 className={`text-xl font-semibold mb-2 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>Average Humidity</h3>
+          <h3 className={`text-xl font-semibold mb-2 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>Air Quality Sensor</h3>
           <div className="flex items-end gap-2">
-            <span className={`text-3xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>{averageHumidity}</span>
-            <span className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-300'}`}>%</span>
+            <span className={`text-3xl font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>{averageAirQuality}</span>
+            <span className={`text-sm ${theme === 'light' ? 'text-gray-500' : 'text-gray-300'}`}>avg</span>
           </div>
         </Card>
         
