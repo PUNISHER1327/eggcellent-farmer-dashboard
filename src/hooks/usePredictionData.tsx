@@ -61,6 +61,16 @@ export const usePredictionData = () => {
     health: string;
     confidence: number;
   } | null>(null);
+  const [alerts, setAlerts] = useState<{
+    temperature: boolean;
+    humidity: boolean;
+    airQuality: boolean;
+  }>({
+    temperature: false,
+    humidity: false,
+    airQuality: false,
+  });
+  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const { data: sensorData } = useSensorData();
 
   // Load CSV data
@@ -110,18 +120,23 @@ export const usePredictionData = () => {
       const humidityThresholdHigh = 70; // %
       const airQualityThreshold = 300; // PPM
 
-      let alertTriggered = false;
+      const newAlerts = {
+        temperature: (temperature || 0) > tempThreshold,
+        humidity: (humidity || 0) < humidityThresholdLow || (humidity || 0) > humidityThresholdHigh,
+        airQuality: (air_quality || 0) > airQualityThreshold,
+      };
+
+      setAlerts(newAlerts);
       
-      if (temperature > tempThreshold) {
-        alertTriggered = true;
+      const alertTriggered = newAlerts.temperature || newAlerts.humidity || newAlerts.airQuality;
+      
+      if (newAlerts.temperature) {
         console.warn(`Temperature alert: ${temperature}°C exceeds ${tempThreshold}°C`);
       }
-      if (humidity < humidityThresholdLow || humidity > humidityThresholdHigh) {
-        alertTriggered = true;
+      if (newAlerts.humidity) {
         console.warn(`Humidity alert: ${humidity}% outside safe range (${humidityThresholdLow}-${humidityThresholdHigh}%)`);
       }
-      if (air_quality > airQualityThreshold) {
-        alertTriggered = true;
+      if (newAlerts.airQuality) {
         console.warn(`Air Quality alert: ${air_quality} PPM exceeds ${airQualityThreshold} PPM`);
       }
 
@@ -185,6 +200,8 @@ export const usePredictionData = () => {
         health,
         confidence,
       });
+      
+      setLastUpdate(new Date());
     };
 
     // Initial update immediately
@@ -198,5 +215,5 @@ export const usePredictionData = () => {
     };
   }, [sensorData, predictions]);
 
-  return { currentPrediction, loading };
+  return { currentPrediction, loading, alerts, lastUpdate };
 };
