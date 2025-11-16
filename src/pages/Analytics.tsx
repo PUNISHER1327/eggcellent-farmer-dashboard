@@ -9,14 +9,23 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { Brain, TrendingUp, Activity, Heart, AlertTriangle, Thermometer, Droplets, Wind, X } from 'lucide-react';
+import { Brain, TrendingUp, Activity, Heart, AlertTriangle, Thermometer, Droplets, Wind, X, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { usePredictionData } from '@/hooks/usePredictionData';
+import { useState } from 'react';
 
 const Analytics = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
-  const { currentPrediction, loading, alerts, dismissedAlerts, lastUpdate, dismissAlert } = usePredictionData();
+  const { currentPrediction, loading, alerts, dismissedAlerts, lastUpdate, dismissAlert, alertPhoneNumber, updateAlertPhoneNumber } = usePredictionData();
+  const [phoneInput, setPhoneInput] = useState(alertPhoneNumber);
+  const [showPhoneSetup, setShowPhoneSetup] = useState(!alertPhoneNumber);
+
+  const handleSavePhone = () => {
+    updateAlertPhoneNumber(phoneInput);
+    setShowPhoneSetup(false);
+  };
 
   return (
     <div className={`${theme === 'light' ? 'light-mode' : 'dark-mode'} flex flex-col min-h-screen`}>
@@ -37,6 +46,43 @@ const Analytics = () => {
               <p className="text-sm opacity-60 mt-2">
                 Last updated: {lastUpdate.toLocaleTimeString()} • Auto-refresh every 5s
               </p>
+            </div>
+
+            {/* SMS Alert Setup */}
+            <div className="mb-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Phone className="h-5 w-5" />
+                    SMS Alert Configuration
+                  </CardTitle>
+                  <CardDescription>
+                    {alertPhoneNumber 
+                      ? `SMS alerts will be sent to ${alertPhoneNumber}` 
+                      : 'Configure your phone number to receive SMS alerts'}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {showPhoneSetup || !alertPhoneNumber ? (
+                    <div className="flex gap-2">
+                      <Input
+                        type="tel"
+                        placeholder="+1234567890"
+                        value={phoneInput}
+                        onChange={(e) => setPhoneInput(e.target.value)}
+                        className="flex-1"
+                      />
+                      <Button onClick={handleSavePhone}>
+                        Save Number
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button variant="outline" onClick={() => setShowPhoneSetup(true)}>
+                      Update Phone Number
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
             </div>
 
             {/* Critical Alert Modals */}
