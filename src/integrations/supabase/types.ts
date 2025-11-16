@@ -41,6 +41,39 @@ export type Database = {
         }
         Relationships: []
       }
+      predictions: {
+        Row: {
+          air_quality: number | null
+          humidity: number | null
+          id: number
+          model_a_prediction: number | null
+          model_b_prediction: number | null
+          temperature: number | null
+          tflite_prediction: Json | null
+          timestamp: string | null
+        }
+        Insert: {
+          air_quality?: number | null
+          humidity?: number | null
+          id?: number
+          model_a_prediction?: number | null
+          model_b_prediction?: number | null
+          temperature?: number | null
+          tflite_prediction?: Json | null
+          timestamp?: string | null
+        }
+        Update: {
+          air_quality?: number | null
+          humidity?: number | null
+          id?: number
+          model_a_prediction?: number | null
+          model_b_prediction?: number | null
+          temperature?: number | null
+          tflite_prediction?: Json | null
+          timestamp?: string | null
+        }
+        Relationships: []
+      }
       sensor_data: {
         Row: {
           air_quality: number | null

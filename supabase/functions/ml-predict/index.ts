@@ -13,58 +13,59 @@ serve(async (req) => {
   }
 
   try {
-    const { sensorData } = await req.json();
-    
-    console.log("Received prediction request:", sensorData);
-
-    // Get Hugging Face API key from environment
-    const HF_API_KEY = Deno.env.get("HUGGING_FACE_API_KEY");
-    if (!HF_API_KEY) {
-      throw new Error("HUGGING_FACE_API_KEY not configured");
-    }
-
-    // Call your Hugging Face model
-    // Replace MODEL_ID with your actual model ID from Hugging Face
-    const MODEL_ID = Deno.env.get("HF_MODEL_ID") || "YOUR_MODEL_ID";
-    
-    const response = await fetch(
-      `https://api-inference.huggingface.co/models/${MODEL_ID}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${HF_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          inputs: [
-            sensorData.temperature,
-            sensorData.humidity,
-            sensorData.carbon_dioxide,
-            sensorData.ammonia,
-          ],
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      const error = await response.text();
-      console.error("HF API error:", error);
-      throw new Error(`Hugging Face API error: ${response.status}`);
-    }
-
-    const prediction = await response.json();
-    console.log("Prediction result:", prediction);
-
-    // Store prediction in Supabase
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // Get ML API URL from environment variable
+    const ML_API_URL = Deno.env.get("ML_API_URL");
+    if (!ML_API_URL) {
+      throw new Error("ML_API_URL not configured. Please add your deployed model API URL.");
+    }
+
+    // Fetch the latest sensor data from database
+    const { data: latestSensor, error: sensorError } = await supabase
+      .from("sensor_data")
+      .select("temperature, humidity, air_quality")
+      .order("timestamp", { ascending: false })
+      .limit(1)
+      .single();
+
+    if (sensorError || !latestSensor) {
+      console.error("Error fetching sensor data:", sensorError);
+      throw new Error("Failed to fetch latest sensor data");
+    }
+
+    console.log("Latest sensor data:", latestSensor);
+
+    // Call your Python ML model API
+    const response = await fetch(`${ML_API_URL}/predict`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        temperature: latestSensor.temperature,
+        humidity: latestSensor.humidity,
+        air_quality: latestSensor.air_quality,
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      console.error("ML API error:", error);
+      throw new Error(`ML API error: ${response.status}`);
+    }
+
+    const predictionResult = await response.json();
+    console.log("Prediction result:", predictionResult);
+
+    // Store prediction in Supabase
     const { data, error } = await supabase.from("ml_predictions").insert({
       prediction_type: "egg_production",
-      prediction_value: prediction[0]?.score || prediction,
-      confidence: prediction[0]?.confidence || 0.95,
-      sensor_data: sensorData,
+      prediction_value: predictionResult.prediction,
+      confidence: predictionResult.confidence || 0.95,
+      sensor_data: latestSensor,
     }).select();
 
     if (error) {
