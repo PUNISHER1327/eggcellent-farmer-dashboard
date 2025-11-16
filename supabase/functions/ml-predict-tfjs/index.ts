@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
+import { loadLayersModel } from "npm:@tensorflow/tfjs-layers@4.15.0";
 import * as tf from "npm:@tensorflow/tfjs-core@4.15.0";
-import "npm:@tensorflow/tfjs-backend-cpu@4.15.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -88,7 +88,7 @@ serve(async (req) => {
     }
 
     // Load the model
-    const model = await tf.loadLayersModel(modelJsonUrl.signedUrl);
+    const model = await loadLayersModel(modelJsonUrl.signedUrl);
     console.log("Model loaded successfully");
 
     // Reshape input for LSTM: [batch_size, timesteps, features]
