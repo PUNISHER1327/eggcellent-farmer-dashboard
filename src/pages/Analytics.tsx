@@ -50,13 +50,13 @@ const Analytics = () => {
                         Analyzing...
                       </div>
                       <p className="text-sm opacity-70 mt-2">
-                        Processing sensor data (45s)
+                        Processing sensor data (20s)
                       </p>
                     </>
                   ) : (
                     <>
                       <div className="text-4xl font-bold text-primary">
-                        {currentPrediction.eggCount.toLocaleString()}
+                        {currentPrediction.eggCount.toFixed(3)}
                       </div>
                       <p className="text-sm opacity-70 mt-2">
                         Predicted daily eggs • {currentPrediction.confidence}% confidence

@@ -51,11 +51,11 @@ export const usePredictionData = () => {
     loadPredictions();
   }, []);
 
-  // Smart matching algorithm - find best prediction after 45 seconds
+  // Smart matching algorithm - update prediction every 20 seconds
   useEffect(() => {
     if (!sensorData || predictions.length === 0) return;
 
-    const timer = setTimeout(() => {
+    const updatePrediction = () => {
       const air_quality = sensorData.airQuality;
       const temperature = sensorData.temperature;
       const humidity = sensorData.humidity;
@@ -79,7 +79,7 @@ export const usePredictionData = () => {
         }
       });
 
-      // Adjust prediction based on air quality deviation
+      // Adjust prediction based on air quality deviation (keep decimal precision)
       let adjustedEggCount = bestMatch.predicted_egg_count;
       const aqDiff = (air_quality || 0) - bestMatch.air_quality;
       
@@ -111,13 +111,22 @@ export const usePredictionData = () => {
       }
 
       setCurrentPrediction({
-        eggCount: Math.round(adjustedEggCount),
+        eggCount: adjustedEggCount, // Keep decimal values
         health,
         confidence,
       });
-    }, 45000); // 45 seconds
+    };
 
-    return () => clearTimeout(timer);
+    // Initial update after 20 seconds
+    const initialTimer = setTimeout(updatePrediction, 20000);
+    
+    // Then update every 20 seconds
+    const interval = setInterval(updatePrediction, 20000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(interval);
+    };
   }, [sensorData, predictions]);
 
   return { currentPrediction, loading };
