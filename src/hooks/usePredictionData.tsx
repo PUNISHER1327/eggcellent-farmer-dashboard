@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSensorData } from './useSensorData';
+import { supabase } from '@/integrations/supabase/client';
 
 // Audio alert system with continuous sound
 class AlertSoundPlayer {
@@ -104,15 +105,57 @@ export const usePredictionData = () => {
     airQuality: false,
   });
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  const [alertPhoneNumber, setAlertPhoneNumber] = useState<string>('');
+  const [smsSent, setSmsSent] = useState<{
+    temperature: boolean;
+    humidity: boolean;
+    airQuality: boolean;
+  }>({
+    temperature: false,
+    humidity: false,
+    airQuality: false,
+  });
   const { data: sensorData } = useSensorData();
   const alertSoundRef = useRef<AlertSoundPlayer | null>(null);
 
   useEffect(() => {
     alertSoundRef.current = new AlertSoundPlayer();
+    
+    // Load phone number from localStorage
+    const savedPhone = localStorage.getItem('alert_phone_number');
+    if (savedPhone) {
+      setAlertPhoneNumber(savedPhone);
+    }
+    
     return () => {
       alertSoundRef.current?.stop();
     };
   }, []);
+
+  const sendAlertSMS = async (alertType: string, message: string) => {
+    if (!alertPhoneNumber) {
+      console.log('No phone number configured for SMS alerts');
+      return;
+    }
+
+    try {
+      const { error } = await supabase.functions.invoke('send-alert-sms', {
+        body: {
+          alertType,
+          message,
+          phoneNumber: alertPhoneNumber,
+        },
+      });
+
+      if (error) {
+        console.error('Failed to send SMS alert:', error);
+      } else {
+        console.log(`SMS alert sent for ${alertType}`);
+      }
+    } catch (error) {
+      console.error('Error sending SMS alert:', error);
+    }
+  };
 
   // Load CSV data
   useEffect(() => {
@@ -170,12 +213,15 @@ export const usePredictionData = () => {
       // Check if alerts should be reset (values back to normal)
       if (!newAlerts.temperature && dismissedAlerts.temperature) {
         setDismissedAlerts(prev => ({ ...prev, temperature: false }));
+        setSmsSent(prev => ({ ...prev, temperature: false }));
       }
       if (!newAlerts.humidity && dismissedAlerts.humidity) {
         setDismissedAlerts(prev => ({ ...prev, humidity: false }));
+        setSmsSent(prev => ({ ...prev, humidity: false }));
       }
       if (!newAlerts.airQuality && dismissedAlerts.airQuality) {
         setDismissedAlerts(prev => ({ ...prev, airQuality: false }));
+        setSmsSent(prev => ({ ...prev, airQuality: false }));
       }
 
       setAlerts(newAlerts);
@@ -184,14 +230,21 @@ export const usePredictionData = () => {
                             (newAlerts.humidity && !dismissedAlerts.humidity) || 
                             (newAlerts.airQuality && !dismissedAlerts.airQuality);
       
-      if (newAlerts.temperature && !dismissedAlerts.temperature) {
+      // Send SMS alerts for new threshold breaches
+      if (newAlerts.temperature && !dismissedAlerts.temperature && !smsSent.temperature) {
         console.warn(`Temperature alert: ${temperature}°C exceeds ${tempThreshold}°C`);
+        sendAlertSMS('Temperature', `Temperature is ${temperature}°C, exceeding safe threshold of ${tempThreshold}°C. Immediate cooling required.`);
+        setSmsSent(prev => ({ ...prev, temperature: true }));
       }
-      if (newAlerts.humidity && !dismissedAlerts.humidity) {
+      if (newAlerts.humidity && !dismissedAlerts.humidity && !smsSent.humidity) {
         console.warn(`Humidity alert: ${humidity}% outside safe range (${humidityThresholdLow}-${humidityThresholdHigh}%)`);
+        sendAlertSMS('Humidity', `Humidity is ${humidity}%, outside safe range of ${humidityThresholdLow}-${humidityThresholdHigh}%. Adjust ventilation immediately.`);
+        setSmsSent(prev => ({ ...prev, humidity: true }));
       }
-      if (newAlerts.airQuality && !dismissedAlerts.airQuality) {
+      if (newAlerts.airQuality && !dismissedAlerts.airQuality && !smsSent.airQuality) {
         console.warn(`Air Quality alert: ${air_quality} PPM exceeds ${airQualityThreshold} PPM`);
+        sendAlertSMS('Air Quality', `Air quality is ${air_quality} PPM, exceeding safe threshold of ${airQualityThreshold} PPM. Increase ventilation now.`);
+        setSmsSent(prev => ({ ...prev, airQuality: true }));
       }
 
       // Control sound based on active alerts
@@ -275,5 +328,19 @@ export const usePredictionData = () => {
     setDismissedAlerts(prev => ({ ...prev, [alertType]: true }));
   };
 
-  return { currentPrediction, loading, alerts, dismissedAlerts, lastUpdate, dismissAlert };
+  const updateAlertPhoneNumber = (phoneNumber: string) => {
+    setAlertPhoneNumber(phoneNumber);
+    localStorage.setItem('alert_phone_number', phoneNumber);
+  };
+
+  return { 
+    currentPrediction, 
+    loading, 
+    alerts, 
+    dismissedAlerts, 
+    lastUpdate, 
+    dismissAlert,
+    alertPhoneNumber,
+    updateAlertPhoneNumber
+  };
 };
