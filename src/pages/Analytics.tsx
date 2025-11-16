@@ -50,7 +50,7 @@ const Analytics = () => {
                         Analyzing...
                       </div>
                       <p className="text-sm opacity-70 mt-2">
-                        Processing sensor data (20s)
+                        Analyzing sensor data...
                       </p>
                     </>
                   ) : (
