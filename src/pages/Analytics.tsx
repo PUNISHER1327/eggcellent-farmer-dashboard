@@ -7,11 +7,13 @@ import LiveSensorDataTable from '../components/LiveSensorDataTable';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Brain, TrendingUp, Activity } from 'lucide-react';
+import { Brain, TrendingUp, Activity, Heart } from 'lucide-react';
+import { usePredictionData } from '@/hooks/usePredictionData';
 
 const Analytics = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
+  const { currentPrediction, loading } = usePredictionData();
 
   return (
     <div className={`${theme === 'light' ? 'light-mode' : 'dark-mode'} flex flex-col min-h-screen`}>
@@ -42,30 +44,62 @@ const Analytics = () => {
                   <CardDescription>AI-powered production predictions</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-primary">
-                    Coming Soon
-                  </div>
-                  <p className="text-sm opacity-70 mt-2">
-                    Connect your ML model to display predictions
-                  </p>
+                  {loading || !currentPrediction ? (
+                    <>
+                      <div className="text-2xl font-bold text-muted-foreground animate-pulse">
+                        Analyzing...
+                      </div>
+                      <p className="text-sm opacity-70 mt-2">
+                        Processing sensor data (45s)
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-4xl font-bold text-primary">
+                        {currentPrediction.eggCount.toLocaleString()}
+                      </div>
+                      <p className="text-sm opacity-70 mt-2">
+                        Predicted daily eggs • {currentPrediction.confidence}% confidence
+                      </p>
+                    </>
+                  )}
                 </CardContent>
               </Card>
 
               <Card className="border-2 hover:border-primary/50 transition-all">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Activity className="h-5 w-5 text-primary" />
+                    <Heart className="h-5 w-5 text-primary" />
                     Health Status
                   </CardTitle>
                   <CardDescription>Chicken health predictions</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-primary">
-                    Coming Soon
-                  </div>
-                  <p className="text-sm opacity-70 mt-2">
-                    ML-based health monitoring
-                  </p>
+                  {loading || !currentPrediction ? (
+                    <>
+                      <div className="text-2xl font-bold text-muted-foreground animate-pulse">
+                        Analyzing...
+                      </div>
+                      <p className="text-sm opacity-70 mt-2">
+                        ML-based health monitoring
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className={`text-4xl font-bold ${
+                        currentPrediction.health === 'Excellent' ? 'text-green-500' :
+                        currentPrediction.health === 'Good' ? 'text-blue-500' :
+                        currentPrediction.health === 'Fair' ? 'text-yellow-500' :
+                        currentPrediction.health === 'Poor' ? 'text-orange-500' :
+                        'text-red-500'
+                      }`}>
+                        {currentPrediction.health}
+                      </div>
+                      <p className="text-sm opacity-70 mt-2">
+                        Based on air quality analysis
+                      </p>
+                    </>
+                  )}
                 </CardContent>
               </Card>
 
