@@ -73,7 +73,7 @@ export const useRequestPrediction = () => {
   }) => {
     setRequesting(true);
     try {
-      const { data, error } = await supabase.functions.invoke('ml-predict', {
+      const { data, error } = await supabase.functions.invoke('ml-predict-tfjs', {
         body: { sensorData },
       });
 

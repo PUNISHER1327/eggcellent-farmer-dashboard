@@ -1,1 +1,7 @@
 project_id = "ipfqxgzylmfyffeqpdrb"
+
+[functions.ml-predict]
+verify_jwt = false
+
+[functions.ml-predict-tfjs]
+verify_jwt = false
