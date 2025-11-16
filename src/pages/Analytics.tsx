@@ -7,13 +7,14 @@ import LiveSensorDataTable from '../components/LiveSensorDataTable';
 import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Brain, TrendingUp, Activity, Heart } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Brain, TrendingUp, Activity, Heart, AlertTriangle, Thermometer, Droplets, Wind } from 'lucide-react';
 import { usePredictionData } from '@/hooks/usePredictionData';
 
 const Analytics = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
-  const { currentPrediction, loading } = usePredictionData();
+  const { currentPrediction, loading, alerts, lastUpdate } = usePredictionData();
 
   return (
     <div className={`${theme === 'light' ? 'light-mode' : 'dark-mode'} flex flex-col min-h-screen`}>
@@ -24,14 +25,52 @@ const Analytics = () => {
         {/* Header Section */}
         <section className="py-12 px-4">
           <div className="container mx-auto">
-            <div className="text-center mb-12">
+            <div className="text-center mb-8">
               <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gradient">
                 Analytics & Predictions
               </h1>
               <p className="text-lg opacity-80 max-w-2xl mx-auto">
                 Real-time sensor data analysis with AI-powered predictions for egg production and chicken health
               </p>
+              <p className="text-sm opacity-60 mt-2">
+                Last updated: {lastUpdate.toLocaleTimeString()} • Auto-refresh every 5s
+              </p>
             </div>
+
+            {/* Threshold Alerts */}
+            {(alerts.temperature || alerts.humidity || alerts.airQuality) && (
+              <div className="mb-8 space-y-4">
+                {alerts.temperature && (
+                  <Alert variant="destructive" className="animate-pulse">
+                    <Thermometer className="h-4 w-4" />
+                    <AlertTitle>Temperature Alert</AlertTitle>
+                    <AlertDescription>
+                      Temperature exceeds safe threshold (32°C). Immediate action required to cool the environment.
+                    </AlertDescription>
+                  </Alert>
+                )}
+                
+                {alerts.humidity && (
+                  <Alert variant="destructive" className="animate-pulse">
+                    <Droplets className="h-4 w-4" />
+                    <AlertTitle>Humidity Alert</AlertTitle>
+                    <AlertDescription>
+                      Humidity outside safe range (40-70%). Adjust ventilation to maintain optimal conditions.
+                    </AlertDescription>
+                  </Alert>
+                )}
+                
+                {alerts.airQuality && (
+                  <Alert variant="destructive" className="animate-pulse">
+                    <Wind className="h-4 w-4" />
+                    <AlertTitle>Air Quality Alert</AlertTitle>
+                    <AlertDescription>
+                      Air quality exceeds safe threshold (300 PPM). Increase ventilation immediately to protect chicken health.
+                    </AlertDescription>
+                  </Alert>
+                )}
+              </div>
+            )}
 
             {/* ML Predictions Section */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
