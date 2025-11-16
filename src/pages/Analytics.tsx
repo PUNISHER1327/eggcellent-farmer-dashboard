@@ -8,13 +8,15 @@ import { useTheme } from '@/hooks/useTheme';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Brain, TrendingUp, Activity, Heart, AlertTriangle, Thermometer, Droplets, Wind } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { Brain, TrendingUp, Activity, Heart, AlertTriangle, Thermometer, Droplets, Wind, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { usePredictionData } from '@/hooks/usePredictionData';
 
 const Analytics = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
-  const { currentPrediction, loading, alerts, lastUpdate } = usePredictionData();
+  const { currentPrediction, loading, alerts, dismissedAlerts, lastUpdate, dismissAlert } = usePredictionData();
 
   return (
     <div className={`${theme === 'light' ? 'light-mode' : 'dark-mode'} flex flex-col min-h-screen`}>
@@ -37,40 +39,69 @@ const Analytics = () => {
               </p>
             </div>
 
-            {/* Threshold Alerts */}
-            {(alerts.temperature || alerts.humidity || alerts.airQuality) && (
-              <div className="mb-8 space-y-4">
-                {alerts.temperature && (
-                  <Alert variant="destructive" className="animate-pulse">
-                    <Thermometer className="h-4 w-4" />
-                    <AlertTitle>Temperature Alert</AlertTitle>
-                    <AlertDescription>
-                      Temperature exceeds safe threshold (32°C). Immediate action required to cool the environment.
-                    </AlertDescription>
-                  </Alert>
-                )}
-                
-                {alerts.humidity && (
-                  <Alert variant="destructive" className="animate-pulse">
-                    <Droplets className="h-4 w-4" />
-                    <AlertTitle>Humidity Alert</AlertTitle>
-                    <AlertDescription>
-                      Humidity outside safe range (40-70%). Adjust ventilation to maintain optimal conditions.
-                    </AlertDescription>
-                  </Alert>
-                )}
-                
-                {alerts.airQuality && (
-                  <Alert variant="destructive" className="animate-pulse">
-                    <Wind className="h-4 w-4" />
-                    <AlertTitle>Air Quality Alert</AlertTitle>
-                    <AlertDescription>
-                      Air quality exceeds safe threshold (300 PPM). Increase ventilation immediately to protect chicken health.
-                    </AlertDescription>
-                  </Alert>
-                )}
-              </div>
-            )}
+            {/* Critical Alert Modals */}
+            <AlertDialog open={alerts.temperature && !dismissedAlerts.temperature}>
+              <AlertDialogContent className="border-destructive border-2">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="flex items-center gap-2 text-destructive text-xl">
+                    <Thermometer className="h-6 w-6 animate-pulse" />
+                    CRITICAL: Temperature Alert
+                  </AlertDialogTitle>
+                  <AlertDialogDescription className="text-base">
+                    <strong>Temperature exceeds safe threshold (32°C)!</strong>
+                    <br /><br />
+                    Immediate action required to cool the environment. High temperatures can severely impact chicken health and egg production.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogAction onClick={() => dismissAlert('temperature')} className="bg-destructive hover:bg-destructive/90">
+                    Acknowledge Alert
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+            <AlertDialog open={alerts.humidity && !dismissedAlerts.humidity}>
+              <AlertDialogContent className="border-destructive border-2">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="flex items-center gap-2 text-destructive text-xl">
+                    <Droplets className="h-6 w-6 animate-pulse" />
+                    CRITICAL: Humidity Alert
+                  </AlertDialogTitle>
+                  <AlertDialogDescription className="text-base">
+                    <strong>Humidity outside safe range (40-70%)!</strong>
+                    <br /><br />
+                    Adjust ventilation immediately to maintain optimal conditions. Improper humidity affects chicken respiratory health and comfort.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogAction onClick={() => dismissAlert('humidity')} className="bg-destructive hover:bg-destructive/90">
+                    Acknowledge Alert
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+            <AlertDialog open={alerts.airQuality && !dismissedAlerts.airQuality}>
+              <AlertDialogContent className="border-destructive border-2">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="flex items-center gap-2 text-destructive text-xl">
+                    <Wind className="h-6 w-6 animate-pulse" />
+                    CRITICAL: Air Quality Alert
+                  </AlertDialogTitle>
+                  <AlertDialogDescription className="text-base">
+                    <strong>Air quality exceeds safe threshold (300 PPM)!</strong>
+                    <br /><br />
+                    Increase ventilation immediately to protect chicken health. Poor air quality can cause respiratory issues and reduce productivity.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogAction onClick={() => dismissAlert('airQuality')} className="bg-destructive hover:bg-destructive/90">
+                    Acknowledge Alert
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
 
             {/* ML Predictions Section */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">

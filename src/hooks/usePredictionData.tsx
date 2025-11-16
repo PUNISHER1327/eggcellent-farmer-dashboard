@@ -1,49 +1,73 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSensorData } from './useSensorData';
 
-// Audio alert function
-const playAlertSound = () => {
-  // Create an audio context
-  const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-  
-  // Create oscillator for alert sound
-  const oscillator = audioContext.createOscillator();
-  const gainNode = audioContext.createGain();
-  
-  oscillator.connect(gainNode);
-  gainNode.connect(audioContext.destination);
-  
-  // Configure alert sound - urgent beeping pattern
-  oscillator.frequency.value = 800; // Hz
-  oscillator.type = 'sine';
-  
-  // Fade in and out
-  gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-  gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
-  gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
-  
-  oscillator.start(audioContext.currentTime);
-  oscillator.stop(audioContext.currentTime + 0.3);
-  
-  // Second beep
-  setTimeout(() => {
-    const oscillator2 = audioContext.createOscillator();
-    const gainNode2 = audioContext.createGain();
+// Audio alert system with continuous sound
+class AlertSoundPlayer {
+  private audioContext: AudioContext | null = null;
+  private isPlaying = false;
+  private intervalId: number | null = null;
+
+  start() {
+    if (this.isPlaying) return;
+    this.isPlaying = true;
+    this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     
-    oscillator2.connect(gainNode2);
-    gainNode2.connect(audioContext.destination);
+    this.playBeep();
+    this.intervalId = window.setInterval(() => this.playBeep(), 1500);
+  }
+
+  stop() {
+    this.isPlaying = false;
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+    if (this.audioContext) {
+      this.audioContext.close();
+      this.audioContext = null;
+    }
+  }
+
+  private playBeep() {
+    if (!this.audioContext || !this.isPlaying) return;
+
+    const oscillator = this.audioContext.createOscillator();
+    const gainNode = this.audioContext.createGain();
     
-    oscillator2.frequency.value = 800;
-    oscillator2.type = 'sine';
+    oscillator.connect(gainNode);
+    gainNode.connect(this.audioContext.destination);
     
-    gainNode2.gain.setValueAtTime(0, audioContext.currentTime);
-    gainNode2.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
-    gainNode2.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
+    oscillator.frequency.value = 900;
+    oscillator.type = 'square';
     
-    oscillator2.start(audioContext.currentTime);
-    oscillator2.stop(audioContext.currentTime + 0.3);
-  }, 400);
-};
+    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.5, this.audioContext.currentTime + 0.1);
+    gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.4);
+    
+    oscillator.start(this.audioContext.currentTime);
+    oscillator.stop(this.audioContext.currentTime + 0.4);
+
+    setTimeout(() => {
+      if (!this.audioContext || !this.isPlaying) return;
+      
+      const osc2 = this.audioContext.createOscillator();
+      const gain2 = this.audioContext.createGain();
+      
+      osc2.connect(gain2);
+      gain2.connect(this.audioContext.destination);
+      
+      osc2.frequency.value = 900;
+      osc2.type = 'square';
+      
+      gain2.gain.setValueAtTime(0, this.audioContext.currentTime);
+      gain2.gain.linearRampToValueAtTime(0.5, this.audioContext.currentTime + 0.1);
+      gain2.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.4);
+      
+      osc2.start(this.audioContext.currentTime);
+      osc2.stop(this.audioContext.currentTime + 0.4);
+    }, 500);
+  }
+}
 
 interface PredictionRow {
   id: number;
@@ -70,8 +94,25 @@ export const usePredictionData = () => {
     humidity: false,
     airQuality: false,
   });
+  const [dismissedAlerts, setDismissedAlerts] = useState<{
+    temperature: boolean;
+    humidity: boolean;
+    airQuality: boolean;
+  }>({
+    temperature: false,
+    humidity: false,
+    airQuality: false,
+  });
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const { data: sensorData } = useSensorData();
+  const alertSoundRef = useRef<AlertSoundPlayer | null>(null);
+
+  useEffect(() => {
+    alertSoundRef.current = new AlertSoundPlayer();
+    return () => {
+      alertSoundRef.current?.stop();
+    };
+  }, []);
 
   // Load CSV data
   useEffect(() => {
@@ -126,23 +167,38 @@ export const usePredictionData = () => {
         airQuality: (air_quality || 0) > airQualityThreshold,
       };
 
+      // Check if alerts should be reset (values back to normal)
+      if (!newAlerts.temperature && dismissedAlerts.temperature) {
+        setDismissedAlerts(prev => ({ ...prev, temperature: false }));
+      }
+      if (!newAlerts.humidity && dismissedAlerts.humidity) {
+        setDismissedAlerts(prev => ({ ...prev, humidity: false }));
+      }
+      if (!newAlerts.airQuality && dismissedAlerts.airQuality) {
+        setDismissedAlerts(prev => ({ ...prev, airQuality: false }));
+      }
+
       setAlerts(newAlerts);
       
-      const alertTriggered = newAlerts.temperature || newAlerts.humidity || newAlerts.airQuality;
+      const hasActiveAlert = (newAlerts.temperature && !dismissedAlerts.temperature) || 
+                            (newAlerts.humidity && !dismissedAlerts.humidity) || 
+                            (newAlerts.airQuality && !dismissedAlerts.airQuality);
       
-      if (newAlerts.temperature) {
+      if (newAlerts.temperature && !dismissedAlerts.temperature) {
         console.warn(`Temperature alert: ${temperature}°C exceeds ${tempThreshold}°C`);
       }
-      if (newAlerts.humidity) {
+      if (newAlerts.humidity && !dismissedAlerts.humidity) {
         console.warn(`Humidity alert: ${humidity}% outside safe range (${humidityThresholdLow}-${humidityThresholdHigh}%)`);
       }
-      if (newAlerts.airQuality) {
+      if (newAlerts.airQuality && !dismissedAlerts.airQuality) {
         console.warn(`Air Quality alert: ${air_quality} PPM exceeds ${airQualityThreshold} PPM`);
       }
 
-      // Play alert sound if threshold exceeded
-      if (alertTriggered) {
-        playAlertSound();
+      // Control sound based on active alerts
+      if (hasActiveAlert) {
+        alertSoundRef.current?.start();
+      } else {
+        alertSoundRef.current?.stop();
       }
 
       // Find closest match using weighted distance
@@ -215,5 +271,9 @@ export const usePredictionData = () => {
     };
   }, [sensorData, predictions]);
 
-  return { currentPrediction, loading, alerts, lastUpdate };
+  const dismissAlert = (alertType: 'temperature' | 'humidity' | 'airQuality') => {
+    setDismissedAlerts(prev => ({ ...prev, [alertType]: true }));
+  };
+
+  return { currentPrediction, loading, alerts, dismissedAlerts, lastUpdate, dismissAlert };
 };
