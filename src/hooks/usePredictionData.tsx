@@ -1,6 +1,50 @@
 import { useState, useEffect } from 'react';
 import { useSensorData } from './useSensorData';
 
+// Audio alert function
+const playAlertSound = () => {
+  // Create an audio context
+  const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+  
+  // Create oscillator for alert sound
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  
+  // Configure alert sound - urgent beeping pattern
+  oscillator.frequency.value = 800; // Hz
+  oscillator.type = 'sine';
+  
+  // Fade in and out
+  gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+  gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
+  gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
+  
+  oscillator.start(audioContext.currentTime);
+  oscillator.stop(audioContext.currentTime + 0.3);
+  
+  // Second beep
+  setTimeout(() => {
+    const oscillator2 = audioContext.createOscillator();
+    const gainNode2 = audioContext.createGain();
+    
+    oscillator2.connect(gainNode2);
+    gainNode2.connect(audioContext.destination);
+    
+    oscillator2.frequency.value = 800;
+    oscillator2.type = 'sine';
+    
+    gainNode2.gain.setValueAtTime(0, audioContext.currentTime);
+    gainNode2.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
+    gainNode2.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
+    
+    oscillator2.start(audioContext.currentTime);
+    oscillator2.stop(audioContext.currentTime + 0.3);
+  }, 400);
+};
+
 interface PredictionRow {
   id: number;
   air_quality: number;
@@ -51,7 +95,7 @@ export const usePredictionData = () => {
     loadPredictions();
   }, []);
 
-  // Smart matching algorithm - update prediction every 20 seconds
+  // Smart matching algorithm - update prediction every 5 seconds
   useEffect(() => {
     if (!sensorData || predictions.length === 0) return;
 
@@ -59,6 +103,32 @@ export const usePredictionData = () => {
       const air_quality = sensorData.airQuality;
       const temperature = sensorData.temperature;
       const humidity = sensorData.humidity;
+
+      // Check thresholds and play alert sound
+      const tempThreshold = 32; // °C
+      const humidityThresholdLow = 40; // %
+      const humidityThresholdHigh = 70; // %
+      const airQualityThreshold = 300; // PPM
+
+      let alertTriggered = false;
+      
+      if (temperature > tempThreshold) {
+        alertTriggered = true;
+        console.warn(`Temperature alert: ${temperature}°C exceeds ${tempThreshold}°C`);
+      }
+      if (humidity < humidityThresholdLow || humidity > humidityThresholdHigh) {
+        alertTriggered = true;
+        console.warn(`Humidity alert: ${humidity}% outside safe range (${humidityThresholdLow}-${humidityThresholdHigh}%)`);
+      }
+      if (air_quality > airQualityThreshold) {
+        alertTriggered = true;
+        console.warn(`Air Quality alert: ${air_quality} PPM exceeds ${airQualityThreshold} PPM`);
+      }
+
+      // Play alert sound if threshold exceeded
+      if (alertTriggered) {
+        playAlertSound();
+      }
 
       // Find closest match using weighted distance
       let bestMatch = predictions[0];
@@ -117,14 +187,13 @@ export const usePredictionData = () => {
       });
     };
 
-    // Initial update after 20 seconds
-    const initialTimer = setTimeout(updatePrediction, 20000);
+    // Initial update immediately
+    updatePrediction();
     
-    // Then update every 20 seconds
-    const interval = setInterval(updatePrediction, 20000);
+    // Then update every 5 seconds
+    const interval = setInterval(updatePrediction, 5000);
 
     return () => {
-      clearTimeout(initialTimer);
       clearInterval(interval);
     };
   }, [sensorData, predictions]);
